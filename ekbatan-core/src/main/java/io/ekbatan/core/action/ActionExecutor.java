@@ -338,6 +338,17 @@ public class ActionExecutor {
             var entityClass = entry.getKey();
             var changes = entry.getValue();
             var repository = repositoryRegistry.repository(entityClass);
+            if (repository == null) {
+                // Checked here rather than left to ChangePersister, which says the same thing
+                // further down. Grouping needs the repository's ShardingStrategy first, so an
+                // unregistered type reached that line as a NullPointerException naming
+                // shardingStrategy() - and the message written for exactly this case was
+                // unreachable through the executor.
+                throw new IllegalStateException("No repository found for entity type: " + entityClass.getName()
+                        + ". Register one with RepositoryRegistry.Builder.withModelRepository("
+                        + entityClass.getSimpleName() + ".class, ...) - an action cannot stage a change to a"
+                        + " type the executor has no way to write.");
+            }
             groupEntityChangesByShard(repository, entityClass, changes, result);
         }
 

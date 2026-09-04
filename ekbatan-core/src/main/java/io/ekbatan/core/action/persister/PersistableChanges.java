@@ -11,9 +11,12 @@ import java.util.Map;
  * insertion-ordered.
  *
  * <p>Re-registering the same ID - whether for add or update - raises
- * {@link IllegalStateException}. This is deliberate: an action that stages a wallet for add
- * and then tries to update it has almost certainly drifted in its understanding of state and
- * the right answer is to surface the mistake at staging time rather than at commit time.
+ * {@link IllegalStateException}. This is deliberate: an action writes each row once, so a
+ * second staging cannot mean a second write. Accepting it would have to either overwrite the
+ * first silently - leaving the value that {@code plan().update(...)} already handed back
+ * describing a row nobody is going to write - or guard the write against a version the
+ * database has never held, which surfaces later as an optimistic-lock failure with nothing
+ * concurrent anywhere near it. Refusing at the point of the mistake is better than either.
  *
  * @param <ID> the identifier type of the persistable entity.
  * @param <E> the concrete {@link Persistable} entity type being staged.
@@ -26,7 +29,8 @@ public class PersistableChanges<ID extends Comparable<ID>, E extends Persistable
     private final Map<ID, E> additions = new LinkedHashMap<>();
     private final Map<ID, E> updates = new LinkedHashMap<>();
 
-    private void checkNotRegistered(ID id, String operation) {
+    private void checkNotRegistered(E entity, String operation) {
+        final var id = entity.getId();
         final var existingOperation =
                 switch (id) {
                     case ID _ when additions.containsKey(id) -> "addition";
@@ -35,9 +39,16 @@ public class PersistableChanges<ID extends Comparable<ID>, E extends Persistable
                 };
 
         if (existingOperation != null) {
-            throw new IllegalStateException("Entity with ID " + id + " is already registered for "
-                    + existingOperation + " operation, cannot "
-                    + operation);
+            // Names the type as well as the id, and says what to do instead. An error that
+            // only reports what went wrong leaves the reader to work out the rest, and the
+            // reader here has just written something that looked entirely reasonable.
+            throw new IllegalStateException(entity.getClass().getSimpleName() + " " + id
+                    + " is already registered for " + existingOperation
+                    + " operation, cannot " + operation
+                    + ". An action writes each row once, so two changes to one row must be"
+                    + " composed before they are staged - wallet.deposit(10).withdraw(5) -"
+                    + " and then staged with a single plan().update(...), rather than staged"
+                    + " one after another.");
         }
     }
 
@@ -47,9 +58,8 @@ public class PersistableChanges<ID extends Comparable<ID>, E extends Persistable
      * @param entity the entity to insert.
      */
     public void add(E entity) {
-        ID id = entity.getId();
-        checkNotRegistered(id, "add");
-        additions.put(id, entity);
+        checkNotRegistered(entity, "add");
+        additions.put(entity.getId(), entity);
     }
 
     /**
@@ -58,9 +68,8 @@ public class PersistableChanges<ID extends Comparable<ID>, E extends Persistable
      * @param entity the entity to update.
      */
     public void update(E entity) {
-        ID id = entity.getId();
-        checkNotRegistered(id, "update");
-        updates.put(id, entity);
+        checkNotRegistered(entity, "update");
+        updates.put(entity.getId(), entity);
     }
 
     /** {@return an immutable view of the additions staged so far, in insertion order} */

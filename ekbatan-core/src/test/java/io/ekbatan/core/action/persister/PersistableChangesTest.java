@@ -108,7 +108,9 @@ class PersistableChangesTest {
         // WHEN / THEN
         assertThatThrownBy(() -> changes.add(item))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("already registered for addition");
+                .hasMessageContaining("already registered for addition")
+                .hasMessageContaining("Item")
+                .hasMessageContaining("composed before they are staged");
     }
 
     @Test
@@ -121,7 +123,9 @@ class PersistableChangesTest {
         // WHEN / THEN
         assertThatThrownBy(() -> changes.add(item))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("already registered for update");
+                .hasMessageContaining("already registered for update")
+                .hasMessageContaining("Item")
+                .hasMessageContaining("composed before they are staged");
     }
 
     @Test
@@ -134,7 +138,9 @@ class PersistableChangesTest {
         // WHEN / THEN
         assertThatThrownBy(() -> changes.update(item))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("already registered for addition");
+                .hasMessageContaining("already registered for addition")
+                .hasMessageContaining("Item")
+                .hasMessageContaining("composed before they are staged");
     }
 
     @Test
@@ -147,7 +153,9 @@ class PersistableChangesTest {
         // WHEN / THEN
         assertThatThrownBy(() -> changes.update(item))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("already registered for update");
+                .hasMessageContaining("already registered for update")
+                .hasMessageContaining("Item")
+                .hasMessageContaining("composed before they are staged");
     }
 
     @Test

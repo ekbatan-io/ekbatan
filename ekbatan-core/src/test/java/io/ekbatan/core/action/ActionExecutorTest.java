@@ -490,4 +490,30 @@ class ActionExecutorTest {
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("databaseRegistry is required");
     }
+
+    @Test
+    void execute_names_the_type_when_no_repository_is_registered() {
+        // GIVEN an executor that knows about no repository at all
+        var executor = actionExecutor()
+                .namespace("test.namespace")
+                .databaseRegistry(databaseRegistry)
+                .objectMapper(new ObjectMapper())
+                .repositoryRegistry(repositoryRegistry().build())
+                .actionRegistry(actionRegistry()
+                        .withAction(CreateItemAction.class, new CreateItemAction(clock))
+                        .build())
+                .eventPersister(new RecordingEventPersister())
+                .clock(clock)
+                .build();
+
+        // WHEN & THEN the message names the type, rather than the null it was dereferenced on.
+        // Grouping needs the ShardingStrategy before ChangePersister ever runs, so this used to
+        // surface as "Cannot invoke Repository.shardingStrategy() because repository is null".
+        assertThatThrownBy(() ->
+                        executor.execute(() -> "user", CreateItemAction.class, new CreateItemAction.Params("wallet")))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("No repository found for entity type")
+                .hasMessageContaining("Item")
+                .hasMessageContaining("withModelRepository");
+    }
 }

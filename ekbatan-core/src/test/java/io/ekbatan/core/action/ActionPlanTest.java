@@ -216,6 +216,8 @@ class ActionPlanTest {
         // WHEN / THEN
         assertThatThrownBy(() -> plan.add(model))
                 .isInstanceOf(IllegalStateException.class)
-                .hasMessageContaining("already registered");
+                .hasMessageContaining("already registered")
+                .hasMessageContaining("TestModel")
+                .hasMessageContaining("composed before they are staged");
     }
 }
