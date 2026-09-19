@@ -49,8 +49,12 @@ public final class DatabaseRegistry implements AutoCloseable {
     /** The shard the executor routes to when an action declines to specify one. */
     public final ShardIdentifier defaultShard;
 
+    /** What to do with a shard this deployment has not configured. */
+    public final UnknownShardPolicy unknownShardPolicy;
+
     private DatabaseRegistry(Builder builder) {
         this.transactionManagers = Collections.unmodifiableMap(builder.transactionManagers);
+        this.unknownShardPolicy = builder.unknownShardPolicy;
         Validate.isTrue(!this.transactionManagers.isEmpty(), "at least one database is required");
         this.defaultShard = builder.defaultShard.orElseGet(() -> {
             Validate.isTrue(
@@ -89,11 +93,32 @@ public final class DatabaseRegistry implements AutoCloseable {
      * sharding strategies to gracefully degrade when a strategy proposes a shard that
      * doesn't exist in the current deployment.
      *
+     * <p>Degrading gracefully is the point, and it is also what a mistyped shard identifier
+     * does: it writes to the default, successfully, where nobody looks for the row afterwards.
+     * Nothing here can tell a foreign id apart from a bug, so this no longer tries to - it logs
+     * every fallback it takes. A deployment holding the whole layout, where an unregistered
+     * shard can only be a bug, can configure {@link UnknownShardPolicy#FAIL} instead.
+     *
      * @param shard the proposed shard.
      * @return {@code shard} if registered, otherwise {@link #defaultShard}.
+     * @throws IllegalArgumentException if it is not registered and the policy is
+     *     {@link UnknownShardPolicy#FAIL}.
      */
     public ShardIdentifier effectiveShard(ShardIdentifier shard) {
-        return transactionManagers.containsKey(shard) ? shard : defaultShard;
+        if (transactionManagers.containsKey(shard)) {
+            return shard;
+        }
+        if (unknownShardPolicy == UnknownShardPolicy.FAIL) {
+            throw new IllegalArgumentException("Shard " + shard
+                    + " is not registered and unknownShardPolicy is FAIL; registered: "
+                    + transactionManagers.keySet());
+        }
+        LOG.warn(
+                "Shard {} is not registered, routing to default {} [registered={}]",
+                shard,
+                defaultShard,
+                transactionManagers.keySet());
+        return defaultShard;
     }
 
     /** {@return the {@link TransactionManager} for the default shard} */
@@ -159,7 +184,7 @@ public final class DatabaseRegistry implements AutoCloseable {
                         .anyMatch(id -> id.equals(config.defaultShard)),
                 "defaultShard must reference a registered database");
 
-        var builder = databaseRegistry();
+        var builder = databaseRegistry().withUnknownShardPolicy(config.unknownShardPolicy);
 
         for (var group : config.groups) {
             for (var member : group.members) {
@@ -195,6 +220,7 @@ public final class DatabaseRegistry implements AutoCloseable {
 
         private final Map<ShardIdentifier, TransactionManager> transactionManagers = new LinkedHashMap<>();
         private Optional<ShardIdentifier> defaultShard = Optional.empty();
+        private UnknownShardPolicy unknownShardPolicy = UnknownShardPolicy.USE_DEFAULT_SHARD;
 
         private Builder() {}
 
@@ -225,6 +251,19 @@ public final class DatabaseRegistry implements AutoCloseable {
         public Builder withDefaultDatabase(TransactionManager tm) {
             this.transactionManagers.put(tm.shardIdentifier, tm);
             this.defaultShard = Optional.of(tm.shardIdentifier);
+            return this;
+        }
+
+        /**
+         * Sets what to do with a shard that is not registered here. Optional; omitting it
+         * selects {@link UnknownShardPolicy#USE_DEFAULT_SHARD}.
+         *
+         * @param unknownShardPolicy the policy.
+         * @return this builder, for chaining.
+         */
+        public Builder withUnknownShardPolicy(UnknownShardPolicy unknownShardPolicy) {
+            this.unknownShardPolicy =
+                    unknownShardPolicy == null ? UnknownShardPolicy.USE_DEFAULT_SHARD : unknownShardPolicy;
             return this;
         }
 

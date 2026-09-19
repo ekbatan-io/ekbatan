@@ -286,9 +286,41 @@ Optional<DataSourceConfig> secondary = member.secondaryConfig();       // empty 
 Optional<DataSourceConfig> lock      = member.configFor("lockConfig"); // user-defined
 ```
 
-## Unregistered shards fall back to default
+## Unregistered shards fall back to default, and say so
 
-`DatabaseRegistry.effectiveShard(shard)` quietly returns the default shard for any `ShardIdentifier` not explicitly registered. So a wallet routed to an Australia shard that hasn't been deployed yet will fall through to the default. This makes incremental rollouts safe — encode the future shard in IDs first, register the database later, no migration needed in between.
+`DatabaseRegistry.effectiveShard(shard)` returns the default shard for any `ShardIdentifier` not explicitly registered. So a wallet routed to an Australia shard that hasn't been deployed yet falls through to the default. This makes incremental rollouts safe — encode the future shard in IDs first, register the database later, no migration needed in between.
+
+It is also exactly what a **mistyped shard identifier** does, and that one writes to the wrong database successfully. Nothing at the call site can tell a not-yet-deployed shard from a typo, so the fallback logs every time it fires:
+
+```
+WARN  i.e.core.shard.DatabaseRegistry - Shard 9:9 is not registered, routing to default 0:0 [registered=[0:0, 1:0]]
+```
+
+A deployment that holds the **whole** layout can make it an error instead, because there an unregistered shard can only be a bug:
+
+```yaml
+ekbatan:
+  sharding:
+    unknownShardPolicy: fail   # omitted -> useDefaultShard: fall back, and warn
+    defaultShard:
+      group: 0
+      member: 0
+```
+
+or on the builder, when you wire the registry by hand:
+
+```java
+databaseRegistry()
+        .withUnknownShardPolicy(UnknownShardPolicy.FAIL)
+        .withDefaultDatabase(tm)
+        .build();
+```
+
+```
+IllegalArgumentException: Shard 9:9 is not registered and unknownShardPolicy is FAIL; registered: [0:0, 1:0]
+```
+
+It is applied where routing resolves, so it covers **reads and writes alike**. Leave it alone if your deployment is a **subset** of the layout - turning it on there refuses exactly the incremental-rollout case above.
 
 ## Cross-shard actions
 

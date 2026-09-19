@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.ekbatan.core.shard.ShardIdentifier;
+import io.ekbatan.core.shard.UnknownShardPolicy;
 import org.jooq.SQLDialect;
 import org.junit.jupiter.api.Test;
 import tools.jackson.databind.DeserializationFeature;
@@ -166,5 +167,57 @@ class ShardingConfigJacksonBindingTest {
         assertThatThrownBy(() -> MAPPER.readValue(yaml, ShardingConfig.class))
                 .isInstanceOf(MismatchedInputException.class)
                 .hasMessageContaining("memmbers");
+    }
+
+    // -- unknownShardPolicy, the one setting an operator reaches for after a misrouted write ------
+
+    @Test
+    void should_bind_unknown_shard_policy_from_yaml_whatever_the_spelling() {
+        for (var written : new String[] {"fail", "FAIL", "Fail"}) {
+            var config = MAPPER.readValue(minimalYaml("unknownShardPolicy: " + written + "\n"), ShardingConfig.class);
+
+            assertThat(config.unknownShardPolicy)
+                    .describedAs("unknownShardPolicy: %s", written)
+                    .isEqualTo(UnknownShardPolicy.FAIL);
+        }
+        for (var written : new String[] {"useDefaultShard", "use_default_shard", "USE-DEFAULT-SHARD"}) {
+            var config = MAPPER.readValue(minimalYaml("unknownShardPolicy: " + written + "\n"), ShardingConfig.class);
+
+            assertThat(config.unknownShardPolicy)
+                    .describedAs("unknownShardPolicy: %s", written)
+                    .isEqualTo(UnknownShardPolicy.USE_DEFAULT_SHARD);
+        }
+    }
+
+    @Test
+    void should_use_default_shard_when_yaml_omits_the_policy() {
+        var config = MAPPER.readValue(minimalYaml(""), ShardingConfig.class);
+
+        assertThat(config.unknownShardPolicy).isEqualTo(UnknownShardPolicy.USE_DEFAULT_SHARD);
+    }
+
+    @Test
+    void should_refuse_a_policy_value_that_names_neither() {
+        assertThatThrownBy(() -> MAPPER.readValue(minimalYaml("unknownShardPolicy: shrug\n"), ShardingConfig.class))
+                .hasMessageContaining("unknownShardPolicy must be 'useDefaultShard' or 'fail'");
+    }
+
+    private static String minimalYaml(String extra) {
+        return extra + """
+                defaultShard:
+                  group: 0
+                  member: 0
+                groups:
+                  - group: 0
+                    name: global
+                    members:
+                      - member: 0
+                        name: global
+                        configs:
+                          primaryConfig:
+                            jdbcUrl: jdbc:postgresql://primary:5432/db
+                            username: app
+                            password: secret
+                """;
     }
 }

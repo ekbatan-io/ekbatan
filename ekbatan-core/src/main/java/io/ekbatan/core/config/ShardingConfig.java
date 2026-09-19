@@ -3,6 +3,7 @@ package io.ekbatan.core.config;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.ekbatan.core.internal.Validate;
 import io.ekbatan.core.shard.ShardIdentifier;
+import io.ekbatan.core.shard.UnknownShardPolicy;
 import java.util.ArrayList;
 import java.util.List;
 import tools.jackson.databind.annotation.JsonDeserialize;
@@ -29,10 +30,19 @@ public final class ShardingConfig {
     /** All shard groups in the deployment; at least one is required. */
     public final List<ShardGroupConfig> groups;
 
+    /**
+     * What to do with a shard this deployment has not configured. Defaults to
+     * {@link UnknownShardPolicy#USE_DEFAULT_SHARD}, which routes it to {@link #defaultShard}
+     * and logs.
+     */
+    public final UnknownShardPolicy unknownShardPolicy;
+
     private ShardingConfig(Builder builder) {
         this.defaultShard = Validate.notNull(builder.defaultShard, "defaultShard is required");
         Validate.isTrue(!builder.groups.isEmpty(), "at least one group is required");
         this.groups = List.copyOf(builder.groups);
+        this.unknownShardPolicy =
+                builder.unknownShardPolicy == null ? UnknownShardPolicy.USE_DEFAULT_SHARD : builder.unknownShardPolicy;
     }
 
     /** Fluent builder for {@link ShardingConfig}. Obtain via {@link #shardingConfig()}. */
@@ -41,6 +51,7 @@ public final class ShardingConfig {
 
         private ShardIdentifier defaultShard;
         private List<ShardGroupConfig> groups = new ArrayList<>();
+        private UnknownShardPolicy unknownShardPolicy = UnknownShardPolicy.USE_DEFAULT_SHARD;
 
         private Builder() {}
 
@@ -80,6 +91,19 @@ public final class ShardingConfig {
         @JsonIgnore
         public Builder withGroup(ShardGroupConfig group) {
             this.groups.add(group);
+            return this;
+        }
+
+        /**
+         * Sets what to do with a shard this deployment has not configured. Optional; omitting
+         * it selects {@link UnknownShardPolicy#USE_DEFAULT_SHARD}, which is the behaviour this
+         * framework has always had.
+         *
+         * @param unknownShardPolicy the policy.
+         * @return this builder, for chaining.
+         */
+        public Builder unknownShardPolicy(UnknownShardPolicy unknownShardPolicy) {
+            this.unknownShardPolicy = unknownShardPolicy;
             return this;
         }
 

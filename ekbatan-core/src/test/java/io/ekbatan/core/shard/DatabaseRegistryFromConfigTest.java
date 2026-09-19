@@ -207,4 +207,63 @@ class DatabaseRegistryFromConfigTest {
         assertThat(registry.defaultTransactionManager())
                 .isSameAs(registry.transactionManager(ShardIdentifier.of(1, 0)));
     }
+
+    // -- an unregistered shard says so, and can be made to refuse ---------------------------
+
+    @Test
+    void should_fall_back_to_the_default_for_an_unregistered_shard() {
+        // GIVEN - two shards, and an identifier naming neither
+        var registry = DatabaseRegistry.fromConfig(twoShards(null));
+
+        // WHEN / THEN - the historical behaviour, unchanged, and still the default policy
+        assertThat(registry.unknownShardPolicy).isEqualTo(UnknownShardPolicy.USE_DEFAULT_SHARD);
+        assertThat(registry.effectiveShard(ShardIdentifier.of(9, 9))).isEqualTo(ShardIdentifier.of(0, 0));
+        assertThat(registry.effectiveShard(ShardIdentifier.of(1, 0))).isEqualTo(ShardIdentifier.of(1, 0));
+    }
+
+    @Test
+    void should_fail_on_an_unregistered_shard_when_configured_to() {
+        // GIVEN - a deployment that holds the whole layout, so an unregistered shard is a bug
+        var registry = DatabaseRegistry.fromConfig(twoShards(UnknownShardPolicy.FAIL));
+
+        // WHEN / THEN
+        assertThatThrownBy(() -> registry.effectiveShard(ShardIdentifier.of(9, 9)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("is not registered and unknownShardPolicy is FAIL");
+
+        // AND - a registered shard is unaffected
+        assertThat(registry.effectiveShard(ShardIdentifier.of(1, 0))).isEqualTo(ShardIdentifier.of(1, 0));
+    }
+
+    @Test
+    void should_use_default_shard_when_the_config_does_not_name_a_policy() {
+        assertThat(twoShards(null).unknownShardPolicy).isEqualTo(UnknownShardPolicy.USE_DEFAULT_SHARD);
+    }
+
+    private static io.ekbatan.core.config.ShardingConfig twoShards(UnknownShardPolicy policy) {
+        var builder = shardingConfig()
+                .defaultShard(ShardIdentifier.of(0, 0))
+                .withGroup(shardGroupConfig()
+                        .group(0)
+                        .name("global")
+                        .withMember(shardMemberConfig()
+                                .member(0)
+                                .name("global")
+                                .primaryConfig(PG_CONFIG_G0_M0)
+                                .build())
+                        .build())
+                .withGroup(shardGroupConfig()
+                        .group(1)
+                        .name("mexico")
+                        .withMember(shardMemberConfig()
+                                .member(0)
+                                .name("mexico")
+                                .primaryConfig(PG_CONFIG_G1_M0)
+                                .build())
+                        .build());
+        if (policy != null) {
+            builder = builder.unknownShardPolicy(policy);
+        }
+        return builder.build();
+    }
 }
