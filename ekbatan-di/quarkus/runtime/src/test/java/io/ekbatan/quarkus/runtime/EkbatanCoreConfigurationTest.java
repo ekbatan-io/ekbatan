@@ -2,12 +2,15 @@ package io.ekbatan.quarkus.runtime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 import io.ekbatan.core.config.ShardingConfig;
 import io.smallrye.config.EnvConfigSource;
 import io.smallrye.config.PropertiesConfigSource;
 import io.smallrye.config.SmallRyeConfig;
 import io.smallrye.config.SmallRyeConfigBuilder;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.eclipse.microprofile.config.spi.ConfigProviderResolver;
@@ -111,6 +114,50 @@ class EkbatanCoreConfigurationTest {
         return p;
     }
 
+    @Test
+    void readsDriverSettingsUnderTheCamelCaseKey() {
+        var p = new LinkedHashMap<>(minimalCamelCase());
+        var prefix = "ekbatan.sharding.groups[0].members[0].configs.primaryConfig.dataSourceProperties.";
+        p.put(prefix + "ApplicationName", "orders");
+        p.put(prefix + "ha.enableJMX", "true");
+        p.put(prefix + "keyStorePassword", "k3y");
+        registerConfig(p);
+
+        assertThat(bind().groups.get(0).members.get(0).primaryConfig().dataSourceProperties)
+                .containsOnly(
+                        Map.entry("ApplicationName", "orders"),
+                        Map.entry("ha.enableJMX", "true"),
+                        Map.entry("keyStorePassword", "k3y"));
+    }
+
+    @Test
+    void keepsDriverSettingNamesExactlyAsWritten() {
+        // The container key is normalised like any other; the driver setting names inside it are
+        // not, since a driver reads them exactly as written - capitals, dots and all.
+        var p = new LinkedHashMap<>(minimalCamelCase());
+        var prefix = "ekbatan.sharding.groups[0].members[0].configs.primary-config.data-source-properties.";
+        p.put(prefix + "keyStorePassword", "k3y");
+        p.put(prefix + "ApplicationName", "orders");
+        p.put(prefix + "ha.enableJMX", "true");
+        p.put(prefix + "a", "1");
+        p.put(prefix + "a.b", "2");
+        p.put(prefix + "kms.region", "eu-west-1");
+        p.put(prefix + "connectionAttributes", "team:orders,env:prod");
+        p.put(prefix + "sslpassword", "k3y-pass");
+        registerConfig(p);
+
+        assertThat(bind().groups.get(0).members.get(0).primaryConfig().dataSourceProperties)
+                .containsOnly(
+                        Map.entry("keyStorePassword", "k3y"),
+                        Map.entry("ApplicationName", "orders"),
+                        Map.entry("ha.enableJMX", "true"),
+                        Map.entry("a", "1"),
+                        Map.entry("a.b", "2"),
+                        Map.entry("kms.region", "eu-west-1"),
+                        Map.entry("connectionAttributes", "team:orders,env:prod"),
+                        Map.entry("sslpassword", "k3y-pass"));
+    }
+
     @Nested
     class Casing {
 
@@ -121,8 +168,8 @@ class EkbatanCoreConfigurationTest {
             var primary = cfg.groups.get(0).members.get(0).configs.get("primaryConfig");
             assertThat(primary).isNotNull();
             assertThat(primary.jdbcUrl).isEqualTo("jdbc:postgresql://h/db");
-            assertThat(primary.username).isEqualTo("u");
-            assertThat(primary.password).isEqualTo("p");
+            assertThat(primary.username).contains("u");
+            assertThat(primary.password).contains("p");
         }
 
         @Test
@@ -235,7 +282,7 @@ class EkbatanCoreConfigurationTest {
             assertThat(configs).containsOnlyKeys("primaryConfig", "jobsConfig");
             assertThat(configs.get("primaryConfig").jdbcUrl).isEqualTo("jdbc:postgresql://h/db");
             assertThat(configs.get("jobsConfig").jdbcUrl).isEqualTo("jdbc:postgresql://h/db_jobs");
-            assertThat(configs.get("jobsConfig").username).isEqualTo("uj");
+            assertThat(configs.get("jobsConfig").username).contains("uj");
         }
 
         @Test
@@ -318,6 +365,25 @@ class EkbatanCoreConfigurationTest {
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessageContaining("ekbatan.sharding")
                     .hasMessageContaining("primaryConfig");
+        }
+
+        @Test
+        void aUrlCarryingAPasswordFailsWithoutEverPrintingIt() {
+            // the whole printed failure - what a startup log shows - names the problem, never the value
+            var p = minimalCamelCase();
+            p.put(
+                    "ekbatan.sharding.groups[0].members[0].configs.primaryConfig.jdbcUrl",
+                    "jdbc:postgresql://h/db?password=Zq7-secret-in-the-url");
+            registerConfig(p);
+
+            var failure = catchThrowable(EkbatanCoreConfigurationTest::bind);
+            var printed = new StringWriter();
+            failure.printStackTrace(new PrintWriter(printed));
+
+            assertThat(failure).isInstanceOf(IllegalStateException.class);
+            assertThat(printed.toString())
+                    .contains("carries the login password")
+                    .doesNotContain("Zq7-secret-in-the-url");
         }
 
         @Test
@@ -510,7 +576,7 @@ class EkbatanCoreConfigurationTest {
             registerConfigWithEnv(topologyWithoutPassword(), Map.of(PASSWORD_ENV, "s3cr3t"));
 
             var configs = bind().groups.get(0).members.get(0).configs;
-            assertThat(configs.get("primaryConfig").password).isEqualTo("s3cr3t");
+            assertThat(configs.get("primaryConfig").password).contains("s3cr3t");
         }
 
         @Test
@@ -529,7 +595,7 @@ class EkbatanCoreConfigurationTest {
             registerConfigWithEnv(minimalCamelCase(), Map.of(PASSWORD_ENV, "from-env"));
 
             assertThat(bind().groups.get(0).members.get(0).configs.get("primaryConfig").password)
-                    .isEqualTo("from-env");
+                    .contains("from-env");
         }
 
         @Test
@@ -546,7 +612,7 @@ class EkbatanCoreConfigurationTest {
 
             var configs = bind().groups.get(0).members.get(0).configs;
             assertThat(configs).containsOnlyKeys("primaryConfig");
-            assertThat(configs.get("primaryConfig").password).isEqualTo("s3cr3t");
+            assertThat(configs.get("primaryConfig").password).contains("s3cr3t");
         }
 
         @Test
@@ -565,7 +631,7 @@ class EkbatanCoreConfigurationTest {
             // Regression guard for the collector when getConfigSources() has no EnvConfigSource.
             registerConfig(minimalCamelCase());
             assertThat(bind().groups.get(0).members.get(0).configs.get("primaryConfig").password)
-                    .isEqualTo("p");
+                    .contains("p");
         }
 
         @Test
@@ -622,7 +688,7 @@ class EkbatanCoreConfigurationTest {
             registerConfig(p);
 
             assertThat(bind().groups.get(0).members.get(0).configs.get("primaryConfig").password)
-                    .isEmpty();
+                    .contains("");
         }
 
         @Test
@@ -633,18 +699,20 @@ class EkbatanCoreConfigurationTest {
                     p, Map.of("EKBATAN_SHARDING_GROUPS_0__MEMBERS_0__CONFIGS_PRIMARYCONFIG_PASSWORD", ""));
 
             assertThat(bind().groups.get(0).members.get(0).configs.get("primaryConfig").password)
-                    .isEmpty();
+                    .contains("");
         }
 
         @Test
         void anEmptyValueIsDistinctFromAnAbsentOne() {
-            // The whole point: absent must still fail, or the fix would have traded one silent
-            // misconfiguration for another.
+            // The whole point: a password may be left out now (an IAM token, a client
+            // certificate), but leaving it out must still bind as "no password", never as the
+            // empty password the tests above preserve.
             var p = new LinkedHashMap<>(minimalCamelCase());
             p.remove("ekbatan.sharding.groups[0].members[0].configs.primaryConfig.password");
             registerConfig(p);
 
-            assertThatThrownBy(EkbatanCoreConfigurationTest::bind).isInstanceOf(IllegalStateException.class);
+            assertThat(bind().groups.get(0).members.get(0).configs.get("primaryConfig").password)
+                    .isEmpty();
         }
     }
 }

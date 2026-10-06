@@ -11,7 +11,8 @@ For the framework's *concept* of the outbox (the atomic state + events story), s
   - **[`eventlog.event_notifications`](tables/event-notifications.md)** — local-handler delivery table DDL, columns, states, handler names
   - **[`scheduled_tasks`](tables/scheduled-tasks.md)** — db-scheduler table DDL, columns, optionality
 - **[Sharding](sharding.md)** — group + member, `ShardedUUID`, custom `ShardingStrategy`, cross-shard rules
-- **[Pessimistic locking via `KeyedLockProvider`](keyed-locks.md)** — five backends (Postgres, MySQL, MariaDB, Redis, in-process), reentrancy contract, the `lockConfig` slot
+- **[Connecting to the database](connecting.md)** — `username`, `password`, `data-source-properties`, and every way to log in: passwords, client certificates, IAM, Kerberos, driver plugins
+- **[Pessimistic locking via `KeyedLockProvider`](keyed-locks.md)** — four backends (Postgres, MySQL, MariaDB, Redis), reentrancy contract, the `lockConfig` slot
 - **[Multi-database (PostgreSQL / MySQL / MariaDB)](multi-database.md)** — dialect cheatsheet, init scripts, partial indexes, the `dialect.family()` switch pattern
   - **[PostgreSQL setup](postgresql.md)** — required tables, DDL, codegen block, gotchas (one-stop reference)
   - **[MariaDB setup](mariadb.md)** — required tables, DDL, codegen block, init script, gotchas

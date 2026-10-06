@@ -241,11 +241,11 @@ AbstractRepository resolves shards via `effectiveShard()` overloads, which combi
 ### Timezone Convention — Always UTC
 All timestamps in Ekbatan should be stored and processed in **UTC**. This applies to:
 
-- **SQL column type — use `TIMESTAMP`, never `TIMESTAMPTZ`.** Every timestamp column in every Ekbatan migration is `TIMESTAMP` (without time zone). This is enforced project-wide and is not negotiable per-table. The DB server is pinned to UTC (see below), so plain `TIMESTAMP` round-trips correctly with Java `Instant`. Do not introduce `TIMESTAMPTZ` even if it seems like a "best practice" elsewhere — mixing the two within Ekbatan creates subtle JOOQ codegen and converter inconsistencies.
-- **Database server timezone** — set the database machine or container to `TZ=UTC`. Ekbatan uses `java.time.Instant` (always UTC) for `created_date` and `updated_date` fields. If the database server runs in a non-UTC timezone, `TIMESTAMP` columns will silently shift values on read, causing mismatches between what Java wrote and what the database returns.
+- **SQL column type — use `TIMESTAMP`, never `TIMESTAMPTZ`.** Every timestamp column in every Ekbatan migration is `TIMESTAMP` (without time zone). This is enforced project-wide and is not negotiable per-table. `InstantConverter` turns each `Instant` into UTC wall time in Java and back, so plain `TIMESTAMP` round-trips with Java `Instant` whatever zone the database server or the JVM runs in. Do not introduce `TIMESTAMPTZ` even if it seems like a "best practice" elsewhere — mixing the two within Ekbatan creates subtle JOOQ codegen and converter inconsistencies.
+- **Database server timezone** — set the database machine or container to `TZ=UTC`. Ekbatan uses `java.time.Instant` (always UTC) for `created_date` and `updated_date` fields, and stores them right on a server in any zone; what a zone outside UTC changes is the database's own clock (`NOW()`, `CURRENT_TIMESTAMP`, `LOCALTIMESTAMP`), which then reads local time, hours away from the values Ekbatan wrote. On MySQL/MariaDB that clock follows the server's zone; on PostgreSQL it follows the JVM's.
 - **Table column values** — all timestamps persisted by the framework represent UTC instants. Do not store local times. If a business requirement needs a local time representation, store it as a separate field alongside the UTC instant.
 - **TestContainers** — always configure with `.withEnv("TZ", "UTC")` to avoid timezone-dependent test failures (e.g., daylight saving time shifts).
-- **JDBC connections** — when connecting to PostgreSQL, MySQL, or MariaDB, ensure the session timezone is UTC. For PostgreSQL this is typically the default; for MySQL/MariaDB, consider adding `serverTimezone=UTC` to the JDBC URL if needed.
+- **JDBC connections** — when connecting to PostgreSQL, MySQL, or MariaDB, ensure the session timezone is UTC. On PostgreSQL the driver sets each session to the JVM's zone when it connects, over the server's and over `options=-c TimeZone=...`, so run the JVM in UTC (`-Duser.timezone=UTC`). On MySQL/MariaDB, if the server can't run in UTC, set `sessionVariables: "time_zone='+00:00'"` under `data-source-properties`. Never `serverTimezone` or `connectionTimeZone`: with the JVM outside UTC, MySQL's driver then stores Ekbatan's values shifted by the JVM's offset, and MariaDB's driver ignores `serverTimezone`. `MysqlTimeZoneIntegrationTest`, `MariadbTimeZoneIntegrationTest` and `PgTimeZoneIntegrationTest` in `ekbatan-integration-tests/core-repo` pin all of this.
 
 > **For agents writing new migrations:** before writing schema, open one existing Flyway migration in `ekbatan-integration-tests/.../db/migration/` and copy its column-type conventions verbatim. The existing migrations are the source of truth — not memory of "what's typical" elsewhere, and not example fragments scattered through other docs.
 
@@ -534,7 +534,7 @@ For MariaDB/MySQL TestContainers, place init SQL in `src/test/resources/<dialect
 
 Ekbatan instruments its action execution pipeline using the **OpenTelemetry API** (`opentelemetry-api`). The library depends only on the API — no SDK. When no OTel SDK is registered at runtime, all tracing calls are no-ops with zero overhead. Consumers bring their own `opentelemetry-sdk` and exporters.
 
-**Instrumentation scope:** `io.ekbatan.core` version `1.0.0`, obtained from `GlobalOpenTelemetry.get().getTracer(...)`.
+**Instrumentation scope:** `io.ekbatan.core` version `1.1.0`, obtained from `GlobalOpenTelemetry.get().getTracer(...)`.
 
 **Span hierarchy:**
 ```

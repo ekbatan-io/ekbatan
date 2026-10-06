@@ -2,7 +2,7 @@
 
 Ekbatan instruments its action execution pipeline with the **OpenTelemetry API** (`opentelemetry-api`). The library depends only on the API — no SDK. When no OTel SDK is registered at runtime, all tracing calls are no-ops with zero overhead. Consumers bring their own `opentelemetry-sdk` and exporters.
 
-The instrumentation scope is `io.ekbatan.core` version `1.0.1`, obtained from `GlobalOpenTelemetry.get().getTracer(...)`.
+The instrumentation scope is `io.ekbatan.core` version `1.1.0`, obtained from `GlobalOpenTelemetry.get().getTracer(...)`.
 
 ## Span hierarchy
 
@@ -94,6 +94,23 @@ A steady stream of `handled{outcome="failed_retry"}` concentrated on a **single*
 ### Known caveat
 
 `ekbatan.events.fanned_out` currently counts rows **read** from the read replica, not rows written to the primary. On a deployment with a real replica and non-zero replication lag, a round can re-read events it has already delivered, so the counter over-reports. Treat it as an upper bound until that is fixed.
+
+## Which shard a migration log line is about
+
+Flyway names only the schema in what it logs - `Migrating schema "public" to version "2"` - and
+every PostgreSQL shard is usually `public`. While `FlywayMigrator` migrates each target it puts the
+shard and the target's name in the SLF4J MDC, under `ekbatanShard` (`1:0`) and `ekbatanTarget`
+(`mexico/member-0`), so every line Flyway writes for that target carries both wherever your log
+format or encoder includes MDC values (`%X{ekbatanShard}` in a Logback pattern; JSON encoders
+usually include the MDC by default). It also logs one line before and after each target:
+
+```
+INFO  i.e.flyway.FlywayMigrator - Migrating mexico/member-0 (1:0)
+INFO  i.e.flyway.FlywayMigrator - mexico/member-0 (1:0) is at version 4 (2 applied)
+```
+
+Neither the lines nor the MDC values ever contain a URL or a credential - only the shard and the
+name. Values an application already had under those two keys are put back afterwards.
 
 ## Bringing your own SDK
 

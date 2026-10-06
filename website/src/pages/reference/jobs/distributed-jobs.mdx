@@ -114,7 +114,7 @@ CREATE INDEX priority_execution_time_idx ON scheduled_tasks (priority DESC, exec
 
 For the MySQL/MariaDB equivalents, see db-scheduler's [`postgresql_tables.sql`](https://github.com/kagkarlsson/db-scheduler/tree/master/db-scheduler/src/main/resources) and [`mysql_tables.sql`](https://github.com/kagkarlsson/db-scheduler/tree/master/db-scheduler/src/main/resources). The `TIMESTAMP WITH TIME ZONE` column is db-scheduler's choice (this is the one place the framework deliberately steps off the always-`TIMESTAMP` rule — db-scheduler owns the table and its schema).
 
-A reference migration lives in [`ekbatan-integration-tests/distributed-jobs-pg/src/test/resources/db/migration/V0001__create_scheduled_tasks.sql`](../../ekbatan-integration-tests/distributed-jobs-pg/src/test/resources/db/migration/V0001__create_scheduled_tasks.sql).
+A reference migration lives in [`ekbatan-integration-tests/distributed-jobs-pg/src/test/resources/db/migration/V0001__create_scheduled_tasks.sql`](https://github.com/ekbatan-io/ekbatan/blob/main/ekbatan-integration-tests/distributed-jobs-pg/src/test/resources/db/migration/V0001__create_scheduled_tasks.sql).
 
 ## Wiring without DI
 
@@ -231,7 +231,7 @@ The `ekbatan.jobs.*` properties also accept camelCase aliases: `polling-interval
 
 Use a dedicated `ConnectionProvider` for `JobRegistry` — separate from your primary application pool. db-scheduler polls continuously, so you don't want it competing with normal queries for connections. A small pool is enough (polling + heartbeats are low-volume).
 
-The DI integrations expect this pool under the user-defined `jobs-config` / `jobsConfig` slot of the default shard's first member, as shown above. Both spellings are accepted in external config. Manual wiring must use the canonical Java key: `member.configFor("jobsConfig")`, not `member.configFor("jobs-config")`.
+The DI integrations expect this pool under the user-defined `jobs-config` / `jobsConfig` slot of the default shard's first member, as shown above. The slot is a complete datasource entry, so everything in [Connecting to the database](/reference/connecting/) applies to it too - an optional `username` and `password`, and `data-source-properties`. Both spellings are accepted in external config. Manual wiring must use the canonical Java key: `member.configFor("jobsConfig")`, not `member.configFor("jobs-config")`.
 
 ## See also
 

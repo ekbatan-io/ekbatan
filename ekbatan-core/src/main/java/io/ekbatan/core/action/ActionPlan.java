@@ -2,6 +2,7 @@ package io.ekbatan.core.action;
 
 import io.ekbatan.core.action.persister.PersistableChanges;
 import io.ekbatan.core.domain.Persistable;
+import io.ekbatan.core.internal.Validate;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -43,20 +44,24 @@ public class ActionPlan {
      */
     @SuppressWarnings("unchecked")
     public <ID extends Comparable<ID>, E extends Persistable<ID>> E add(E entity) {
+        Validate.notNull(entity, "entity cannot be null");
         getOrCreateChanges((Class<E>) entity.getClass()).add(entity);
         return entity;
     }
 
     /**
-     * Stages a collection of entities for insert.
+     * Stages a collection of entities for insert. A null collection is refused rather than read
+     * as "nothing to stage": it is a caller's mistake, and taken as empty it would commit an
+     * action that staged nothing and looks like success.
      *
-     * @param entities the entities to insert.
+     * @param entities the entities to insert; not null, and holding no null.
      * @param <ID> the entity identifier type.
-     * @return the same collection (or an empty collection if {@code entities} was null/empty).
+     * @return the same collection, or an empty one if {@code entities} was empty.
      */
     public <ID extends Comparable<ID>> Collection<? extends Persistable<ID>> addAll(
             Collection<? extends Persistable<ID>> entities) {
-        if (entities == null || entities.isEmpty()) {
+        Validate.notNull(entities, "entities cannot be null");
+        if (entities.isEmpty()) {
             return Collections.emptyList();
         }
         entities.forEach(this::add);
@@ -74,20 +79,23 @@ public class ActionPlan {
      */
     @SuppressWarnings("unchecked")
     public <ID extends Comparable<ID>, E extends Persistable<ID>> E update(E entity) {
+        Validate.notNull(entity, "entity cannot be null");
         getOrCreateChanges((Class<E>) entity.getClass()).update(entity);
         return entity.nextVersion();
     }
 
     /**
-     * Stages a collection of entities for update; returns the versions-incremented copies.
+     * Stages a collection of entities for update; returns the versions-incremented copies. A null
+     * collection is refused, as in {@link #addAll(Collection)}.
      *
-     * @param entities the entities to update.
+     * @param entities the entities to update; not null, and holding no null.
      * @param <ID> the entity identifier type.
      * @return the version-incremented copies, in the same order.
      */
     public <ID extends Comparable<ID>> Collection<? extends Persistable<ID>> updateAll(
             Collection<? extends Persistable<ID>> entities) {
-        if (entities == null || entities.isEmpty()) {
+        Validate.notNull(entities, "entities cannot be null");
+        if (entities.isEmpty()) {
             return Collections.emptyList();
         }
 

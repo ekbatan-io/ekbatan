@@ -1,0 +1,1516 @@
+driver	versions	setting	aliases	kind	note
+postgresql	42.7.8 42.7.13	adaptiveFetch		other	Specifies if number of rows fetched in ResultSet should be adaptive to maxResultBuffer and max row size.
+postgresql	42.7.8 42.7.13	adaptiveFetchMaximum		other	Specifies maximum number of rows used by adaptive fetch.
+postgresql	42.7.8 42.7.13	adaptiveFetchMinimum		other	Specifies minimum number of rows used by adaptive fetch.
+postgresql	42.2.29 42.7.8 42.7.13	allowEncodingChanges		other	Allow for changes in client_encoding
+postgresql	42.2.29 42.7.8 42.7.13	ApplicationName		other	Name of the Application (backend >= 9.0)
+postgresql	42.2.29 42.7.8 42.7.13	assumeMinServerVersion		other	Assume the server is at least that version
+postgresql	42.7.8 42.7.13	authenticationPluginClassName		other	Name of class which implements AuthenticationPlugin
+postgresql	42.2.29 42.7.8 42.7.13	autosave		other	Specifies what the driver should do if a query fails. In autosave=always mode, JDBC driver sets a savepoint before each query, and rolls back to that savepoi...
+postgresql	42.2.29 42.7.8 42.7.13	binaryTransfer		other	Enable binary transfer for supported built-in types if possible. Setting this to false disables any binary transfer unless it's individually activated for ea...
+postgresql	42.2.29 42.7.8 42.7.13	binaryTransferDisable		other	Comma separated list of types to disable binary transfer. Either OID numbers or names. Overrides values in the driver default set and values set with binaryT...
+postgresql	42.2.29 42.7.8 42.7.13	binaryTransferEnable		other	Comma separated list of types to enable binary transfer. Either OID numbers or names.
+postgresql	42.2.29 42.7.8 42.7.13	cancelSignalTimeout		other	The timeout that is used for sending cancel command.
+postgresql	42.7.8 42.7.13	channelBinding		other	This option controls the client's use of channel binding.
+postgresql	42.7.13	classLoaderStrategy		other	Order in which the driver searches classloaders when loading a class named by a connection property.
+postgresql	42.2.29 42.7.8 42.7.13	cleanupSavepoints		other	Determine whether SAVEPOINTS used in AUTOSAVE will be released per query or not
+postgresql	42.7.13	connectExecutor		other	Executor class used to run connection attempts with loginTimeout. It must support thread interrupts and clear interrupt flags after task execution.
+postgresql	42.7.13	connectExecutorArg		other	Argument forwarded to constructor of connectExecutor class.
+postgresql	42.2.29 42.7.8 42.7.13	connectTimeout		other	The timeout value in seconds used for socket connect operations.
+postgresql	42.7.8 42.7.13	convertBooleanToNumeric		other	Enable automatic conversion of PostgreSQL boolean values ('t'/'f') to numeric types (1/0)
+postgresql	42.2.29 42.7.8 42.7.13	currentSchema		other	Specify the schema (or several schema separated by commas) to be set in the search-path
+postgresql	42.2.29 42.7.8 42.7.13	databaseMetadataCacheFields		other	Specifies the maximum number of fields to be cached per connection. A value of {@code 0} disables the cache.
+postgresql	42.2.29 42.7.8 42.7.13	databaseMetadataCacheFieldsMiB		other	Specifies the maximum size (in megabytes) of fields to be cached per connection. A value of {@code 0} disables the cache.
+postgresql	42.2.29 42.7.8 42.7.13	defaultRowFetchSize		other	Positive number of rows that should be fetched from the database when more rows are needed for ResultSet by each fetch iteration
+postgresql	42.2.29 42.7.8 42.7.13	disableColumnSanitiser		other	Enable optimization that disables column name sanitiser
+postgresql	42.2.29 42.7.8 42.7.13	escapeSyntaxCallMode		other	Specifies how the driver transforms JDBC escape call syntax into underlying SQL, for invoking procedures or functions. (backend >= 11)In escapeSyntaxCallMode...
+postgresql	42.7.13	flushCacheOnDdl		other	Invalidate the prepared-statement cache when a CREATE/DROP/ALTER CommandComplete is observed (default true). Disable for legacy behavior that surfaces 'cache...
+postgresql	42.7.8 42.7.13	groupStartupParameters		other	[deprecated] This is important in pool-by-transaction scenarios in order to make sure that all the statements reaches the same connection that is being initi...
+postgresql	42.2.29 42.7.8 42.7.13	gssEncMode		other	Force Encoded GSS Mode
+postgresql	42.2.29 42.7.8 42.7.13	gsslib		other	Force SSSPI or GSSAPI
+postgresql	42.7.8 42.7.13	gssResponseTimeout		other	Time in milliseconds we wait for a response from the server after requesting a GSS upgrade
+postgresql	42.7.8 42.7.13	gssUseDefaultCreds		other	Use the default GSS credentials the process already has, rather than a JAAS login
+postgresql	42.2.29 42.7.8 42.7.13	hideUnprivilegedObjects		other	Enable hiding of database objects for which the current user has no privileges granted from the DatabaseMetaData
+postgresql	42.2.29 42.7.8 42.7.13	hostRecheckSeconds		other	Specifies period (seconds) after which the host status is checked again in case it has changed
+postgresql	42.2.29 42.7.8 42.7.13	jaasApplicationName		other	Specifies the name of the JAAS system or application login configuration.
+postgresql	42.2.29 42.7.8 42.7.13	jaasLogin		other	Login with JAAS before doing GSSAPI authentication
+postgresql	42.2.29 42.7.8 42.7.13	kerberosServerName		other	The Kerberos service name to use when authenticating with GSSAPI.
+postgresql	42.2.29 42.7.8 42.7.13	loadBalanceHosts		other	If disabled hosts are connected in the given order. If enabled hosts are chosen randomly from the set of suitable candidates
+postgresql	42.7.8 42.7.13	localSocketAddress		other	Local Socket address, if set bind the client side of the socket to this address
+postgresql	42.2.29 42.7.8 42.7.13	loggerFile		other	[deprecated] File name output of the Logger
+postgresql	42.2.29 42.7.8 42.7.13	loggerLevel		other	[deprecated] Logger level of the driver
+postgresql	42.2.29 42.7.8 42.7.13	loginTimeout		other	Specify how long in seconds to wait for establishment of a database connection.
+postgresql	42.2.29 42.7.8 42.7.13	logServerErrorDetail		other	Include full server error detail in exception messages. If disabled then only the error itself will be included.
+postgresql	42.2.29 42.7.8 42.7.13	logUnclosedConnections		other	When connections that are not explicitly closed are garbage collected, log the stacktrace from the opening of the connection to trace the leak source
+postgresql	42.2.29 42.7.8 42.7.13	maxResultBuffer		other	Specifies size of buffer during fetching result set. Can be specified as specified size or percent of heap memory.
+postgresql	42.7.8 42.7.13	maxSendBufferSize		other	Maximum amount of bytes buffered before sending to the backend
+postgresql	42.2.29 42.7.8 42.7.13	options		other	Specify 'options' connection initialization parameter.
+postgresql	42.2.29 42.7.8 42.7.13	password		login-password	the login password
+postgresql	42.7.13	pemKeyAlgorithm		other	Algorithm of the PEM key
+postgresql	42.2.29 42.7.8 42.7.13	PGDBNAME	dbname	other	Database name to connect to (may be specified directly in the JDBC URL)
+postgresql	42.2.29 42.7.8 42.7.13	PGHOST	host	other	Hostname of the PostgreSQL server (may be specified directly in the JDBC URL)
+postgresql	42.2.29 42.7.8 42.7.13	PGPORT	port	other	Port of the PostgreSQL server (may be specified directly in the JDBC URL)
+postgresql	42.2.29 42.7.8 42.7.13	preferQueryMode		other	Specifies which mode is used to execute queries to database: simple means ('Q' execute, no parse, no bind, text mode only), extended means always use bind/ex...
+postgresql	42.2.29 42.7.8 42.7.13	preparedStatementCacheQueries		other	Specifies the maximum number of entries in per-connection cache of prepared statements. A value of {@code 0} disables the cache.
+postgresql	42.2.29 42.7.8 42.7.13	preparedStatementCacheSizeMiB		other	Specifies the maximum size (in megabytes) of a per-connection prepared statement cache. A value of {@code 0} disables the cache.
+postgresql	42.2.29 42.7.8 42.7.13	prepareThreshold		other	Statement prepare threshold. A value of {@code -1} stands for forceBinary
+postgresql	42.2.29 42.7.8 42.7.13	protocolVersion		other	Force use of a particular protocol version when connecting, currently only version 3 is supported.
+postgresql	42.7.13	queryTimeout		other	The timeout value in seconds that the driver will wait for a query to execute.
+postgresql	42.7.8 42.7.13	quoteReturningIdentifiers		other	Quote identifiers provided in returning array
+postgresql	42.2.29 42.7.8 42.7.13	readOnly		other	Puts this connection in read-only mode
+postgresql	42.2.29 42.7.8 42.7.13	readOnlyMode		other	Controls the behavior when a connection is set to be read only, one of 'ignore', 'transaction', or 'always' When 'ignore', setting readOnly has no effect. Wh...
+postgresql	42.2.29 42.7.8 42.7.13	receiveBufferSize		other	Socket read buffer size
+postgresql	42.2.29 42.7.8 42.7.13	replication		other	Connection parameter passed in startup message, one of 'true' or 'database' Passing 'true' tells the backend to go into walsender mode, wherein a small set o...
+postgresql	42.7.13	requireAuth		other	Comma-separated list of acceptable authentication methods. Use '!' prefix to reject methods (e.g., '!password' to reject cleartext). Supported: password, md5...
+postgresql	42.2.29 42.7.8 42.7.13	reWriteBatchedInserts		other	Enable optimization to rewrite and collapse compatible INSERT statements that are batched.
+postgresql	42.7.13	reWriteBatchedInsertsSize		other	Maximum number of rows merged into a single multi-values INSERT when reWriteBatchedInserts is enabled. Rounded down to a power of two and capped at 32768 row...
+postgresql	42.7.13	scramMaxIterations		other	Maximum PBKDF2 iteration count accepted from the server during SCRAM authentication. A value of zero disables this check.
+postgresql	42.2.29 42.7.8 42.7.13	sendBufferSize		other	Socket write buffer size
+postgresql	42.7.8 42.7.13	service		other	Service name to be searched in pg_service.conf resource
+postgresql	42.2.29 42.7.8 42.7.13	socketFactory		other	Specify a socket factory for socket creation
+postgresql	42.2.29 42.7.8 42.7.13	socketFactoryArg		other	Argument forwarded to constructor of SocketFactory class.
+postgresql	42.2.29 42.7.8 42.7.13	socketTimeout		other	The timeout value in seconds max(2147484) used for socket read operations.
+postgresql	42.2.29 42.7.8 42.7.13	ssl		other	Control use of SSL (any non-null value causes SSL to be required)
+postgresql	42.2.29 42.7.8 42.7.13	sslcert		other	The location of the client's SSL certificate
+postgresql	42.2.29 42.7.8 42.7.13	sslfactory		other	Provide a SSLSocketFactory class when using SSL.
+postgresql	42.2.29 42.7.8 42.7.13	sslfactoryarg		other	Argument forwarded to constructor of SSLSocketFactory class.
+postgresql	42.2.29 42.7.8 42.7.13	sslhostnameverifier		other	A class, implementing javax.net.ssl.HostnameVerifier that can verify the server
+postgresql	42.2.29 42.7.8 42.7.13	sslkey		other	a file path
+postgresql	42.2.29 42.7.8 42.7.13	sslmode		other	Parameter governing the use of SSL
+postgresql	42.7.8 42.7.13	sslNegotiation		other	This option controls whether the driver will perform its protocol negotiation to request encryption from the server or will just directly make a standard SSL...
+postgresql	42.2.29 42.7.8 42.7.13	sslpassword		secret	password of the client's TLS key
+postgresql	42.2.29 42.7.8 42.7.13	sslpasswordcallback		other	a class name
+postgresql	42.7.8 42.7.13	sslResponseTimeout		other	Time in milliseconds we wait for a response from the server after requesting SSL upgrade
+postgresql	42.2.29 42.7.8 42.7.13	sslrootcert		other	The location of the root certificate for authenticating the server.
+postgresql	42.2.29 42.7.8 42.7.13	sspiServiceClass		other	The Windows SSPI service class for SPN
+postgresql	42.2.29 42.7.8 42.7.13	stringtype		other	The type to bind String parameters as (usually 'varchar', 'unspecified' allows implicit casting to other types)
+postgresql	42.2.29 42.7.8 42.7.13	targetServerType		other	Specifies what kind of server to connect
+postgresql	42.2.29 42.7.8 42.7.13	tcpKeepAlive		other	Enable or disable TCP keep-alive. The default is {@code false}.
+postgresql	42.7.8 42.7.13	tcpNoDelay		other	Enable or disable TCP no delay. The default is (@code true}.
+postgresql	42.2.29 42.7.8 42.7.13	unknownLength		other	Specifies the length to return for types of unknown length
+postgresql	42.2.29 42.7.8 42.7.13	user		login-user	the database user to log in as
+postgresql	42.2.29 42.7.8 42.7.13	useSpnego		other	Use SPNEGO in SSPI authentication requests
+postgresql	42.2.29 42.7.8 42.7.13	xmlFactoryFactory		other	Factory class to instantiate factories for XML processing
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	address		other	[name read ignoring case] [no definition: a host or URL part]
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	allowLoadLocalInfile		other	Should the driver allow use of "LOAD DATA LOCAL INFILE ..."? Setting to "true" overrides whatever path is set in 'allowLoadLocalInfileInPath', allowing uploa...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	allowLoadLocalInfileInPath		other	Enables "LOAD DATA LOCAL INFILE ..." statements, but only allows loading files from the specified path. Files within sub-directories are also allowed, but re...
+mysql	5.1.49 8.0.33 8.4.0	allowMasterDownConnections		other	[5.1] allowMasterDownConnections
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	allowMultiQueries		other	Allow the use of ";" to delimit multiple queries during one statement. This option does not affect the 'addBatch()' and 'executeBatch()' methods, which rely...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	allowNanAndInf		other	Should the driver allow NaN or +/- INF values in 'PreparedStatement.setDouble()'?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	allowPublicKeyRetrieval		other	Allows special handshake round-trip to get an RSA public key directly from server.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	allowReplicaDownConnections		other	By default, a replication-aware connection will fail to connect when configured replica hosts are all unavailable at initial connection. Setting this propert...
+mysql	5.1.49 8.0.33 8.4.0	allowSlaveDownConnections		other	[5.1] allowSlaveDownConnections
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	allowSourceDownConnections		other	By default, a replication-aware connection will fail to connect when configured source hosts are all unavailable at initial connection. Setting this property...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	allowUrlInLocalInfile		other	Should the driver allow URLs in "LOAD DATA LOCAL INFILE ..." statements?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	alwaysSendSetIsolation		other	Should the driver always communicate with the database when 'Connection.setTransactionIsolation()' is called? If set to "false", the driver will only communi...
+mysql	8.0.33	authenticationFidoCallbackHandler		other	Fully-qualified class name of a class implementing the interface ''com.mysql.cj.callback.MysqlCallbackHandler''. This class will be used by the FIDO authenti...
+mysql	9.5.0 26.7.0	authenticationOpenidConnectCallbackHandler		other	A fully-qualified class name of a class that implements the 'com.mysql.cj.callback.MysqlCallbackHandler' interface. This class will be utilized by the OpenID...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	authenticationPlugins		other	Comma-delimited list of classes that implement the interface 'com.mysql.cj.protocol.AuthenticationPlugin'. These plugins will be loaded at connection initial...
+mysql	8.4.0 9.5.0 26.7.0	authenticationWebAuthnCallbackHandler		other	A fully-qualified class name of a class that implements the 'com.mysql.cj.callback.MysqlCallbackHandler' interface. This class will be utilized by the WebAut...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	autoClosePStmtStreams		other	Should the driver automatically call the method 'close()' on streams/readers passed as arguments via 'set*()' methods?
+mysql	5.1.49 8.0.33	autoDeserialize		other	Should the driver automatically detect and de-serialize objects stored in BLOB fields?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	autoGenerateTestcaseScript		other	Should the driver dump the SQL it is executing, including server-side prepared statements to STDERR?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	autoReconnect		other	Should the driver try to re-establish stale and/or dead connections? If enabled the driver will throw an exception for queries issued on a stale or dead conn...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	autoReconnectForPools		other	Use a reconnection strategy appropriate for connection pools?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	autoSlowLog		other	Instead of using 'slowQueryThreshold*' to determine if a query is slow enough to be logged, maintain statistics that allow the driver to determine queries th...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	blobsAreStrings		other	Should the driver always treat BLOBs as Strings - specifically to work around dubious metadata returned by the server for GROUP BY clauses?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	blobSendChunkSize		other	Chunk size to use sending BLOBs or CLOBs via server-prepared statements. This value must not exceed 'maxAllowedPacket'; if it does, it will be adjusted autom...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	cacheCallableStmts		other	Should the driver cache the parsing stage of CallableStatements?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	cacheDefaultTimeZone	cacheDefaultTimezone	other	Caches client's default time zone. This results in better performance when dealing with time zone conversions in Date and Time data types, however it won't b...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	cachePrepStmts		other	Should the driver cache the parsing stage of PreparedStatements of client-side prepared statements, the "check" for suitability of server-side prepared and s...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	cacheResultSetMetadata		other	Should the driver cache 'ResultSetMetaData' for statements and prepared statements?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	cacheServerConfiguration		other	Should the driver cache the results of "SHOW VARIABLES" and "SHOW COLLATION" on a per-URL basis?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	callableStmtCacheSize		other	If 'cacheCallableStmts' is enabled, how many callable statements should be cached?
+mysql	5.1.49	capitalizeTypeNames		other	[5.1] capitalizeTypeNames
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	characterEncoding		other	Instructs the server to set session system variables 'character_set_client' and 'character_set_connection' to the default character set supported by MySQL fo...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	characterSetResults		other	Instructs the server to return the data encoded with the default character set for the specified Java encoding. If not set or set to "null", the server will...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	clientCertificateKeyStorePassword		secret	password of the client certificate key store
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	clientCertificateKeyStoreType		other	Key store type for client certificates. Null or empty means use the default, which is "JKS". Standard key store types supported by the JVM are "JKS" and "PKC...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	clientCertificateKeyStoreUrl		other	URL for the client certificate KeyStore. If not specified, the property 'fallbackToSystemKeyStore' determines if system-wide key store is used.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	clientInfoProvider		other	The name of a class that implements the 'com.mysql.cj.jdbc.ClientInfoProvider' interface in order to support JDBC-4.0's 'Connection.get/setClientInfo()' meth...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	clobberStreamingResults		other	This will cause a streaming result set to be automatically closed, and any outstanding data still streaming from the server to be discarded if another query...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	clobCharacterEncoding		other	The character encoding to use for sending and retrieving TEXT, MEDIUMTEXT and LONGTEXT values instead of the configured connection 'characterEncoding'.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	compensateOnDuplicateKeyUpdateCounts		other	Should the driver compensate for the update counts of "INSERT ... ON DUPLICATE KEY UPDATE" statements (2 = 1, 0 = 1) when using prepared statements?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	connectionAttributes		other	A comma-delimited list of user-defined "key:value" pairs, in addition to standard MySQL-defined "key:value" pairs, to be passed to MySQL Server for display a...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	connectionCollation		other	Instructs the server to set session system variable 'collation_connection' to the specified collation name and set 'character_set_client' and 'character_set_...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	connectionLifecycleInterceptors		other	A comma-delimited list of classes that implement 'com.mysql.cj.jdbc.interceptors.ConnectionLifecycleInterceptor' that should be notified of connection lifecy...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	connectionTimeZone	serverTimezone	other	Configures the connection time zone which is used by Connector/J if conversion between the JVM default and a target time zone is needed when preserving insta...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	connectTimeout		other	Timeout for socket connect (in milliseconds), with 0 being no timeout.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	continueBatchOnError		other	Should the driver continue processing batch commands if one statement fails. The JDBC spec allows either way.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	createDatabaseIfNotExist		other	Creates the database given in the URL if it doesn't yet exist. Assumes the configured user has permissions to create databases.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	customCharsetMapping		other	A comma-delimited list of custom "charset:java encoding" pairs. In case the MySQL server is configured with custom character sets and "detectCustomCollations...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	databaseTerm		other	MySQL uses the term "schema" as a synonym of the term "database," while Connector/J historically takes the JDBC term "catalog" as synonymous to "database". T...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	dbname		other	[name read ignoring case] [no definition: a host or URL part]
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	defaultAuthenticationPlugin		other	The default authentication plugin client-side protocol name or a fully qualified name of a class that implements the interface 'com.mysql.cj.protocol.Authent...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	defaultFetchSize		other	The driver will call 'setFetchSize(n)' with this value on all newly-created statements.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	detectCustomCollations		other	Should the driver detect custom charsets/collations installed on server? If this option set to "true" the driver gets actual charsets/collations from the ser...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	disabledAuthenticationPlugins		other	Comma-delimited list of authentication plugins client-side protocol names or classes implementing the interface 'com.mysql.cj.protocol.AuthenticationPlugin'....
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	disconnectOnExpiredPasswords		other	a yes/no flag
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	dnsSrv		other	Should the driver use the given host name to lookup for DNS SRV records and use the resulting list of hosts in a multi-host failover connection? Note that a...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	dontCheckOnDuplicateKeyUpdateInSQL		other	Stops checking if every INSERT statement contains the "ON DUPLICATE KEY UPDATE" clause. As a side effect, obtaining the statement's generated keys informatio...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	dontTrackOpenResources		other	The JDBC specification requires the driver to automatically track and close resources, however if your application doesn't do a good job of explicitly callin...
+mysql	5.1.49	dumpMetadataOnColumnNotFound		other	[5.1] dumpMetadataOnColumnNotFound
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	dumpQueriesOnException		other	Should the driver dump the contents of the query sent to the server in the message for SQLExceptions?
+mysql	5.1.49	dynamicCalendars		other	[5.1] dynamicCalendars
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	elideSetAutoCommits		other	Should the driver only issue 'set autocommit=n' queries when the server's state doesn't match the requested state by 'Connection.setAutoCommit(boolean)'?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	emptyStringsConvertToZero		other	Should the driver allow conversions from empty string fields to numeric values of "0"?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	emulateLocators		other	Should the driver emulate 'java.sql.Blob' with locators? With this feature enabled, the driver will delay loading the actual Blob data until the one of the r...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	emulateUnsupportedPstmts		other	Should the driver detect prepared statements that are not supported by the server, and replace them with client-side emulated versions?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	enableEscapeProcessing		other	Sets the default escape processing behavior for Statement objects. The method 'Statement.setEscapeProcessing()' can be used to specify the escape processing...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	enablePacketDebug		other	When enabled, a ring-buffer of 'packetDebugBufferSize' packets will be kept, and dumped when exceptions are thrown in key areas in the driver's code.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	enableQueryTimeouts		other	When enabled, query timeouts set via 'Statement.setQueryTimeout()' use a shared 'java.util.Timer' instance for scheduling. Even if the timeout doesn't expire...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	exceptionInterceptors		other	Comma-delimited list of classes that implement the interface 'com.mysql.cj.exceptions.ExceptionInterceptor'. These classes will be instantiated one per 'Conn...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	explainSlowQueries		other	If 'logSlowQueries' is enabled, should the driver automatically issue an 'EXPLAIN' on the server and send the results to the configured logger at a WARN level?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	failOverReadOnly		other	When failing over in 'autoReconnect' mode, should the connection be set to 'read-only'?
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	fallbackToSystemKeyStore		other	Whether the absence of setting a value for 'clientCertificateKeyStoreUrl' falls back to using the system-wide key store defined through the system properties...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	fallbackToSystemTrustStore		other	Whether the absence of setting a value for 'trustCertificateKeyStoreUrl' falls back to using the system-wide default trust store or one defined through the s...
+mysql	8.4.0 9.5.0 26.7.0	fipsCompliantJsse		other	Enables Connector/J to be compatible to JSSE operating in FIPS mode. Should be set to "true" if the JSSE is configured to operate in FIPS mode and Connector/...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	forceConnectionTimeZoneToSession		other	If enabled, sets the time zone value determined by 'connectionTimeZone' connection property to the current server session 'time_zone' variable. If the time z...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	functionsNeverReturnBlobs		other	Should the driver always treat data from functions returning BLOBs as Strings - specifically to work around dubious metadata returned by the server for "GROU...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	gatherPerfMetrics		other	Should the driver gather performance metrics, and report them via the configured logger every 'reportMetricsIntervalMillis' milliseconds?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	generateSimpleParameterMetadata		other	Should the driver generate simplified parameter metadata for prepared statements when no metadata is available either because the server couldn't support pre...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	getProceduresReturnsFunctions		other	Pre-JDBC4 'DatabaseMetaData' API has only the 'getProcedures()' and 'getProcedureColumns()' methods, so they return metadata info for both stored procedures...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	ha.enableJMX	haEnableJMX	other	Enables JMX-based management of load-balanced connection groups, including live addition/removal of hosts from load-balancing pool. Enables JMX-based managem...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	ha.loadBalanceStrategy	haLoadBalanceStrategy	other	If using a load-balanced connection to connect to MySQL servers in a MySQL Cluster configuration (using the URL prefix "jdbc:mysql:loadbalance://"), which lo...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	holdResultsOpenOverStatementClose		other	Should the driver close result sets on 'Statement.close()' as required by the JDBC specification?
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	host		other	[name read ignoring case] [no definition: a host or URL part]
+mysql	9.5.0 26.7.0	idTokenFile		other	a file path; the file holds the token
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	ignoreNonTxTables		other	Ignore non-transactional table warning for rollback?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	includeInnodbStatusInDeadlockExceptions		other	Include the output of "SHOW ENGINE INNODB STATUS" in exception messages when deadlock exceptions are detected?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	includeThreadDumpInDeadlockExceptions		other	Include current Java thread dump in exception messages when deadlock exceptions are detected?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	includeThreadNamesAsStatementComment		other	Include the name of the current thread as a comment visible in "SHOW PROCESSLIST", or in Innodb deadlock dumps, useful in correlation with "includeInnodbStat...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	initialTimeout		other	If 'autoReconnect' is enabled, the initial time to wait between re-connect attempts (in seconds, defaults to "2").
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	interactiveClient		other	Set the 'CLIENT_INTERACTIVE' flag, which tells MySQL to timeout connections based on 'interactive_timeout' instead of 'wait_timeout'.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	jdbcCompliantTruncation		other	Should the driver throw 'java.sql.DataTruncation' exceptions when data is truncated as is required by the JDBC specification? This property has no effect if...
+mysql	8.4.0 9.5.0 26.7.0	KeyManagerFactoryProvider		other	The name of the a Java Security Provider that provides a 'javax.net.ssl.KeyManagerFactory' implementation. If none is specified then the default one is used.
+mysql	8.4.0 9.5.0 26.7.0	keyStoreProvider		other	The name of the a Java Security Provider that provides a 'java.security.KeyStore' implementation that supports the key stores types specified with 'clientCer...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	largeRowSizeThreshold		other	What size result set row should the JDBC driver consider large, and thus use a more memory-efficient way of representing the row internally?
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	ldapServerHostname		other	When using MySQL's LDAP pluggable authentication with GSSAPI/Kerberos authentication method, allows setting the LDAP service principal hostname as configured...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	loadBalanceAutoCommitStatementRegex		other	When load-balancing is enabled for auto-commit statements (via 'loadBalanceAutoCommitStatementThreshold'), the statement counter will only increment when the...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	loadBalanceAutoCommitStatementThreshold		other	When auto-commit is enabled, the number of statements which should be executed before triggering load-balancing to rebalance. Default value of "0" causes loa...
+mysql	5.1.49 8.0.33 8.4.0	loadBalanceBlacklistTimeout		other	[5.1] loadBalanceBlacklistTimeout
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	loadBalanceBlocklistTimeout		other	Time in milliseconds between checks of servers which are unavailable, by controlling how long a server lives in the global blocklist.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	loadBalanceConnectionGroup		other	Logical group of load-balanced connections within a class loader, used to manage different groups independently. If not specified, live management of load-ba...
+mysql	5.1.49	loadBalanceEnableJMX		other	[5.1] loadBalanceEnableJMX
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	loadBalanceExceptionChecker		other	Fully-qualified class name of custom exception checker. The class must implement 'com.mysql.cj.jdbc.ha.LoadBalanceExceptionChecker' interface, and is used to...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	loadBalanceHostRemovalGracePeriod		other	Sets the grace period to wait for a host being removed from a load-balanced connection, to be released when it is currently the active host.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	loadBalancePingTimeout		other	Time in milliseconds to wait for ping responses from each of load-balanced physical connections when using a load-balanced connection.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	loadBalanceSQLExceptionSubclassFailover		other	Comma-delimited list of classes/interfaces used by default load-balanced exception checker to determine whether a given 'SQLException' should trigger a failo...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	loadBalanceSQLStateFailover		other	Comma-delimited list of 'SQLState' codes used by the default load-balanced exception checker to determine whether a given 'SQLException' should trigger a fai...
+mysql	5.1.49	loadBalanceStrategy		other	[5.1] loadBalanceStrategy
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	loadBalanceValidateConnectionOnSwapServer		other	Should the load-balanced connection explicitly check whether the connection is live when swapping to a new physical connection at commit/rollback?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	localSocketAddress		other	Hostname or IP address given to explicitly configure the interface that the driver will bind the client side of the TCP/IP connection to when connecting.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	locatorFetchBufferSize		other	If 'emulateLocators' is configured to "true", what size buffer should be used when fetching BLOB data for 'getBinaryInputStream()'?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	logger		other	The name of a class that implements 'com.mysql.cj.log.Log' that will be used to log messages to. (default is 'com.mysql.cj.log.StandardLogger', which logs to...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	logSlowQueries		other	Should queries that take longer than 'slowQueryThresholdMillis' or detected by the 'autoSlowLog' monitoring be reported to the registered 'profilerEventHandl...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	logXaCommands		other	Should the driver log XA commands sent by 'MysqlXaConnection' to the server, at the DEBUG level of logging?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	maintainTimeStats		other	Should the driver maintain various internal timers to enable idle time calculations as well as more verbose error messages when the connection to the server...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	maxAllowedPacket		other	Maximum allowed packet size to send to server. If not set, the value of system variable 'max_allowed_packet' will be used to initialize this upon connecting....
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	maxByteArrayAsHex		other	Maximum size for a byte array parameter in a prepared statement that is converted to a hexadecimal literal when interpolated by 'JdbcPreparedStatement.toStri...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	maxQuerySizeToLog		other	Controls the maximum length of the part of a query that will get logged when profiling or tracing.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	maxReconnects		other	Maximum number of reconnects to attempt if 'autoReconnect' is "true".
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	maxRows		other	The maximum number of rows to return. The default "0" means return all rows.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	metadataCacheSize		other	The number of queries to cache 'ResultSetMetadata' for if 'cacheResultSetMetaData' is set to "true".
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	netTimeoutForStreamingResults		other	What value should the driver automatically set the server setting 'net_write_timeout' to when the streaming result sets feature is in use? Value has unit of...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	noAccessToProcedureBodies		other	When determining procedure parameter types for 'CallableStatement', and the connected user can't access procedure bodies through "SHOW CREATE PROCEDURE" shou...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	noDatetimeStringSync		other	Don't ensure that 'ResultSet.getTimestamp().toString().equals(ResultSet.getString())'.
+mysql	5.1.49	noTimezoneConversionForDateType		other	[5.1] noTzConversionForDateType
+mysql	5.1.49	noTimezoneConversionForTimeType		other	[5.1] noTzConversionForTimeType
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	nullDatabaseMeansCurrent	nullCatalogMeansCurrent	other	In 'DatabaseMetaData' methods that take a 'catalog' or 'schema' parameter, does the value "null" mean to use the current database? See also the property 'dat...
+mysql	5.1.49	nullNamePatternMatchesAll		other	[5.1] nullNamePatternMatchesAll
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	ociConfigFile		other	The location of the OCI configuration file as required by the OCI SDK for Java. Default value is "~/.oci/config" for Unix-like systems and "%HOMEDRIVE%%HOMEP...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	ociConfigProfile		other	The profile in the OCI configuration file specified in 'ociConfigFile', from where the configuration to use in the 'authentication_oci_client' authentication...
+mysql	8.4.0 9.5.0 26.7.0	openTelemetry		other	Should the driver generate OpenTelemetry traces and handle context propagation to the MySQL Server? This option accepts the values "REQUIRED", "PREFERRED", a...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	overrideSupportsIntegrityEnhancementFacility		other	Should the driver return "true" for 'DatabaseMetaData.supportsIntegrityEnhancementFacility()' even if the database doesn't support it to workaround applicati...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	packetDebugBufferSize		other	The maximum number of packets to retain when 'enablePacketDebug' is "true".
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	padCharsWithSpace		other	If a result set column has the CHAR type and the value does not fill the amount of characters specified in the DDL for the column, should the driver pad the...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	paranoid		other	[name read ignoring case] Take measures to prevent exposure sensitive information in error messages and clear data structures holding sensitive data when pos...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	password		login-password	the login password
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	password1		secret	multi-factor login: first factor (a synonym of password)
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	password2		secret	multi-factor login: second factor
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	password3		secret	multi-factor login: third factor
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	passwordCharacterEncoding		other	an encoding name
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	path	namedPipePath	other	[name read ignoring case] [no definition: a host or URL part]
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	pedantic		other	Follow the JDBC specification to the letter.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	pinGlobalTxToPhysicalConnection		other	When using XA connections, should the driver ensure that operations on a given XID are always routed to the same physical connection? This allows the 'XAConn...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	populateInsertRowWithDefaultValues		other	When using result sets that are 'CONCUR_UPDATABLE', should the driver pre-populate the insert row with default values from the DDL for the table used in the...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	port		other	[name read ignoring case] [no definition: a host or URL part]
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	prepStmtCacheSize		other	If prepared statement caching is enabled, how many prepared statements should be cached?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	prepStmtCacheSqlLimit		other	If prepared statement caching is enabled, what's the largest SQL the driver will cache the parsing for?
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	preserveInstants		other	If enabled, Connector/J does its best to preserve the instant point on the time-line for Java instant-based objects such as 'java.sql.Timestamp' or 'java.tim...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	priority		other	[name read ignoring case] [no definition: a host or URL part]
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	processEscapeCodesForPrepStmts		other	Should the driver process escape codes in queries that are prepared? Default escape processing behavior in non-prepared statements must be defined with the p...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	profilerEventHandler		other	Name of a class that implements the interface 'com.mysql.cj.log.ProfilerEventHandler' that will be used to handle profiling/tracing events.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	profileSQL		other	Trace queries and their execution/fetch times to the configured 'profilerEventHandler'.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	propertiesTransform		other	An implementation of 'com.mysql.cj.conf.ConnectionPropertiesTransform' that the driver will use to modify connection string properties passed to the driver b...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	protocol		other	[name read ignoring case] [no definition: a host or URL part]
+mysql	5.1.49 8.0.33 8.4.0	queriesBeforeRetryMaster		other	[5.1] queriesBeforeRetryMaster
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	queriesBeforeRetrySource		other	When using multi-host failover, the number of queries to issue before falling back to the primary host when failed over. Whichever condition is met first, 'q...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	queryInfoCacheFactory	parseInfoCacheFactory	other	Name of a class implementing 'com.mysql.cj.CacheAdapterFactory', which will be used to create caches for the parsed representation of prepared statements. Pr...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	queryInterceptors		other	A comma-delimited list of classes that implement 'com.mysql.cj.interceptors.QueryInterceptor' that intercept query executions and are able influence the resu...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	queryTimeoutKillsConnection		other	If the timeout given in 'Statement.setQueryTimeout()' expires, should the driver forcibly abort the connection instead of attempting to abort the query?
+mysql	5.1.49 8.0.33 8.4.0	readFromMasterWhenNoSlaves		other	[5.1] readFromMasterWhenNoSlaves
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	readFromSourceWhenNoReplicas		other	Replication-aware connections distribute load by using the source hosts when in read/write state and by using the replica hosts when in read-only state. If,...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	readOnlyPropagatesToServer		other	Should the driver issue appropriate statements to implicitly set the transaction access mode on server side when 'Connection.setReadOnly()' is called? Settin...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	reconnectAtTxEnd		other	If 'autoReconnect' is set to "true", should the driver attempt reconnections at the end of every transaction?
+mysql	5.1.49	relaxAutoCommit		other	[5.1] relaxAutoCommit
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	replicationConnectionGroup		other	Logical group of replication connections within a class loader, used to manage different groups independently. If not specified, live management of replicati...
+mysql	5.1.49	replicationEnableJMX		other	[5.1] loadBalanceEnableJMX
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	reportMetricsIntervalMillis		other	If 'gatherPerfMetrics' is enabled, how often should they be logged (in milliseconds)?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	requireSSL		other	DEPRECATED: See 'sslMode' property description for details. For 8.0.12 and earlier: Require server support of SSL connection if "useSSL=true".
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	resourceId		other	A globally unique name that identifies the resource that this data source or connection is connected to, used for 'XAResource.isSameRM()' when the driver can...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	resultSetSizeThreshold		other	If 'useUsageAdvisor' is "true", how many rows should a result set contain before the driver warns that it is suspiciously large?
+mysql	5.1.49	retainStatementAfterResultSetClose		other	[5.1] retainStatementAfterResultSetClose
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	retriesAllDown		other	When using load balancing or failover, the number of times the driver should cycle through available hosts, attempting to connect. Between cycles, the driver...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	rewriteBatchedStatements		other	Should the driver use multi-queries, regardless of the setting of 'allowMultiQueries', as well as rewriting of prepared statements for INSERT and REPLACE que...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	rollbackOnPooledClose		other	Should the driver issue a 'rollback()' when the logical connection in a pool is closed?
+mysql	5.1.49	roundRobinLoadBalance		other	[5.1] roundRobinLoadBalance
+mysql	5.1.49	runningCTS13		other	[5.1] runningCTS13
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	scrollTolerantForwardOnly		other	Should the driver contradict the JDBC API and tolerate and support backward and absolute cursor movement on result sets of type 'ResultSet.TYPE_FORWARD_ONLY'...
+mysql	5.1.49 8.0.33 8.4.0	secondsBeforeRetryMaster		other	[5.1] secondsBeforeRetryMaster
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	secondsBeforeRetrySource		other	How long, in seconds, should the driver wait when failed over, before attempting to reconnect to the primary host? Whichever condition is met first, 'queries...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	selfDestructOnPingMaxOperations		other	If set to a non-zero value, the driver will report close the connection and report failure when 'com.mysql.cj.jdbc.JdbcConnection.ping()' or 'java.sql.Connec...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	selfDestructOnPingSecondsLifetime		other	If set to a non-zero value, the driver will close the connection and report failure when 'com.mysql.cj.jdbc.JdbcConnection.ping()' or 'java.sql.Connection.is...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	sendFractionalSeconds		other	If set to "false", the fractional seconds will always be truncated before sending any data to the server. This option applies only to prepared statements, ca...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	sendFractionalSecondsForTime		other	If set to "false", the fractional seconds of 'java.sql.Time' will be ignored as required by JDBC specification. If set to "true", its value is rendered with...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	serverAffinityOrder		other	A comma separated list containing the host/port pairs that are to be used in load-balancing "serverAffinity" strategy. Only the sub-set of the hosts enumerat...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	serverConfigCacheFactory		other	Name of a class implementing 'com.mysql.cj.CacheAdapterFactory', which will be used to create caches for MySQL server configuration values.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	serverRSAPublicKeyFile		other	File path to the server RSA public key file for 'sha256_password' authentication. If not specified, the public key will be retrieved from the server.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	sessionVariables		other	A comma or semicolon separated list of "name=value" pairs to be sent as "SET [SESSION] ..." to the server when the driver connects.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	slowQueryThresholdMillis		other	If 'logSlowQueries' is enabled, how long, in milliseconds, should a query take before it is logged as slow?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	slowQueryThresholdNanos		other	If 'logSlowQueries' is enabled, 'useNanosForElapsedTime' is set to "true", and this property is set to a non-zero value, the driver will use this threshold,...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	socketFactory		other	The name of the class that the driver should use for creating socket connections to the server. This class must implement the interface 'com.mysql.cj.protoco...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	socketTimeout		other	Timeout, specified in milliseconds, on network socket operations. Value "0" means no timeout.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	socksProxyHost		other	Name or IP address of a SOCKS host to connect through.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	socksProxyPort		other	Port of the SOCKS server.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	socksProxyRemoteDns		other	When using a SOCKS proxy, whether the DNS lookup for the database host should be performed locally or through the SOCKS proxy.
+mysql	8.4.0 9.5.0 26.7.0	sslContextProvider		other	The name of the a Java Security Provider that provides a 'javax.net.ssl.SSLContext' implementation. If none is specified then the default one is used.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	sslMode		other	By default, network connections are SSL encrypted; this property permits secure connections to be turned off, or a different levels of security to be chosen....
+mysql	5.1.49	statementInterceptors		other	[5.1] statementInterceptors
+mysql	5.1.49	strictFloatingPoint		other	[5.1] strictFloatingPoint
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	strictUpdates		other	Should the driver do strict checking, i.e. all primary keys selected, of updatable result sets?
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	tcpKeepAlive		other	If connecting using TCP/IP, should the driver set 'SO_KEEPALIVE'?
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	tcpNoDelay		other	If connecting using TCP/IP, should the driver set 'SO_TCP_NODELAY', disabling the Nagle Algorithm?
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	tcpRcvBuf		other	If connecting using TCP/IP, should the driver set 'SO_RCV_BUF' to the given value? The default value of "0", means use the platform default value for this pr...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	tcpSndBuf		other	If connecting using TCP/IP, should the driver set 'SO_SND_BUF' to the given value? The default value of "0", means use the platform default value for this pr...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	tcpTrafficClass		other	If connecting using TCP/IP, should the driver set traffic class or type-of-service fields? See the documentation for 'java.net.Socket.setTrafficClass()' for...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	tinyInt1isBit		other	Since the MySQL server silently converts BIT to TINYINT(1) when creating tables, should the driver treat the datatype TINYINT(1) as the BIT type?
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	tlsCiphersuites	enabledSSLCipherSuites	other	When establishing secure connections, overrides the cipher suites enabled for use on the underlying SSL sockets. This may be required when using external JSS...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	tlsVersions	enabledTLSProtocols	other	List of TLS protocols to allow when establishing secure connections. Overrides the TLS protocols enabled in the underlying SSL sockets. This can be used to r...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	traceProtocol		other	Should the network protocol be logged at the TRACE level?
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	trackSessionState		other	Receive server session state changes on query results. These changes are accessible via 'MysqlConnection.getServerSessionStateController()'.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	transformedBitIsBoolean		other	If the driver converts TINYINT(1) to a different type, should it use BOOLEAN instead of BIT?
+mysql	8.4.0 9.5.0 26.7.0	treatMysqlDatetimeAsTimestamp		other	Should the driver treat the MySQL DATETIME type as TIMESTAMP in 'ResultSet.getObject()'? Enabling this option changes the default MySQL data type to Java typ...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	treatUtilDateAsTimestamp		other	Should the driver treat 'java.util.Date' as a TIMESTAMP in 'PreparedStatement.setObject()'?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	trustCertificateKeyStorePassword		secret	password of the trusted certificates key store
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	trustCertificateKeyStoreType		other	Key store type for trusted root certificates. Null or empty means use the default, which is "JKS". Standard key store types supported by the JVM are "JKS" an...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	trustCertificateKeyStoreUrl		other	URL for the trusted root certificates key store. If not specified, the property 'fallbackToSystemTrustStore' determines if system-wide trust store is used.
+mysql	8.4.0 9.5.0 26.7.0	trustManagerFactoryProvider		other	The name of the a Java Security Provider that provides a 'javax.net.ssl.TrustManagerFactory' implementation. If none is specified then the default one is used.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	type		other	[name read ignoring case] [no definition: a host or URL part]
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	ultraDevHack		other	Create prepared statements for 'prepareCall()' when required, because UltraDev is broken and issues a 'prepareCall()' for all statements?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useAffectedRows		other	Don't set the 'CLIENT_FOUND_ROWS' flag when connecting to the server. Note that this is not JDBC-compliant and it will break most applications that rely on "...
+mysql	5.1.49	useBlobToStoreUTF8OutsideBMP		other	[5.1] useBlobToStoreUTF8OutsideBMP
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useColumnNamesInFindColumn		other	Prior to JDBC-4.0, the JDBC specification had a bug related to what could be given as a column name to result set methods like 'findColumn()', or getters tha...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useCompression		other	Use zlib compression when communicating with the server?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useConfigs		other	Load the comma-delimited list of configuration properties for specifying combinations of options for particular scenarios. These properties are loaded before...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useCursorFetch		other	Should the driver use cursor-based fetching to retrieve rows? If set to "true" and 'defaultFetchSize' is set to a value higher than zero or 'setFetchSize()'...
+mysql	5.1.49	useDirectRowUnpack		other	[5.1] useFastIntParsing
+mysql	5.1.49	useDynamicCharsetInfo		other	[5.1] useDynamicCharsetInfo
+mysql	5.1.49	useFastDateParsing		other	[5.1] useFastDateParsing
+mysql	5.1.49	useFastIntParsing		other	
+mysql	5.1.49	useGmtMillisForDatetimes		other	[5.1] useGmtMillisForDatetimes
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useHostsInPrivileges		other	Add '@hostname' to users in 'DatabaseMetaData.getColumn/TablePrivileges()'.
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useInformationSchema		other	Should the driver use the INFORMATION_SCHEMA to derive information used by 'DatabaseMetaData'? Default is "true" when connecting to MySQL 8.0.3+, otherwise d...
+mysql	5.1.49	useJDBCCompliantTimezoneShift		other	[5.1] useJDBCCompliantTimezoneShift
+mysql	5.1.49	useJvmCharsetConverters		other	
+mysql	5.1.49	useLegacyDatetimeCode		other	[5.1] useLegacyDatetimeCode
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useLocalSessionState		other	Should the driver refer to the internal values of auto-commit and transaction isolation that are set by 'Connection.setAutoCommit()' and 'Connection.setTrans...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useLocalTransactionState		other	Should the driver use the in-transaction state provided by the MySQL protocol to determine if a 'commit()' or 'rollback()' should actually be sent to the dat...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useNanosForElapsedTime		other	For profiling/debugging functionality that measures elapsed time, should the driver try to use nanoseconds resolution?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useOldAliasMetadataBehavior		other	Should the driver use the legacy behavior for "AS" clauses on columns and tables, and only return aliases ,if any, for 'ResultSetMetaData.getColumnName()' or...
+mysql	5.1.49	useOldUTF8Behavior		other	[5.1] useOldUtf8Behavior
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useOnlyServerErrorMessages		other	Don't prepend standard 'SQLState' error messages to error messages returned by the server.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	user		login-user	the database user to log in as
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useReadAheadInput		other	Use optimized non-blocking buffered input stream when reading from the server?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useServerPrepStmts		other	Use server-side prepared statements if the server supports them? The server may limit the number of prepared statements with 'max_prepared_stmt_count' or dis...
+mysql	5.1.49	useSqlStateCodes		other	[5.1] useSqlStateCodes
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useSSL		other	DEPRECATED: See 'sslMode' property description for details. For 8.0.12 and earlier: Use SSL when communicating with the server, default is "true" when connec...
+mysql	5.1.49	useSSPSCompatibleTimezoneShift		other	[5.1] useSSPSCompatibleTimezoneShift
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useStreamLengthsInPrepStmts		other	Honor stream length parameter in 'PreparedStatement/ResultSet.set*Stream()' method calls?
+mysql	5.1.49	useTimezone		other	[5.1] useTimezone
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useUnbufferedInput		other	Don't use 'BufferedInputStream' for reading data from the server.
+mysql	5.1.49	useUnicode		other	[5.1] useUnicode
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	useUsageAdvisor		other	Should the driver issue usage warnings advising proper and efficient usage of JDBC and MySQL Connector/J to the 'profilerEventHandler'?
+mysql	5.1.49	utf8OutsideBmpExcludedColumnNamePattern		other	[5.1] utf8OutsideBmpExcludedColumnNamePattern
+mysql	5.1.49	utf8OutsideBmpIncludedColumnNamePattern		other	[5.1] utf8OutsideBmpIncludedColumnNamePattern
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	verifyServerCertificate		other	DEPRECATED: See 'sslMode' property description for details. For 8.0.12 and earlier: If 'useSSL' is set to "true", should the driver verify the server's certi...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.asyncResponseTimeout	xdevapiAsyncResponseTimeout	other	[no definition: a host or URL part]
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.auth	xdevapiAuth	other	an authentication mechanism name
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.compression	xdevapiCompression	other	X DevAPI-specific network traffic compression. This option accepts one of the three values: "PREFERRED", "REQUIRED", and "DISABLED". Setting this option to "...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.compression-algorithms	xdevapiCompressionAlgorithms	other	A comma-delimited list of compression algorithms, each one identified by its name and operating mode, (e.g. "lz4_message"; consult the description for the My...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.compression-extensions	xdevapiCompressionExtensions	other	A comma-delimited list of triplets, with their elements delimited by colon, that enables the support for additional compression algorithms. Each triplet must...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.connect-timeout	xdevapiConnectTimeout	other	X DevAPI-specific timeout, in milliseconds, for socket connect, with "0" being no timeout. If 'xdevapi.connect-timeout' is not set explicitly and 'connectTim...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.connection-attributes	xdevapiConnectionAttributes	other	An X DevAPI-specific comma-delimited list of user-defined "key=value" pairs, in addition to standard X Protocol-defined "key=value" pairs, to be passed to My...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.dns-srv	xdevapiDnsSrv	other	X DevAPI-specific option for instructing the driver use the given host name to lookup for DNS SRV records and use the resulting list of hosts in a multi-host...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.fallback-to-system-keystore	xdevapiFallbackToSystemKeyStore	other	X DevAPI-specific switch to specify whether in the absence of a set value for 'xdevapi.ssl-keystore' (or 'clientCertificateKeyStoreUrl'), Connector/J falls b...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.fallback-to-system-truststore	xdevapiFallbackToSystemTrustStore	other	X DevAPI-specific switch to specify whether in the absence of a set value for 'xdevapi.ssl-truststore' (or 'trustCertificateKeyStoreUrl'), Connector/J falls...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.ssl-keystore	xdevapiSslKeystore	other	X DevAPI-specific URL for the client certificate key store. If not specified, use 'clientCertificateKeyStoreUrl' value.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.ssl-keystore-password	xdevapiSslKeystorePassword	secret	X DevAPI: password of the client certificate key store
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.ssl-keystore-type	xdevapiSslKeystoreType	other	X DevAPI-specific type of the client certificate key store. If not specified, use 'clientCertificateKeyStoreType' value.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.ssl-mode	xdevapiSslMode	other	X DevAPI-specific SSL mode setting. If not specified, use 'sslMode'. Because the "PREFERRED" mode is not applicable to X Protocol, if 'xdevapi.ssl-mode' is n...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.ssl-truststore	xdevapiSslTruststore	other	X DevAPI-specific URL for the trusted CA certificates key store. If not specified, use 'trustCertificateKeyStoreUrl' value.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.ssl-truststore-password	xdevapiSslTruststorePassword	secret	X DevAPI: password of the trusted certificates key store
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.ssl-truststore-type	xdevapiSslTruststoreType	other	X DevAPI-specific type of the trusted CA certificates key store. If not specified, use 'trustCertificateKeyStoreType' value.
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.tls-ciphersuites	xdevapiTlsCiphersuites	other	X DevAPI-specific property overriding the cipher suites enabled for use on the underlying SSL sockets. If not specified, the value of 'enabledSSLCipherSuites...
+mysql	8.0.33 8.4.0 9.5.0 26.7.0	xdevapi.tls-versions	xdevapiTlsVersions	other	X DevAPI-specific property that takes a list of TLS protocols to allow when creating secure sessions. Overrides the TLS protocols enabled in the underlying S...
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	yearIsDateType		other	Should the JDBC driver treat the MySQL type YEAR as a 'java.sql.Date', or as a SHORT?
+mysql	5.1.49 8.0.33 8.4.0 9.5.0 26.7.0	zeroDateTimeBehavior		other	What should happen when the driver encounters DATETIME values that are composed entirely of zeros - used by MySQL to represent invalid dates? Valid values ar...
+mariadb	3.5.7 3.5.10	accessKeyId		other	identifies an AWS access key; its secret half is secretKey
+mariadb	2.7.13 3.5.7 3.5.10	allowLocalInfile		other	Indicate if LOAD DATA LOCAL INFILE commands are permitted. This will disable all pipelining implementation. Default false.
+mariadb	2.7.13	allowMasterDownConnection		other	
+mariadb	2.7.13 3.5.7 3.5.10	allowMultiQueries		other	permit multi-queries like insert into ab (i) values (1); insert into ab (i) values (2). Default: false.
+mariadb	2.7.13 3.5.7 3.5.10	allowPublicKeyRetrieval		other	Authorize client to retrieve RSA server public key when serverRsaPublicKeyFile is not set (for sha256_password and caching_sha2_password authentication passw...
+mariadb	2.7.13	assureReadOnly		other	
+mariadb	2.7.13 3.5.7 3.5.10	autocommit		other	Set default autocommit value on connection initialization. Default: true.
+mariadb	2.7.13	autoReconnect		other	
+mariadb	2.7.13 3.5.7 3.5.10	blankTableNameMeta		other	Resultset metadata getTableName always return blank. This option is mainly for ORACLE db compatibility.
+mariadb	2.7.13	cacheCallableStmts		other	
+mariadb	3.5.7 3.5.10	cacheCodecs		other	permit to enable/disable caching of codecs (FIELD encoder/decoder)
+mariadb	2.7.13 3.5.7 3.5.10	cachePrepStmts		other	enable/disable prepare Statement cache. When enable, PreparedStatement.close won't close prepare immediately, keeping a pool of most used prepared results. D...
+mariadb	2.7.13	callableStmtCacheSize		other	
+mariadb	3.5.7 3.5.10	canUseServerTimeout		other	connection switch [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	connectionAttributes		other	When performance_schema is active, permit to send server some client information in a key;value pair format (example: connectionAttributes=key1:value1,key2,v...
+mariadb	3.5.7 3.5.10	connectionCollation		other	indicate what utf8mb4 collation to use. if not set, server default collation for utf8mb4 will be used
+mariadb	3.5.7 3.5.10	connectionTimeZone		other	This option defines the connection's time zone. LOCAL retrieves the JVM's default time zone, SERVER fetches the server's global time zone upon connection cre...
+mariadb	2.7.13 3.5.7	connectTimeout		other	The connect timeout value, in milliseconds, or zero for no timeout.
+mariadb	2.7.13	continueBatchOnError		other	
+mariadb	2.7.13 3.5.7 3.5.10	createDatabaseIfNotExist		other	the specified database in the url will be created if nonexistent. Default: false
+mariadb	2.7.13 3.5.7 3.5.10	credentialType		other	Indicate the credential plugin type to use. Plugin must be present in classpath
+mariadb	3.5.7 3.5.10	database		other	Database
+mariadb	2.7.13 3.5.7 3.5.10	defaultFetchSize		other	The driver will call setFetchSize(n) with this value on all newly-created Statements. Default: 0.
+mariadb	3.5.7 3.5.10	deniedListTimeout		other	failover timing [read by name, not in the option list]
+mariadb	3.5.7 3.5.10	deprecateEof		other	protocol switch [read by name, not in the option list]
+mariadb	3.5.7 3.5.10	disablePipeline		other	option permitting disabling pipelining
+mariadb	3.5.7 3.5.10	disableSessionTracking		other	protocol switch [read by name, not in the option list]
+mariadb	3.5.10	disableSslContextCache		other	TLS switch (3.5.10) [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	disableSslHostnameVerification		other	legacy TLS switch [read by name, not in the option list]
+mariadb	3.5.7 3.5.10	disconnectOnExpiredPasswords		other	a yes/no flag
+mariadb	2.7.13 3.5.7 3.5.10	dumpQueriesOnException		other	If set to 'true', an exception is thrown during query execution containing a query string.
+mariadb	3.5.7 3.5.10	enableBulkUnitResult		other	protocol switch [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	enabledSslCipherSuites		other	Force TLS/SSL cipher (comma separated list). Example : "TLS_DHE_RSA_WITH_AES_256_GCM_SHA384, TLS_DHE_DSS_WITH_AES_256_GCM_SHA384"
+mariadb	2.7.13 3.5.7 3.5.10	enabledSslProtocolSuites		other	Force TLS/SSL protocol to a specific set of TLS versions (comma separated list). Example : "TLSv1, TLSv1.1, TLSv1.2"
+mariadb	2.7.13	enablePacketDebug		other	
+mariadb	3.5.7 3.5.10	enableSkipMeta		other	protocol switch [read by name, not in the option list]
+mariadb	2.7.13	ensureSocketState		other	
+mariadb	3.5.7 3.5.10	extendedTypeInfo		other	protocol switch [read by name, not in the option list]
+mariadb	2.7.13	failOnReadOnly		other	
+mariadb	2.7.13	failoverLoopRetries		other	
+mariadb	3.5.7 3.5.10	fallbackToSystemKeyStore		other	Indicate if keystore default implementation can be used. Connector use keystore option if set or if not, use javax.net.ssl.keyStore* system properties to loa...
+mariadb	3.5.7 3.5.10	fallbackToSystemTrustStore		other	Indicate if truststore default implementation can be used. Connector use serverSslCert option if set or if not, use java default truststore if this option is...
+mariadb	3.5.7 3.5.10	forceConnectionTimeZoneToSession		other	This setting dictates whether the connector enforces the connection time zone for the session.
+mariadb	3.5.7 3.5.10	forceTransactionEnd		other	connection switch [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	galeraAllowedState		other	Usually, Connection.isValid just send an empty packet to server, and server send a small response to ensure connectivity. When this option is set, connector...
+mariadb	3.5.7 3.5.10	geometryDefaultType		other	Indicate what default Object type Geometry a resultset.getObject must return. null or empty is WKB byte array. 'default' will return org.mariadb.mariadb.jdbc...
+mariadb	3.5.7 3.5.10	getExportedKeysUsingIs		other	metadata switch [read by name, not in the option list]
+mariadb	3.5.7 3.5.10	getImportedKeysUsingIs		other	metadata switch [read by name, not in the option list]
+mariadb	3.5.7 3.5.10	importedKeysWithConstraintNames		other	metadata switch [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	includeInnodbStatusInDeadlockExceptions		other	add "SHOW ENGINE INNODB STATUS" result to exception trace when having a deadlock exception.
+mariadb	2.7.13 3.5.7 3.5.10	includeThreadDumpInDeadlockExceptions		other	add thread dump to exception trace when having a deadlock exception.
+mariadb	3.5.7 3.5.10	initSql		other	Initial command to execute on new connection creation
+mariadb	2.7.13 3.5.7 3.5.10	interactiveClient		other	protocol switch [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	jdbcCompliantTruncation		other	If set, the connector ensures STRICT_TRANS_TABLES is always set to follow JDBC expected truncation. Default is not set, since it will add a new command for e...
+mariadb	2.7.13 3.5.7 3.5.10	keyPassword		secret	password of the private key inside the key store
+mariadb	2.7.13 3.5.7 3.5.10	keyStore	clientcertificatekeystoreurl	other	File path of the keyStore file that contain client private key store and associate certificates (similar to java System property "javax.net.ssl.keyStore", bu...
+mariadb	2.7.13 3.5.7 3.5.10	keyStorePassword	clientcertificatekeystorepassword	secret	password of the client certificate key store
+mariadb	2.7.13 3.5.7 3.5.10	keyStoreType	clientcertificatekeystoretype	other	indicate key store type (JKS/PKCS12). default is null, then using java default type
+mariadb	2.7.13	loadBalanceBlacklistTimeout		other	
+mariadb	2.7.13 3.5.7 3.5.10	localSocket		other	Permits connecting to the database via Unix domain socket, if the server allows it. The value is the path of Unix domain socket (i.e "socket" database parame...
+mariadb	2.7.13 3.5.7 3.5.10	localSocketAddress		other	Hostname or IP address to bind the connection socket to a local (UNIX domain) socket.
+mariadb	2.7.13	log		other	
+mariadb	3.5.10	maxAllowedColumns		other	maximum number of columns the driver will accept in result-set or prepare metadata received from the server. Reading column metadata allocates memory proport...
+mariadb	3.5.7 3.5.10	maxAllowedPacket		other	permit to driver to avoid sending command with size > to server max_allowed_packet, throwing an error in place of server dropping the connection.
+mariadb	2.7.13 3.5.7 3.5.10	maxIdleTime		other	The maximum amount of time in seconds that a connection can stay in the pool when not used. This value must always be below @wait_timeout value - 45s. Defaul...
+mariadb	2.7.13	maximizeMysqlCompatibility		other	
+mariadb	2.7.13 3.5.7 3.5.10	maxPoolSize		other	The maximum number of physical connections that the pool should contain. Default: 8.
+mariadb	2.7.13 3.5.7 3.5.10	maxQuerySizeToLog		other	Only the first characters corresponding to this options size will be displayed in logs. Default: 1024
+mariadb	3.5.7 3.5.10	metaExportedKeys		other	permit to force the use of 2 different implementation for DatabaseMetaData.getExportedKeys. Possible choices are "UseInformationSchema" for using information...
+mariadb	2.7.13 3.5.7 3.5.10	minPoolSize		other	When connections are removed due to not being used for longer than than "maxIdleTime", connections are closed and removed from the pool. "minPoolSize" indica...
+mariadb	3.5.7 3.5.10	nullDatabaseMeansCurrent	nullcatalogmeanscurrent	other	When enable, in DatabaseMetadata, will handle null database/schema (depending on UseCatalog=catalog/schema) as current. (Alias nullCatalogMeansCurrent)
+mariadb	3.5.7 3.5.10	oldModeNoPrecisionTimestamp		other	permit timestamp text micro-precision representation compatible with 2.7. This is a compatibility option only.
+mariadb	2.7.13 3.5.7	password		login-password	the login password
+mariadb	2.7.13 3.5.7 3.5.10	password<N>		secret	PAM: the password for the N-th prompt, N = 2, 3, ...
+mariadb	2.7.13	passwordCharacterEncoding		other	
+mariadb	3.5.7 3.5.10	permitNoResults		other	Indicate if Statement/PreparedStatement.executeQuery for command that produce no result will return an exception or just an empty result-set. When enabled, c...
+mariadb	3.5.7 3.5.10	permitRedirect		other	permit server redirection. Default is true
+mariadb	2.7.13 3.5.7 3.5.10	pinGlobalTxToPhysicalConnection		other	When set, will reuse previous connection used for XID.
+mariadb	2.7.13 3.5.7 3.5.10	pipe		other	On Windows, specify named pipe name to connect.
+mariadb	2.7.13 3.5.7 3.5.10	pool		other	Use pool. This option is useful only if not using a DataSource object, but only a connection object. Default: false.
+mariadb	2.7.13 3.5.7 3.5.10	poolName		other	Pool name that permits identifying threads. default: auto-generated as MariaDb-pool-<pool-index>
+mariadb	2.7.13 3.5.7 3.5.10	poolValidMinDelay		other	When asking a connection to pool, the pool will validate the connection state. "poolValidMinDelay" permits disabling this validation if the connection has be...
+mariadb	2.7.13 3.5.7 3.5.10	prepStmtCacheSize		other	if useServerPrepStmts = true, defines the prepared statement cache size that option `cachePrepStmts` use. Default: 250
+mariadb	2.7.13	prepStmtCacheSqlLimit		other	
+mariadb	3.5.7 3.5.10	preserveInstants		other	This option controls whether the connector converts Timestamp values to the connection's time zone.
+mariadb	2.7.13	profileSql		other	
+mariadb	3.5.10	pureLocalDateTime		other	When true (default), LocalDateTime values are exchanged verbatim as zoneless wall-clock values, matching SQL DATETIME. When false, preserveInstants also conv...
+mariadb	3.5.7 3.5.10	pwdKey		other	the name of an environment variable or system property, not a password
+mariadb	3.5.10	readOnlyPropagatesToServer		other	When enabled (default), Connection.setReadOnly() propagates the read-only state to the server on a single-host connection by issuing SET SESSION TRANSACTION...
+mariadb	3.5.7 3.5.10	region		other	AWS region for the AWS-IAM credential plugin [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	registerJmxPool		other	Register JMX monitoring pools. Default: true.
+mariadb	3.5.7 3.5.10	restrictedAuth		other	if set, restrict authentication plugin to secure list. Default provided plugins are mysql_native_password,client_ed25519,auth_gssapi_client,caching_sha2_pass...
+mariadb	3.5.7 3.5.10	resultSetMetaDataUnsignedCompatibility		other	metadata switch [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	retriesAllDown		other	When the connector is performing a failover and all hosts are down, this parameter defines the maximum number of connection attempts the connector will make...
+mariadb	3.5.7 3.5.10	returnMultiValuesGeneratedIds		other	For compatibility with 2.x MariaDB connector. This permit to return generated ids from multi-values insert
+mariadb	2.7.13 3.5.7 3.5.10	rewriteBatchedStatements		other	Rewrites INSERT statements into multi-valued inserts when executeBatch() is called. For insert queries only, rewrites batched statement to execute in a singl...
+mariadb	3.5.7 3.5.10	secretKey		secret	AWS secret access key (AWS-IAM credential plugin)
+mariadb	2.7.13 3.5.7 3.5.10	serverRsaPublicKeyFile		other	Indicate path to RSA server public key file for sha256_password and caching_sha2_password authentication password
+mariadb	2.7.13 3.5.7 3.5.10	serverSslCert		other	Permits providing server's certificate in DER form, or server's CA certificate. The server will be added to trustStor. This permits a self-signed certificate...
+mariadb	2.7.13	serverTimezone		other	
+mariadb	2.7.13 3.5.7 3.5.10	servicePrincipalName		other	When using GSSAPI authentication, use this value as the Service Principal Name (SPN) instead of the one defined for the user account on the database server.
+mariadb	2.7.13 3.5.7 3.5.10	sessionVariables		other	<var>=<value> pairs separated by comma, mysql session variables, set upon establishing successful connection.
+mariadb	2.7.13	sharedMemory		other	
+mariadb	2.7.13	slowQueryThresholdNanos		other	
+mariadb	2.7.13 3.5.7 3.5.10	socketFactory		other	to use a custom socket factory, set it to the full name of the class that implements javax.net.SocketFactory.
+mariadb	2.7.13 3.5.7 3.5.10	socketTimeout		other	Defined the network socket timeout (SO_TIMEOUT) in milliseconds. Value of 0 disables this timeout.If the goal is to set a timeout for all queries, since Mari...
+mariadb	3.5.7 3.5.10	sslMode		other	Indicate SSL demand. Possible value disable, trust (no certificate and hostname validation), verify-ca (Encryption, certificates validation, BUT no hostname...
+mariadb	2.7.13	staticGlobal		other	
+mariadb	2.7.13 3.5.7 3.5.10	tcpAbortiveClose		other	This option can be used in environments where connections are created and closed in rapid succession. Often, it is not possible to create a socket in such an...
+mariadb	2.7.13 3.5.7 3.5.10	tcpKeepAlive		other	Sets corresponding option on the connection socket. Default: True
+mariadb	3.5.7 3.5.10	tcpKeepCount		other	permit setting socket TCP_KEEPCOUNT value. Only valid for java 11+(for previous version, this option will have no use). (Integer) Default null
+mariadb	3.5.7 3.5.10	tcpKeepIdle		other	permit setting socket TCP_KEEPIDLE value. Only valid for java 11+(for previous version, this option will have no use). (Integer) Default null
+mariadb	3.5.7 3.5.10	tcpKeepInterval		other	permit setting socket TCP_KEEPINTERVAL value. Only valid for java 11+(for previous version, this option will have no use). (Integer) Default null
+mariadb	2.7.13	tcpNoDelay		other	
+mariadb	2.7.13	tcpRcvBuf		other	
+mariadb	2.7.13	tcpSndBuf		other	
+mariadb	3.5.7 3.5.10	testMinRemovalDelay		other	pool timing [read by name, not in the option list]
+mariadb	3.5.7 3.5.10	timezone		other	permits to force session timezone in case of client having a different timezone compare to server. The option `timezone` can have 3 types of value: 'disabled...
+mariadb	2.7.13 3.5.7 3.5.10	tinyInt1isBit		other	Datatype mapping flag, handle MySQL Tiny as BIT(boolean).
+mariadb	2.7.13 3.5.7 3.5.10	tlsSocketType		other	Indicate the TLS org.mariadb.jdbc.tls.TlsSocketPlugin plugin type to use. Plugin must be present in classpath
+mariadb	2.7.13	trackSchema		other	
+mariadb	3.5.7 3.5.10	transactionIsolation		other	Default transaction isolation level. Possible values READ-UNCOMMITTED, READ-COMMITTED, REPEATABLE-READ, SERIALIZABLE. default REPEATABLE-READ
+mariadb	3.5.7 3.5.10	transactionReplay		other	When having a failover, can current transaction being re-executed, having a completely transparent failover. All commands must be idempotent. Default false.
+mariadb	3.5.7 3.5.10	transactionReplaySize		other	replay cache buffer maximum size. If a transaction has more command that this size and a failover occurs, transaction will then not be replayed, just throwin...
+mariadb	3.5.7 3.5.10	transformedBitIsBoolean		other	Indicate for TINYINT(1) in column metadata that type is BOOLEAN in place of BIT
+mariadb	2.7.13 3.5.7 3.5.10	trustServerCertificate		other	legacy TLS switch [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	trustStore	trustcertificatekeystoreurl	other	File path of the trustStore file (similar to java System property "javax.net.ssl.trustStore". (legacy alias trustCertificateKeyStoreUrl). Use the specified f...
+mariadb	2.7.13 3.5.7 3.5.10	trustStorePassword	trustcertificatekeystorepassword	secret	password of the trusted certificates store
+mariadb	2.7.13 3.5.7 3.5.10	trustStoreType	trustcertificatekeystoretype	other	indicate trust store type (JKS/PKCS12). default is null, then using java default type
+mariadb	2.7.13 3.5.7 3.5.10	useAffectedRows		other	If false (default), use "found rows" for the row count of statements. This corresponds to the JDBC standard. If true, use "affected rows" for the row count....
+mariadb	2.7.13	useBatchMultiSend		other	
+mariadb	2.7.13	useBatchMultiSendNumber		other	
+mariadb	2.7.13 3.5.7 3.5.10	useBulkStmts		other	Use dedicated COM_STMT_BULK_EXECUTE protocol for batch insert when possible. (batch without Statement.RETURN_GENERATED_KEYS and streams) to have faster batch...
+mariadb	3.5.7 3.5.10	useBulkStmtsForInserts		other	use Bulk batch for insert only. This permits to ensure returning expected affected rows and not Statement.SUCCESS_NO_INFO. This option is enabled when useBul...
+mariadb	3.5.7 3.5.10	useCatalogTerm	databaseterm	other	"schema" and "database" are server synonymous. Connector historically get/set database using Connection.setCatalog()/getCatalog(), setSchema()/getSchema() be...
+mariadb	2.7.13 3.5.7 3.5.10	useCompression		other	Compresses the exchange with the database through gzip. This permits better performance when the database is not in the same location.
+mariadb	2.7.13	useFractionalSeconds		other	
+mariadb	3.5.10	useIpForKillQuery		other	When cancelling a query, reuse the current socket IP instead of the original hostname. Default false: the kill connection uses the original hostname, which i...
+mariadb	2.7.13	useLegacyDatetimeCode		other	
+mariadb	3.5.7 3.5.10	useLocalSessionState		other	indicate if connector can use local state to avoid unnecessary queries. This means application must use JDBC dedicated methods, like connection.setTransactio...
+mariadb	2.7.13 3.5.7 3.5.10	useMysqlMetadata		other	force DatabaseMetadata.getDatabaseProductName() to return "MySQL" (for compatibility reason)
+mariadb	2.7.13	useOldAliasMetadataBehavior		other	
+mariadb	2.7.13	usePipelineAuth		other	
+mariadb	2.7.13 3.5.7	user		login-user	the database user to log in as
+mariadb	2.7.13 3.5.7 3.5.10	useReadAheadInput		other	use a buffered inputSteam that read socket available data. This cost a bit more in CPU, but permit returning result-set faster. Default true
+mariadb	2.7.13 3.5.7 3.5.10	useResetConnection		other	When a connection is closed() (given back to pool), the pool resets the connection state. Setting this option, the prepare command will be deleted, session v...
+mariadb	3.5.7 3.5.10	userKey		other	the name of an environment variable or system property, not a user
+mariadb	2.7.13 3.5.7 3.5.10	useServerPrepStmts		other	PrepareStatement are prepared on the server side before executing. The applications that repeatedly use the same queries have value to activate this option,...
+mariadb	2.7.13 3.5.7 3.5.10	useSsl		other	legacy TLS switch [read by name, not in the option list]
+mariadb	3.5.7 3.5.10	uuidAsString		other	must uuid fields return as String and not java.util.UUID when using getObject()
+mariadb	2.7.13	validConnectionTimeout		other	
+mariadb	3.5.7 3.5.10	waitReconnectTimeout		other	failover timing [read by name, not in the option list]
+mariadb	2.7.13 3.5.7 3.5.10	yearIsDateType		other	Year is date type, rather than numerical.
+aws-advanced-jdbc-wrapper	4.4.0	activeHomeFailoverMode		other	Set node role to follow during failover when GDB primary region is in home region.
+aws-advanced-jdbc-wrapper	4.4.0	allowAwsLoginSession		other	Allow resolving AWS credentials from a profile that authenticates via a 'login_session' entry. Requires the optional 'software.amazon.awssdk:signin' dependen...
+aws-advanced-jdbc-wrapper	4.4.0	allowStatementRecreationOnConnectionSwitch		other	When a routing decision switches the underlying connection to a different node, allow an already-created Statement/PreparedStatement/CallableStatement to be...
+aws-advanced-jdbc-wrapper	4.4.0	appId		other	The ID of the AWS application configured on Okta
+aws-advanced-jdbc-wrapper	4.4.0	assumeWriteTransaction		other	Treat a transaction that was not explicitly declared read-only (via Connection.setReadOnly(true)) as a read-write transaction, routing it to the writer even...
+aws-advanced-jdbc-wrapper	4.4.0	auditLoggingEnabled		other	Enable/disable audit logging
+aws-advanced-jdbc-wrapper	4.4.0	autoSortWrapperPluginOrder		other	This flag is enabled by default, meaning that the plugins order will be automatically adjusted. Disable it at your own risk or if you really need plugins to...
+aws-advanced-jdbc-wrapper	4.4.0	awsProfile		other	Name of the AWS Profile to use for IAM/SecretsManager auth.
+aws-advanced-jdbc-wrapper	4.4.0	bgBaselineMs		other	Baseline Blue/Green Deployment status checking interval (in msec).
+aws-advanced-jdbc-wrapper	4.4.0	bgConnectTimeoutMs		other	Connect timeout (in msec) during Blue/Green Deployment switchover.
+aws-advanced-jdbc-wrapper	4.4.0	bgdId		other	Blue/Green Deployment identifier that helps the driver to distinguish different deployments.
+aws-advanced-jdbc-wrapper	4.4.0	bgDropBlueConnections		other	If set to true, allows to drops all connections to blue cluster when Blue/Green switchover starts.
+aws-advanced-jdbc-wrapper	4.4.0	bgHighMs		other	High Blue/Green Deployment status checking interval (in msec).
+aws-advanced-jdbc-wrapper	4.4.0	bgIncreasedMs		other	Increased Blue/Green Deployment status checking interval (in msec).
+aws-advanced-jdbc-wrapper	4.4.0	bgReleaseOnBlueDnsUpdate		other	If set to true, allows to stop holding traffic as soon as all blue endpoints resolve to new IP addresses, without waiting for the deployment to report a stat...
+aws-advanced-jdbc-wrapper	4.4.0	bgSwitchoverTimeoutMs		other	Blue/Green Deployment switchover timeout (in msec).
+aws-advanced-jdbc-wrapper	4.4.0	blue-green-monitoring-<setting>		prefix	passes <setting> on, prefix removed, to the blue/green deployment monitoring connections
+aws-advanced-jdbc-wrapper	4.4.0	cacheAllowStreamSource		other	When true, allows SQLXML.getSource(StreamSource.class) on XML values retrieved from the cache to return the raw XML unparsed. Disabled by default because the...
+aws-advanced-jdbc-wrapper	4.4.0	cacheAllowUrl		other	When true, allows java.net.URL values to be reconstructed from the cache. Disabled by default because URL equality and hashing involve network resolution, wh...
+aws-advanced-jdbc-wrapper	4.4.0	cacheConnectionPoolSize		other	Cache connection pool size. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	cacheConnectionTimeoutMs		other	Cache connection request timeout duration in milliseconds. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	cachedReaderKeepAliveTimeoutMs		other	The time in milliseconds to keep a reader connection alive in the cache. Default value 0 means the Wrapper will keep reusing the same cached reader connection.
+aws-advanced-jdbc-wrapper	4.4.0	cacheEndpointAddrRo		other	The cache read-only server endpoint address. This is an optional parameter to allow performing read operations from read replica cache nodes. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	cacheEndpointAddrRw		other	The cache read-write server endpoint address. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	cacheHealthCheckInHealthyState		other	Whether to run health checks (pings) in healthy state.
+aws-advanced-jdbc-wrapper	4.4.0	cacheIamRegion		other	AWS region for ElastiCache IAM authentication. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	cacheInFlightWriteSizeLimitBytes		other	Maximum in-flight write size in bytes before triggering degraded mode.
+aws-advanced-jdbc-wrapper	4.4.0	cacheKeyPrefix		other	Optional prefix for cache keys (max 10 characters). Enables multi-tenant cache isolation. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	cacheMaxQuerySize		other	The max query size for remote caching
+aws-advanced-jdbc-wrapper	4.4.0	cacheName		other	Explicit cache name for ElastiCache IAM authentication. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	cachePassword		secret	the ElastiCache user's password
+aws-advanced-jdbc-wrapper	4.4.0	cacheTlsCaCertPath		other	File path to the CA certificate (PEM) for verifying the cache server's TLS certificate. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	cacheUsername		user-name	the ElastiCache user
+aws-advanced-jdbc-wrapper	4.4.0	cacheUseSSL		other	Whether to use SSL for cache connections. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	clusterId		other	A unique identifier for the cluster. Connections with the same cluster id share a cluster topology cache. If unspecified, a cluster id is '1'.
+aws-advanced-jdbc-wrapper	4.4.0	clusterInstanceHostPattern		other	The cluster instance DNS pattern that will be used to build a complete instance endpoint. A "?" character in this pattern should be used as a placeholder for...
+aws-advanced-jdbc-wrapper	4.4.0	clusterTopologyHighRefreshRateMs		other	Cluster topology high refresh rate in millis.
+aws-advanced-jdbc-wrapper	4.4.0	clusterTopologyRefreshRateMs		other	Cluster topology refresh rate in millis. The cached topology for the cluster will be invalidated after the specified time, after which it will be updated dur...
+aws-advanced-jdbc-wrapper	4.4.0	connectionPoolType		other	Enable internal connection pooling with specified type for the current cluster.
+aws-advanced-jdbc-wrapper	4.4.0	connectTimeout		other	Socket connect timeout in msec.
+aws-advanced-jdbc-wrapper	4.4.0	cp-overrideDefaultPassword		secret	the internal c3p0 pool's overrideDefaultPassword
+aws-advanced-jdbc-wrapper	4.4.0	cp-overrideDefaultUser		user-name	the internal c3p0 pool's overrideDefaultUser
+aws-advanced-jdbc-wrapper	4.4.0	cp-password		secret	the internal Hikari or c3p0 pool's password
+aws-advanced-jdbc-wrapper	4.4.0	cp-user		user-name	the internal c3p0 pool's user
+aws-advanced-jdbc-wrapper	4.4.0	cp-username		user-name	the internal Hikari pool's username (cp- settings go to HikariConfig setters)
+aws-advanced-jdbc-wrapper	4.4.0	customEndpointInfoMaxRefreshRateMs		other	Controls the maximum time the custom endpoint monitor will wait in between fetches for custom endpoint info, in milliseconds.
+aws-advanced-jdbc-wrapper	4.4.0	customEndpointInfoRefreshRateBackoffFactor		other	Controls the exponential backoff factor for the custom endpoint monitor. In the event the custom endpoint monitor encounters a throttling exception from the...
+aws-advanced-jdbc-wrapper	4.4.0	customEndpointInfoRefreshRateMs		other	Controls how frequently custom endpoint monitors fetch custom endpoint info, in milliseconds.
+aws-advanced-jdbc-wrapper	4.4.0	customEndpointMonitorExpirationMs		other	Controls how long a monitor should run without use before expiring and being removed, in milliseconds.
+aws-advanced-jdbc-wrapper	4.4.0	customEndpointRegion		other	The region of the cluster's custom endpoints. If not specified, the region will be parsed from the URL.
+aws-advanced-jdbc-wrapper	4.4.0	database		other	Driver database name
+aws-advanced-jdbc-wrapper	4.4.0	dataCacheTriggerCondition		other	A regular expression that, if it's matched, allows the plugin to cache SQL results.
+aws-advanced-jdbc-wrapper	4.4.0	dataKeyCacheEnabled		other	Enable/disable data key caching
+aws-advanced-jdbc-wrapper	4.4.0	dataKeyCacheExpirationMs		other	Data key cache expiration in milliseconds
+aws-advanced-jdbc-wrapper	4.4.0	dataKeyCacheMaxSize		other	Maximum size of data key cache
+aws-advanced-jdbc-wrapper	4.4.0	dbUser		user-name	the database user for federated and Okta logins
+aws-advanced-jdbc-wrapper	4.4.0	defaultHostAvailabilityStrategy		other	An override for specifying the default host availability change strategy.
+aws-advanced-jdbc-wrapper	4.4.0	enableClusterAwareFailover		other	Enable/disable cluster-aware failover logic
+aws-advanced-jdbc-wrapper	4.4.0	enableConnectFailover		other	Enable/disable cluster-aware failover if the initial connection to the database fails due to a network exception. Note that this may result in a connection t...
+aws-advanced-jdbc-wrapper	4.4.0	enableGreenNodeReplacement		other	Enables replacing a green node host name with the original hostname after a blue/green switchover and the green name no longer resolves.
+aws-advanced-jdbc-wrapper	4.4.0	enableTelemetry		other	Enables telemetry and observability of the driver
+aws-advanced-jdbc-wrapper	4.4.0	encryptionMetadataSchema		other	Schema name for encryption metadata tables
+aws-advanced-jdbc-wrapper	4.4.0	endpointSubstitutionRole		other	Defines whether or not the initial connection URL should be replaced with an instance URL from the topology info when available, and if so, the role of the i...
+aws-advanced-jdbc-wrapper	4.4.0	enhancedLogQueryEnabled		other	Allows the 'logQuery' plugin to inspect object internals to get prepared SQL statements and batches.
+aws-advanced-jdbc-wrapper	4.4.0	failoverClusterTopologyRefreshRateMs		other	Cluster topology refresh rate in millis during a writer failover process. During the writer failover process, cluster topology may be refreshed at a faster p...
+aws-advanced-jdbc-wrapper	4.4.0	failoverHomeRegion		other	Set home region for failover.
+aws-advanced-jdbc-wrapper	4.4.0	failoverMode		other	Set node role to follow during failover.
+aws-advanced-jdbc-wrapper	4.4.0	failoverReaderConnectTimeoutMs		other	Reader connection attempt timeout during a reader failover process.
+aws-advanced-jdbc-wrapper	4.4.0	failoverReaderHostSelectorStrategy		other	The strategy that should be used to select a new reader host while opening a new connection.
+aws-advanced-jdbc-wrapper	4.4.0	failoverTimeoutMs		other	Maximum allowed time for the failover process.
+aws-advanced-jdbc-wrapper	4.4.0	failoverWriterReconnectIntervalMs		other	Interval of time to wait between attempts to reconnect to a failed writer during a writer failover process.
+aws-advanced-jdbc-wrapper	4.4.0	failureDetectionCount		other	Number of failed connection checks before considering database node unhealthy.
+aws-advanced-jdbc-wrapper	4.4.0	failureDetectionEnabled		other	Enable failure detection logic (aka node monitoring thread).
+aws-advanced-jdbc-wrapper	4.4.0	failureDetectionInterval		other	Interval in millis between probes to database node.
+aws-advanced-jdbc-wrapper	4.4.0	failureDetectionTime		other	Interval in millis between sending SQL to the server and the first probe to database node.
+aws-advanced-jdbc-wrapper	4.4.0	failWhenCacheDown		other	Whether to throw SQLException on cache failures under Degraded mode. [cache plugin]
+aws-advanced-jdbc-wrapper	4.4.0	frt-<setting>		prefix	passes <setting> on, prefix removed, to the fastest-response-time monitoring connections
+aws-advanced-jdbc-wrapper	4.4.0	gdbAccessibleRegions		other	Comma-separated list of AWS regions accessible by the application. When set, failover, topology monitoring, and read/write splitting will only consider nodes...
+aws-advanced-jdbc-wrapper	4.4.0	gdbEnableGlobalWriteForwarding		other	Set to true to enable Global Write Forwarding when connected to a reader connection in a secondary global region.
+aws-advanced-jdbc-wrapper	4.4.0	gdbMonitoringConnectionPriority		other	Comma-separated list of monitoring connection priorities for Global Aurora Databases, in order of preference. Possible values: strict-writer-primary, strict-...
+aws-advanced-jdbc-wrapper	4.4.0	gdbRwHomeRegion		other	Specifies the home region for read/write splitting.
+aws-advanced-jdbc-wrapper	4.4.0	gdbRwRestrictReaderToHomeRegion		other	Prevents connections to a reader node outside of the defined home region.
+aws-advanced-jdbc-wrapper	4.4.0	gdbRwRestrictWriterToHomeRegion		other	Prevents connections to a writer node outside of the defined home region.
+aws-advanced-jdbc-wrapper	4.4.0	globalClusterInstanceHostPatterns		other	Comma-separated list of the cluster instance DNS patterns that will be used to build a complete instance endpoints. A "?" character in these patterns should...
+aws-advanced-jdbc-wrapper	4.4.0	highestLoadCpuWeight		other	The weight of CPU utilization percent in the calculation of a host's load.
+aws-advanced-jdbc-wrapper	4.4.0	highestLoadLagWeight		other	The weight of lag in the calculation of a host's load.
+aws-advanced-jdbc-wrapper	4.4.0	hostAvailabilityStrategyInitialBackoffTime		other	The initial backoff time in seconds.
+aws-advanced-jdbc-wrapper	4.4.0	hostAvailabilityStrategyMaxRetries		other	Max number of retries for checking a host's availability.
+aws-advanced-jdbc-wrapper	4.4.0	httpClientConnectTimeout		other	The connect timeout value in milliseconds for the HttpClient used by the OktaAuthPlugin
+aws-advanced-jdbc-wrapper	4.4.0	httpClientSocketTimeout		other	The socket timeout value in milliseconds for the HttpClient used by the OktaAuthPlugin
+aws-advanced-jdbc-wrapper	4.4.0	iamAccessTokenPropertyName		other	the name of a setting, not a token
+aws-advanced-jdbc-wrapper	4.4.0	iamDefaultPort		other	Overrides default port that is used to generate the IAM token
+aws-advanced-jdbc-wrapper	4.4.0	iamExpiration		other	IAM token cache expiration in seconds
+aws-advanced-jdbc-wrapper	4.4.0	iamHost		other	Overrides the host that is used to generate the IAM token
+aws-advanced-jdbc-wrapper	4.4.0	iamIdpArn		other	The ARN of the Identity Provider
+aws-advanced-jdbc-wrapper	4.4.0	iamRegion		other	Overrides AWS region that is used to generate the IAM token
+aws-advanced-jdbc-wrapper	4.4.0	iamRoleArn		other	The ARN of the IAM Role that is to be assumed.
+aws-advanced-jdbc-wrapper	4.4.0	iamTokenExpiration		other	IAM token cache expiration in seconds
+aws-advanced-jdbc-wrapper	4.4.0	idpEndpoint		other	The hosting URL of the Identity Provider
+aws-advanced-jdbc-wrapper	4.4.0	idpName		other	The name of the Identity Provider implementation used
+aws-advanced-jdbc-wrapper	4.4.0	idpPassword		secret	the federated (identity provider) user's password
+aws-advanced-jdbc-wrapper	4.4.0	idpPort		other	The hosting port of Identity Provider
+aws-advanced-jdbc-wrapper	4.4.0	idpUsername		user-name	the federated (identity provider) user
+aws-advanced-jdbc-wrapper	4.4.0	inactiveClusterWriterEndpointSubstitutionRole		other	Defines whether or not the inactive cluster writer endpoint in the initial connection URL should be replaced with a writer instance URL from the topology inf...
+aws-advanced-jdbc-wrapper	4.4.0	inactiveHomeFailoverMode		other	Set node role to follow during failover when GDB primary region is not in home region.
+aws-advanced-jdbc-wrapper	4.4.0	initialConnectionHostSelectorStrategy		other	The strategy that should be used to select a host while opening a new connection.
+aws-advanced-jdbc-wrapper	4.4.0	keyManagementMaxRetries		other	Maximum number of retries for key management operations
+aws-advanced-jdbc-wrapper	4.4.0	keyManagementRetryBackoffBaseMs		other	Base backoff time in milliseconds for key management retries
+aws-advanced-jdbc-wrapper	4.4.0	kms.region		other	AWS KMS region for encryption operations
+aws-advanced-jdbc-wrapper	4.4.0	limitless-router-monitor-<setting>		prefix	passes <setting> on, prefix removed, to the Limitless router monitoring connections
+aws-advanced-jdbc-wrapper	4.4.0	limitlessConnectMaxRetries		other	Max number of connection retries the Limitless Connection Plugin will attempt.
+aws-advanced-jdbc-wrapper	4.4.0	limitlessGetTransactionRouterInfoMaxRetries		other	Max number of connection retries fetching Limitless Transaction Router information.
+aws-advanced-jdbc-wrapper	4.4.0	limitlessGetTransactionRouterInfoRetryIntervalMs		other	Interval in millis between retries fetching Limitless Transaction Router information.
+aws-advanced-jdbc-wrapper	4.4.0	limitlessTransactionRouterMonitorDisposalTimeMs		other	Interval in milliseconds for an Limitless router monitor to be considered inactive and to be disposed.
+aws-advanced-jdbc-wrapper	4.4.0	limitlessTransactionRouterMonitorIntervalMs		other	Interval in millis between polling for Limitless Transaction Routers to the database.
+aws-advanced-jdbc-wrapper	4.4.0	limitlessWaitForTransactionRouterInfo		other	If the cache of transaction router info is empty and a new connection is made, this property toggles whether the plugin will wait and synchronously fetch tra...
+aws-advanced-jdbc-wrapper	4.4.0	loadBalancingIncludeWriter		other	When query-level load balancing is enabled, include the writer node as an eligible target in the reader-balancing pool.
+aws-advanced-jdbc-wrapper	4.4.0	loginTimeout		other	Login timeout in msec.
+aws-advanced-jdbc-wrapper	4.4.0	lowestLoadCpuWeight		other	The weight of CPU utilization percent in the calculation of a host's load.
+aws-advanced-jdbc-wrapper	4.4.0	lowestLoadLagWeight		other	The weight of lag in the calculation of a host's load.
+aws-advanced-jdbc-wrapper	4.4.0	metadataCacheEnabled		other	Enable/disable metadata caching
+aws-advanced-jdbc-wrapper	4.4.0	metadataCacheExpirationMinutes		other	Metadata cache expiration time in minutes
+aws-advanced-jdbc-wrapper	4.4.0	metadataCacheRefreshIntervalMs		other	Metadata cache refresh interval in milliseconds
+aws-advanced-jdbc-wrapper	4.4.0	monitorDisposalTime		other	Interval in milliseconds for a monitor to be considered inactive and to be disposed.
+aws-advanced-jdbc-wrapper	4.4.0	monitoring-<setting>		prefix	passes <setting> on, prefix removed, to the enhanced failure monitoring connections (efm, efm2)
+aws-advanced-jdbc-wrapper	4.4.0	monitoringConnectionPriority		other	Comma-separated list of monitoring connection priorities in order of preference. The monitor will try to establish a connection matching the highest priority...
+aws-advanced-jdbc-wrapper	4.4.0	openConnectionRetryIntervalMs		other	Time between each retry of opening a connection.
+aws-advanced-jdbc-wrapper	4.4.0	openConnectionRetryTimeoutMs		other	Maximum allowed time for the retries opening a connection.
+aws-advanced-jdbc-wrapper	4.4.0	password		login-password	the login password
+aws-advanced-jdbc-wrapper	4.4.0	queryLevelLoadBalancing		other	Select a fresh reader on each read-routing decision within an established read-only phase (query-level load balancing) instead of reusing a single sticky rea...
+aws-advanced-jdbc-wrapper	4.4.0	readerHostSelectorStrategy		other	The strategy that should be used to select a new reader host.
+aws-advanced-jdbc-wrapper	4.4.0	readerInitialConnectionHostSelectorStrategy		other	The strategy that should be used to select a new reader host while opening a new connection.
+aws-advanced-jdbc-wrapper	4.4.0	resetSessionStateOnClose		other	Enables to reset connection session state before closing it.
+aws-advanced-jdbc-wrapper	4.4.0	responseMeasurementIntervalMs		other	Interval in millis between measuring response time to a database node.
+aws-advanced-jdbc-wrapper	4.4.0	rollbackOnSwitch		other	Enables to rollback a current transaction being in progress when switching to a new connection.
+aws-advanced-jdbc-wrapper	4.4.0	roundRobinDefaultWeight		other	The default weight for any hosts that have not been configured with the `roundRobinHostWeightPairs` parameter.
+aws-advanced-jdbc-wrapper	4.4.0	roundRobinHostWeightPairs		other	Comma separated list of database host-weight pairs in the format of `<host>:<weight>`.
+aws-advanced-jdbc-wrapper	4.4.0	rpIdentifier		other	The relaying party identifier
+aws-advanced-jdbc-wrapper	4.4.0	secretsManagerConnectRetryIntervalMs		other	Initial delay, in milliseconds, before a connection that failed to log in is retried. The delay doubles after every failed attempt, capped at 30000ms and at...
+aws-advanced-jdbc-wrapper	4.4.0	secretsManagerConnectRetryTimeoutMs		other	Total time budget, in milliseconds, for retrying a connection that failed to log in. Before each retry the credentials are re-fetched from AWS Secrets Manage...
+aws-advanced-jdbc-wrapper	4.4.0	secretsManagerEndpoint		other	The endpoint of the secret to retrieve.
+aws-advanced-jdbc-wrapper	4.4.0	secretsManagerExpirationTimeSec		other	Secrets Manager credentials' expiration time in seconds.
+aws-advanced-jdbc-wrapper	4.4.0	secretsManagerRegion		other	The region of the secret to retrieve.
+aws-advanced-jdbc-wrapper	4.4.0	secretsManagerSecretId		other	the name or ARN of a secret, not the secret
+aws-advanced-jdbc-wrapper	4.4.0	secretsManagerSecretPasswordProperty		other	a key name in the secret's JSON
+aws-advanced-jdbc-wrapper	4.4.0	secretsManagerSecretUsernameProperty		other	a key name in the secret's JSON
+aws-advanced-jdbc-wrapper	4.4.0	singleWriterConnectionString		other	Set to true if you are providing a connection string with multiple comma-delimited hosts and your cluster has only one writer. The writer must be the first h...
+aws-advanced-jdbc-wrapper	4.4.0	skipFailoverOnInterruptedThread		other	Enable to skip failover if the current thread is interrupted.
+aws-advanced-jdbc-wrapper	4.4.0	skipInactiveWriterClusterEndpointCheck		other	Allows to avoid connection check for inactive cluster writer endpoint.
+aws-advanced-jdbc-wrapper	4.4.0	skipWrappingForPackages		other	Register Java package names (comma separated list) which will be left unwrapped. This setting modifies all future connections established by the driver, not...
+aws-advanced-jdbc-wrapper	4.4.0	socketTimeout		other	Socket timeout in msec.
+aws-advanced-jdbc-wrapper	4.4.0	srwConnectRetryIntervalMs		other	Time between each retry of opening a connection.
+aws-advanced-jdbc-wrapper	4.4.0	srwConnectRetryTimeoutMs		other	Maximum allowed time for the retries opening a connection.
+aws-advanced-jdbc-wrapper	4.4.0	srwReadEndpoint		other	The read-only endpoint that should be used to connect to a reader.
+aws-advanced-jdbc-wrapper	4.4.0	srwWriteEndpoint		other	The read-write/cluster endpoint that should be used to connect to the writer.
+aws-advanced-jdbc-wrapper	4.4.0	sslInsecure		other	Whether or not the SSL session is to be secure and the sever's certificates will be verified
+aws-advanced-jdbc-wrapper	4.4.0	targetDriverAutoRegister		other	Allows to auto-register a target driver.
+aws-advanced-jdbc-wrapper	4.4.0	tcpKeepAlive		other	Enable or disable TCP keep-alive probe.
+aws-advanced-jdbc-wrapper	4.4.0	telemetryFailoverAdditionalTopTrace		other	Post an additional top-level trace for failover process.
+aws-advanced-jdbc-wrapper	4.4.0	telemetryMetricsBackend		other	Method to export telemetry metrics of the driver
+aws-advanced-jdbc-wrapper	4.4.0	telemetrySubmitToplevel		other	Force submitting traces related to JDBC calls as top level traces.
+aws-advanced-jdbc-wrapper	4.4.0	telemetryTracesBackend		other	Method to export telemetry traces of the driver
+aws-advanced-jdbc-wrapper	4.4.0	topology-monitoring-<setting>		prefix	passes <setting> on, prefix removed, to the cluster topology monitoring connections
+aws-advanced-jdbc-wrapper	4.4.0	transferSessionStateOnSwitch		other	Enables session state transfer to a new connection.
+aws-advanced-jdbc-wrapper	4.4.0	user		login-user	the database user to log in as
+aws-advanced-jdbc-wrapper	4.4.0	verifyInactiveClusterWriterEndpointConnectionType		other	Defines whether inactive cluster writer connection should be verified to be a writer, or if no role verification should be performed.
+aws-advanced-jdbc-wrapper	4.4.0	verifyInitialConnectionRole		other	Whether to verify the role of the initial connection by querying the database.
+aws-advanced-jdbc-wrapper	4.4.0	verifyInitialConnectionType		other	Force to verify the initial connection to be either a writer or a reader.
+aws-advanced-jdbc-wrapper	4.4.0	verifyNewSrwConnections		other	Enables role verification for new connections made by the Simple Read/Write Splitting Plugin.
+aws-advanced-jdbc-wrapper	4.4.0	verifyOpenedConnectionType		other	Defines whether an opened connection should be verified to be a writer or reader, or if no role verification should be performed.
+aws-advanced-jdbc-wrapper	4.4.0	waitForCustomEndpointInfo		other	Controls whether to wait for custom endpoint info to become available before connecting or executing a method. Waiting is only necessary if a connection to a...
+aws-advanced-jdbc-wrapper	4.4.0	waitForCustomEndpointInfoTimeoutMs		other	Controls the maximum amount of time that the plugin will wait for custom endpoint info to be made available by the custom endpoint monitor, in milliseconds.
+aws-advanced-jdbc-wrapper	4.4.0	waitForInitialTopologyMs		other	Maximum allowed time, in milliseconds, to wait for the cluster topology to be fetched before opening a new connection. When set to a value greater than 0 and...
+aws-advanced-jdbc-wrapper	4.4.0	weightedRandomHostWeightPairs		other	Comma separated list of database host-weight pairs in the format of `<host>:<weight>`.
+aws-advanced-jdbc-wrapper	4.4.0	wrapperAssumeFetchEntireResultSet		other	Allow the driver to optimized work with ResultSets and skip tracking some of their methods by assuming that entire data result are fetched at once.
+aws-advanced-jdbc-wrapper	4.4.0	wrapperCaseSensitive		other	Allows the driver to change case sensitivity for parameter names in the connection string.
+aws-advanced-jdbc-wrapper	4.4.0	wrapperDialect		other	A unique identifier for the supported database dialect.
+aws-advanced-jdbc-wrapper	4.4.0	wrapperDriverName		other	Override this value to return a specific driver name for the DatabaseMetaData#getDriverName method
+aws-advanced-jdbc-wrapper	4.4.0	wrapperLoggerLevel		other	Logger level of the driver
+aws-advanced-jdbc-wrapper	4.4.0	wrapperLogUnclosedConnections		other	Allows the driver to track a point in the code where connection has been opened and never closed after
+aws-advanced-jdbc-wrapper	4.4.0	wrapperPlugins		other	Comma separated list of connection plugin codes
+aws-advanced-jdbc-wrapper	4.4.0	wrapperProfileName		other	Driver configuration profile name
+aws-advanced-jdbc-wrapper	4.4.0	wrapperTargetDriverDialect		other	A unique identifier for the target driver dialect.
+azure-identity-extensions	1.2.9	azure.accessTokenTimeoutInSeconds		other	Max time to get an access token.
+azure-identity-extensions	1.2.9	azure.authorityHost		other	The well known authority hosts for the Azure Public Cloud and sovereign clouds.
+azure-identity-extensions	1.2.9	azure.claims		other	Claims for Azure resources.
+azure-identity-extensions	1.2.9	azure.clientCertificatePassword		secret	password of the service principal's certificate file
+azure-identity-extensions	1.2.9	azure.clientCertificatePath		other	Path of a PEM/PFX certificate file to use when performing service principal authentication with Azure.
+azure-identity-extensions	1.2.9	azure.clientId		other	identifies an application or managed identity; its secret half is azure.clientSecret
+azure-identity-extensions	1.2.9	azure.clientSecret		secret	the service principal's client secret
+azure-identity-extensions	1.2.9	azure.managedIdentityEnabled		other	Whether to enable managed identity to authenticate with Azure.
+azure-identity-extensions	1.2.9	azure.password		secret	the Azure user's password
+azure-identity-extensions	1.2.9	azure.scopes		other	Scopes for Azure resources.
+azure-identity-extensions	1.2.9	azure.tenantId		other	Tenant ID for Azure resources.
+azure-identity-extensions	1.2.9	azure.tokenCredentialBeanName		other	The given bean name of a TokenCredential bean in the Spring context.
+azure-identity-extensions	1.2.9	azure.tokenCredentialCacheEnabled		other	Whether to enable the token credential cache.
+azure-identity-extensions	1.2.9	azure.tokenCredentialProviderClassName		other	The canonical class name of a class that implements 'TokenCredentialProvider'.
+azure-identity-extensions	1.2.9	azure.username		user-name	the Azure user for a username/password login
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlAdminQuotaProject		other	quota project
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlAdminRootUrl		other	admin API root URL
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlAdminServicePath		other	admin API service path
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlDelegates		other	identifies service accounts to act through; not login names
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlGoogleCredentialsPath		other	a file path; the file holds the key
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlInstance		other	instance connection name
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlNamedConnector		other	named connector
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlRefreshStrategy		other	certificate refresh strategy
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlResourceExhaustedCooldownPeriod		other	cooldown period
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlSqlDataEndpoint		other	data endpoint
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlSqlDataStreamTimeout		other	data stream timeout
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlTargetPrincipal		other	identifies a service account to act as; not a login name
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlUniverseDomain		other	universe domain
+cloud-sql-jdbc-socket-factory	1.30.0	cloudSqlUnixSocketPathSuffix		other	Unix socket path suffix
+cloud-sql-jdbc-socket-factory	1.30.0	enableIamAuth		other	IAM database login on/off
+cloud-sql-jdbc-socket-factory	1.30.0	ipTypes		other	IP types to try
+cloud-sql-jdbc-socket-factory	1.30.0	mdxClientProtocolType		other	metadata exchange protocol
+cloud-sql-jdbc-socket-factory	1.30.0	SocketFactoryArg		other	deprecated instance name for the PostgreSQL factory
+cloud-sql-jdbc-socket-factory	1.30.0	unixSocketPath		other	Unix socket path
+testcontainers-jdbc	2.0.5	password		login-password	the container's password; Testcontainers then logs in with it, ignoring the configured password
+testcontainers-jdbc	2.0.5	TC_<NAME>		other	any other TC_ parameter, handed to the container provider
+testcontainers-jdbc	2.0.5	TC_DAEMON		other	keep the container running
+testcontainers-jdbc	2.0.5	TC_INITFUNCTION		other	init function
+testcontainers-jdbc	2.0.5	TC_INITSCRIPT		other	init script
+testcontainers-jdbc	2.0.5	TC_REUSABLE		other	reuse the container
+testcontainers-jdbc	2.0.5	TC_TMPFS		other	tmpfs mounts
+testcontainers-jdbc	2.0.5	user		login-user	the container's user; Testcontainers then logs in with it, ignoring the configured username
+pgjdbc-ng	0.8.9	api.trace		other	Enables or disables API trace output.
+pgjdbc-ng	0.8.9	api.trace.file		other	File destination of API trace output. NOTE: `api.trace` must be `true` to generate trace output
+pgjdbc-ng	0.8.9	application.name		other	Name of the client application
+pgjdbc-ng	0.8.9	ApplicationName		other	The name of the application currently utilizing the connection
+pgjdbc-ng	0.8.9	ClientUser		user-name	client info: the user the application works for
+pgjdbc-ng	0.8.9	data-source.name	dataSourceName	other	Name of data source.
+pgjdbc-ng	0.8.9	database.name	database	other	Name of database related to connection
+pgjdbc-ng	0.8.9	database.url	url	other	URL of database connection
+pgjdbc-ng	0.8.9	description.cache.size		other	Size of the query description cache. A value of zero disables the cache.
+pgjdbc-ng	0.8.9	fetch.size		other	Default fetch size of query results. Value can be changed at runtime. A value of zero disables batching results.
+pgjdbc-ng	0.8.9	field.format		other	Preferred format of result fields.
+pgjdbc-ng	0.8.9	field.length.max		other	Default maximum allowed length of field.
+pgjdbc-ng	0.8.9	housekeeper		other	Enables or disables the housekeeping system for leaked JDBC objects.
+pgjdbc-ng	0.8.9	login.timeout	loginTimeout	other	Maximum time to wait for a connection to be established.
+pgjdbc-ng	0.8.9	money.fractional-digits	field.money.fractionalDigits	other	# of fractional digits for money fields.
+pgjdbc-ng	0.8.9	network.timeout		other	Default timeout for network communication. Value can be changed at runtime through API. Value of zero disables the timeout.
+pgjdbc-ng	0.8.9	param.format		other	Preferred format of prepared statement parameters.
+pgjdbc-ng	0.8.9	parsed-sql.cache.size		other	Size of the parsed SQL text cache. A value of zero disables the cache.
+pgjdbc-ng	0.8.9	password		login-password	the login password
+pgjdbc-ng	0.8.9	port.number	portNumber	other	Port number for TCP connections.
+pgjdbc-ng	0.8.9	prepared-statement.cache.size		other	Size of the prepared statement cache A value of zero disables the cache.
+pgjdbc-ng	0.8.9	prepared-statement.cache.threshold		other	# of times a query is seen before it is cached as a prepared statement. A value of zero prepares all statements in advance.
+pgjdbc-ng	0.8.9	protocol.buffer.pooling		other	Enable or disable pooling of byte buffers
+pgjdbc-ng	0.8.9	protocol.encoding	clientEncoding	other	Text encoding
+pgjdbc-ng	0.8.9	protocol.io.mode		other	I/O subsystem selection mode.
+pgjdbc-ng	0.8.9	protocol.io.threads		other	Number of I/O threads in pool
+pgjdbc-ng	0.8.9	protocol.message.size.max		other	Maximum size message that can be received
+pgjdbc-ng	0.8.9	protocol.socket.recv-buffer.size	receiveBufferSize	other	Socket receive buffer size
+pgjdbc-ng	0.8.9	protocol.socket.send-buffer.size	sendBufferSize	other	Socket send buffer size
+pgjdbc-ng	0.8.9	protocol.trace		other	Enable or disable message trace output
+pgjdbc-ng	0.8.9	protocol.trace.file		other	File destination of message trace output NOTE: `protocol.trace` must be `true` to generate trace output
+pgjdbc-ng	0.8.9	protocol.version		other	Version of server protocol to use. Valid protocol versions: <ul> <li><code>3.0</code></li> </ul>
+pgjdbc-ng	0.8.9	read-only		other	Connect in read-only mode
+pgjdbc-ng	0.8.9	registry.sharing		other	Enables or disables sharing type registries between connections.
+pgjdbc-ng	0.8.9	server.addresses	serverAddresses	other	Comma separated list of server addresses for which a connection will be attempted in order. Supports providing DNS, IPv4, IPv6 & Unix socket addresses. DNS &...
+pgjdbc-ng	0.8.9	server.local-name	localServerName	other	Unix socket name for local server connections.
+pgjdbc-ng	0.8.9	server.name	serverName	other	Host name for TCP connections.
+pgjdbc-ng	0.8.9	session_authorization		other	a role to switch to after logging in; not a login name
+pgjdbc-ng	0.8.9	sql.trace		other	Enables or disables SQL trace output
+pgjdbc-ng	0.8.9	sql.trace.file		other	File destination of SQL trace output. NOTE: `sql.trace` must be `true` to generate trace output
+pgjdbc-ng	0.8.9	ssl.ca.certificate.file	sslRootCertificateFile	other	SSL certificate authority file name.
+pgjdbc-ng	0.8.9	ssl.certificate.file	sslCertificateFile	other	SSL client certificate file name.
+pgjdbc-ng	0.8.9	ssl.home-dir		other	Directory that SSL files are located in. If the value begins with a path separator (e.g. `/`) it will be considered an absolute path. In all other cases it i...
+pgjdbc-ng	0.8.9	ssl.key.file	sslKeyFile	other	SSL key file name.
+pgjdbc-ng	0.8.9	ssl.key.password	sslPassword	secret	password of the client's TLS key
+pgjdbc-ng	0.8.9	ssl.key.password.callback	sslPasswordCallback	other	SSL key file password callback class name.
+pgjdbc-ng	0.8.9	ssl.mode	sslMode	other	SSL connection mode.
+pgjdbc-ng	0.8.9	standard_conforming_strings		other	Use SQL standard conforming strings
+pgjdbc-ng	0.8.9	strict-mode		other	Enable or disable strict adherence to JDBC specification. Affected behavior when disabled: <ul> <li> <code>ResultSetMetaData.getColumnName(int)</code> return...
+pgjdbc-ng	0.8.9	user		login-user	the database user to log in as
+aws-mysql-jdbc	1.1.15	acceptAwsProtocolOnly		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	allowXmlUnsafeExternalEntity		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	clusterId		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	clusterInstanceHostPattern		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	clusterTopologyRefreshRateMs		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	connectionPluginFactories		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	enableClusterAwareFailover		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	enableFailoverStrictReader		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	failoverClusterTopologyRefreshRateMs		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	failoverReaderConnectTimeoutMs		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	failoverTimeoutMs		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	failoverWriterReconnectIntervalMs		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	failureDetectionCount		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	failureDetectionEnabled		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	failureDetectionInterval		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	failureDetectionTime		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	gatherAdditionalMetricsOnInstance		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	keepSessionStateOnFailover		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	monitorDisposalTime		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	monitoring-<setting>		prefix	passes <setting> on, prefix removed, to the failure detection connections
+aws-mysql-jdbc	1.1.15	secretsManagerRegion		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	secretsManagerSecretId		other	the name or ARN of a secret, not the secret
+aws-mysql-jdbc	1.1.15	useAwsIam		other	the fork's own setting; the rest are Connector/J's
+aws-mysql-jdbc	1.1.15	useConnectionPlugins		other	the fork's own setting; the rest are Connector/J's
+aws-postgresql-jdbc	0.1.0	acceptAwsProtocolOnly		other	the fork's own setting; the rest are pgjdbc's
+aws-postgresql-jdbc	0.1.0	clusterId		other	the fork's own setting; the rest are pgjdbc's
+aws-postgresql-jdbc	0.1.0	clusterInstanceHostPattern		other	the fork's own setting; the rest are pgjdbc's
+aws-postgresql-jdbc	0.1.0	clusterTopologyRefreshRateMs		other	the fork's own setting; the rest are pgjdbc's
+aws-postgresql-jdbc	0.1.0	enableClusterAwareFailover		other	the fork's own setting; the rest are pgjdbc's
+aws-postgresql-jdbc	0.1.0	failoverClusterTopologyRefreshRateMs		other	the fork's own setting; the rest are pgjdbc's
+aws-postgresql-jdbc	0.1.0	failoverReaderConnectTimeoutMs		other	the fork's own setting; the rest are pgjdbc's
+aws-postgresql-jdbc	0.1.0	failoverTimeoutMs		other	the fork's own setting; the rest are pgjdbc's
+aws-postgresql-jdbc	0.1.0	failoverWriterReconnectIntervalMs		other	the fork's own setting; the rest are pgjdbc's
+aws-postgresql-jdbc	0.1.0	gatherPerfMetrics		other	the fork's own setting; the rest are pgjdbc's
+cdata-postgresql	2017-2026	AllowPreparedStatement		other	
+cdata-postgresql	2026	ApplicationName		other	
+cdata-postgresql	2020-2026	AuthScheme		other	
+cdata-postgresql	2023-2025	AutoCache		other	
+cdata-postgresql	2021-2026	AWSAccessKey		other	identifies an AWS access key; its secret half is AWSSecretKey
+cdata-postgresql	2022-2026	AWSExternalId		other	AWS does not treat an external id as a secret
+cdata-postgresql	2021-2026	AWSRoleARN		other	
+cdata-postgresql	2021-2026	AWSSecretKey		secret	AWS secret access key
+cdata-postgresql	2026	AzureEnvironment		other	
+cdata-postgresql	2020-2026	AzureTenant		other	
+cdata-postgresql	2017-2026	BatchSize		other	
+cdata-postgresql	2021-2026	BrowsableSchemas		other	
+cdata-postgresql	2021-2026	BrowsePartitions		other	
+cdata-postgresql	2023-2025	CacheConnection		other	a whole JDBC URL; the check reads its settings' names as it reads the URL's own
+cdata-postgresql	2023-2025	CacheDriver		other	
+cdata-postgresql	2023-2025	CacheLocation		other	
+cdata-postgresql	2023-2025	CacheMetadata		other	
+cdata-postgresql	2026	CacheProvider		other	
+cdata-postgresql	2026	CacheSchema		other	
+cdata-postgresql	2023-2025	CacheTolerance		other	
+cdata-postgresql	2020-2026	CallbackURL		other	
+cdata-postgresql	2018-2026	ConnectionLifeTime		other	
+cdata-postgresql	2017-2026	ConnectOnOpen		other	
+cdata-postgresql	2026	CredentialsLocation		other	a file path
+cdata-postgresql	2017-2026	Database		other	
+cdata-postgresql	2020-2026	FetchResultSetMetadata		other	
+cdata-postgresql	2026	FirewallAutoDetect		other	
+cdata-postgresql	2017-2026	FirewallPassword		secret	the firewall or proxy server's password
+cdata-postgresql	2017-2026	FirewallPort		other	
+cdata-postgresql	2017-2026	FirewallServer		other	
+cdata-postgresql	2017-2026	FirewallType		other	
+cdata-postgresql	2017-2026	FirewallUser		user-name	the firewall or proxy server's user
+cdata-postgresql	2024-2026	GeneratedKeys		other	
+cdata-postgresql	2019-2026	IgnoredSchemas		other	
+cdata-postgresql	2021-2026	IncludeTableTypes		other	
+cdata-postgresql	2020-2026	InitiateOAuth		other	
+cdata-postgresql	2024-2026	InsertMode		other	
+cdata-postgresql	2021-2026	KerberosKDC		other	
+cdata-postgresql	2021-2026	KerberosKeytabFile		other	a file path
+cdata-postgresql	2021-2026	KerberosRealm		other	
+cdata-postgresql	2021-2026	KerberosServiceKDC		other	
+cdata-postgresql	2021-2026	KerberosServiceRealm		other	
+cdata-postgresql	2021-2026	KerberosSPN		other	
+cdata-postgresql	2021-2026	KerberosTicketCache		other	a file path
+cdata-postgresql	2024-2026	KerberosUser		user-name	the Kerberos principal's user
+cdata-postgresql	2017-2026	Location		other	
+cdata-postgresql	2017-2026	Logfile		other	
+cdata-postgresql	2020-2026	LogModules		other	
+cdata-postgresql	2019-2026	MaxLogFileCount		other	
+cdata-postgresql	2017-2026	MaxLogFileSize		other	
+cdata-postgresql	2018-2026	MaxRows		other	
+cdata-postgresql	2026	MFASerialNumber		other	identifies a multi-factor device
+cdata-postgresql	2026	MFAToken		secret	a multi-factor authentication code
+cdata-postgresql	2020-2026	OAuthAccessToken		secret	an OAuth access token
+cdata-postgresql	2020-2026	OAuthClientId		other	identifies an OAuth application; its secret half is OAuthClientSecret
+cdata-postgresql	2020-2026	OAuthClientSecret		secret	the OAuth client secret
+cdata-postgresql	2026	OAuthEncryptKey		secret	the key that encrypts stored OAuth tokens
+cdata-postgresql	2020-2026	OAuthExpiresIn		other	
+cdata-postgresql	2020-2024	OAuthGrantType		other	
+cdata-postgresql	2022-2026	OAuthJWTCert		secret	the JWT certificate: the key itself (or a service account's JSON) when OAuthJWTCertType is a BLOB type, a path otherwise
+cdata-postgresql	2022-2026	OAuthJWTCertPassword		secret	password of the JWT certificate
+cdata-postgresql	2022-2026	OAuthJWTCertSubject		other	
+cdata-postgresql	2022-2026	OAuthJWTCertType		other	
+cdata-postgresql	2022	OAuthJWTIssuer		other	identifies the JWT's issuer
+cdata-postgresql	2022	OAuthJWTSubject		other	identifies the JWT's subject
+cdata-postgresql	2020-2026	OAuthRefreshToken		secret	an OAuth refresh token
+cdata-postgresql	2020-2026	OAuthSettingsLocation		other	a file path; the file holds the tokens
+cdata-postgresql	2020-2026	OAuthTokenTimestamp		other	
+cdata-postgresql	2020-2026	OAuthVerifier		secret	the OAuth verifier code
+cdata-postgresql	2017 2023-2025	Offline		other	
+cdata-postgresql	2017-2026	Other		other	its value can hold other settings; the check reads their names as it reads the URL's own
+cdata-postgresql	2017-2026	Password		login-password	the database password
+cdata-postgresql	2017-2026	PoolIdleTimeout		other	
+cdata-postgresql	2017-2026	PoolMaxSize		other	
+cdata-postgresql	2018-2026	PoolMinSize		other	
+cdata-postgresql	2017-2026	PoolWaitTime		other	
+cdata-postgresql	2017-2026	Port		other	
+cdata-postgresql	2017-2026	QueryPassthrough		other	
+cdata-postgresql	2017-2026	Readonly		other	
+cdata-postgresql	2017-2026	RTK		secret	the driver's licence key
+cdata-postgresql	2025-2026	Scope		other	
+cdata-postgresql	2017-2026	Server		other	
+cdata-postgresql	2021-2026	SSHAuthMode		other	
+cdata-postgresql	2020-2026	SSHClientCert		secret	the SSH client key: the key itself when SSHClientCertType is a BLOB type, a path otherwise
+cdata-postgresql	2020-2026	SSHClientCertPassword		secret	password of the SSH client certificate
+cdata-postgresql	2020-2026	SSHClientCertSubject		other	
+cdata-postgresql	2020-2026	SSHClientCertType		other	
+cdata-postgresql	2020-2026	SSHPassword		secret	the SSH tunnel's password
+cdata-postgresql	2020-2026	SSHPort		other	
+cdata-postgresql	2020-2026	SSHServer		other	
+cdata-postgresql	2020-2026	SSHServerFingerprint		other	
+cdata-postgresql	2020-2026	SSHUser		user-name	the SSH tunnel's user
+cdata-postgresql	2017-2026	SSLClientCert		secret	the TLS client certificate: the key itself when SSLClientCertType is a BLOB type, a path otherwise
+cdata-postgresql	2017-2026	SSLClientCertPassword		secret	password of the TLS client certificate
+cdata-postgresql	2017-2026	SSLClientCertSubject		other	
+cdata-postgresql	2017-2026	SSLClientCertType		other	
+cdata-postgresql	2017-2026	SSLServerCert		other	
+cdata-postgresql	2017-2026	Tables		other	
+cdata-postgresql	2026	TemporaryTokenDuration		other	
+cdata-postgresql	2017-2026	Timeout		other	
+cdata-postgresql	2017-2026	TimeZone		other	
+cdata-postgresql	2017-2026	UseConnectionPooling		other	
+cdata-postgresql	2017-2026	User		login-user	the database user
+cdata-postgresql	2020-2026	UseSSH		other	
+cdata-postgresql	2017-2026	UseSSL		other	
+cdata-postgresql	2017-2026	Verbosity		other	
+cdata-postgresql	2017-2026	Views		other	
+cdata-postgresql	2019-2026	Visibility		other	
+cdata-mysql	2020-2026	AllowUserVariables		other	
+cdata-mysql	2020-2026	AuthScheme		other	
+cdata-mysql	2015-2016 2023-2025	AutoCache		other	
+cdata-mysql	2022-2026	AWSAccessKey		other	identifies an AWS access key; its secret half is AWSSecretKey
+cdata-mysql	2022-2026	AWSRoleARN		other	
+cdata-mysql	2022-2026	AWSSecretKey		secret	AWS secret access key
+cdata-mysql	2020-2026	AzureTenant		other	
+cdata-mysql	2017-2026	BatchSize		other	
+cdata-mysql	2020-2026	BrowsableSchemas		other	
+cdata-mysql	2015-2016 2023-2025	CacheConnection		other	a whole JDBC URL; the check reads its settings' names as it reads the URL's own
+cdata-mysql	2015-2016 2023-2025	CacheDriver		other	
+cdata-mysql	2015-2016 2023-2025	CacheLocation		other	
+cdata-mysql	2015-2016 2023-2025	CacheMetadata		other	
+cdata-mysql	2016	CacheQueryResult		other	
+cdata-mysql	2023-2025	CacheTolerance		other	
+cdata-mysql	2015	CertificateFile		other	a file path
+cdata-mysql	2015	CertificatePassword		secret	password of the client certificate (2015 builds)
+cdata-mysql	2015	CertificateStoreLocation		other	
+cdata-mysql	2015	CertificateThumbprint		other	
+cdata-mysql	2019-2026	Characterset		other	
+cdata-mysql	2018-2026	ConnectionLifeTime		other	
+cdata-mysql	2026	ConnectionString		other	a whole connection string (hidden, removed in 25.0.9305); its names are read as the URL's own
+cdata-mysql	2016-2026	ConnectOnOpen		other	
+cdata-mysql	2026	CredentialsLocation		other	a file path
+cdata-mysql	2015-2026	Database		other	
+cdata-mysql	2025-2026	DateTimeTimeZone		other	
+cdata-mysql	2020-2026	Domain		other	
+cdata-mysql	2024-2026	EnsureKeepAlive		other	
+cdata-mysql	2026	FirewallAutoDetect		other	
+cdata-mysql	2017-2026	FirewallPassword		secret	the firewall or proxy server's password
+cdata-mysql	2017-2026	FirewallPort		other	
+cdata-mysql	2017-2026	FirewallServer		other	
+cdata-mysql	2017-2026	FirewallType		other	
+cdata-mysql	2017-2026	FirewallUser		user-name	the firewall or proxy server's user
+cdata-mysql	2020-2026	InitiateOAuth		other	
+cdata-mysql	2015-2020	IntegratedSecurity		other	
+cdata-mysql	2020-2026	IntegratedUser		user-name	the Windows account for integrated security
+cdata-mysql	2015-2026	Location		other	
+cdata-mysql	2015-2026	Logfile		other	
+cdata-mysql	2020-2026	LogModules		other	
+cdata-mysql	2019-2026	MaxLogFileCount		other	
+cdata-mysql	2015-2026	MaxLogFileSize		other	
+cdata-mysql	2018-2026	MaxRows		other	
+cdata-mysql	2026	MFASerialNumber		other	identifies a multi-factor device
+cdata-mysql	2026	MFAToken		secret	a multi-factor authentication code
+cdata-mysql	2020-2026	NTLMVersion		other	
+cdata-mysql	2020-2026	OAuthAccessToken		secret	an OAuth access token
+cdata-mysql	2020-2026	OAuthClientId		other	identifies an OAuth application; its secret half is OAuthClientSecret
+cdata-mysql	2020-2026	OAuthClientSecret		secret	the OAuth client secret
+cdata-mysql	2026	OAuthEncryptKey		secret	the key that encrypts stored OAuth tokens
+cdata-mysql	2020-2026	OAuthExpiresIn		other	
+cdata-mysql	2026	OAuthJWTCert		secret	the JWT certificate: the key itself (or a service account's JSON) when OAuthJWTCertType is a BLOB type, a path otherwise
+cdata-mysql	2024-2026	OAuthRefreshToken		secret	an OAuth refresh token
+cdata-mysql	2020-2026	OAuthSettingsLocation		other	a file path; the file holds the tokens
+cdata-mysql	2020-2026	OAuthTokenTimestamp		other	
+cdata-mysql	2020-2026	OAuthVerifier		secret	the OAuth verifier code
+cdata-mysql	2015-2017 2023-2025	Offline		other	
+cdata-mysql	2015-2026	Other		other	its value can hold other settings; the check reads their names as it reads the URL's own
+cdata-mysql	2015-2026	Password		login-password	the database password
+cdata-mysql	2017-2026	PoolIdleTimeout		other	
+cdata-mysql	2017-2026	PoolMaxSize		other	
+cdata-mysql	2018-2026	PoolMinSize		other	
+cdata-mysql	2017-2026	PoolWaitTime		other	
+cdata-mysql	2015-2026	Port		other	
+cdata-mysql	2020-2026	ProxyAuthScheme		other	
+cdata-mysql	2020-2026	ProxyAutoDetect		other	
+cdata-mysql	2020-2026	ProxyExceptions		other	
+cdata-mysql	2020-2026	ProxyPassword		secret	the HTTP proxy's password
+cdata-mysql	2020-2026	ProxyPort		other	
+cdata-mysql	2020-2026	ProxyServer		other	
+cdata-mysql	2020-2026	ProxySSLType		other	
+cdata-mysql	2020-2026	ProxyUser		user-name	the HTTP proxy's user
+cdata-mysql	2015-2016	PseudoColumns		other	
+cdata-mysql	2015-2016	QueryCache		other	
+cdata-mysql	2015-2026	QueryPassthrough		other	
+cdata-mysql	2015-2026	Readonly		other	
+cdata-mysql	2015-2026	RTK		secret	the driver's licence key
+cdata-mysql	2025-2026	Scope		other	
+cdata-mysql	2015-2026	Server		other	
+cdata-mysql	2021-2026	ServerTimeZone		other	
+cdata-mysql	2020-2026	SSHAuthMode		other	
+cdata-mysql	2018-2026	SSHClientCert		secret	the SSH client key: the key itself when SSHClientCertType is a BLOB type, a path otherwise
+cdata-mysql	2018-2026	SSHClientCertPassword		secret	password of the SSH client certificate
+cdata-mysql	2018-2026	SSHClientCertSubject		other	
+cdata-mysql	2018-2026	SSHClientCertType		other	
+cdata-mysql	2018-2026	SSHPassword		secret	the SSH tunnel's password
+cdata-mysql	2018-2026	SSHPort		other	
+cdata-mysql	2018-2026	SSHServer		other	
+cdata-mysql	2018-2026	SSHServerFingerPrint		other	
+cdata-mysql	2018-2026	SSHUser		user-name	the SSH tunnel's user
+cdata-mysql	2017-2026	SSLClientCert		secret	the TLS client certificate: the key itself when SSLClientCertType is a BLOB type, a path otherwise
+cdata-mysql	2017-2026	SSLClientCertPassword		secret	password of the TLS client certificate
+cdata-mysql	2017-2026	SSLClientCertSubject		other	
+cdata-mysql	2017-2026	SSLClientCertType		other	
+cdata-mysql	2015	SSLMode		other	
+cdata-mysql	2017-2026	SSLServerCert		other	
+cdata-mysql	2015-2026	Tables		other	
+cdata-mysql	2026	TemporaryTokenDuration		other	
+cdata-mysql	2016-2026	Timeout		other	
+cdata-mysql	2024-2026	TinyInt1Type		other	
+cdata-mysql	2017-2026	UseConnectionPooling		other	
+cdata-mysql	2026	UseNewDialect		other	
+cdata-mysql	2015-2026	User		login-user	the database user
+cdata-mysql	2018-2026	UseSSH		other	
+cdata-mysql	2018-2026	UseSSL		other	
+cdata-mysql	2015-2026	Verbosity		other	
+cdata-mysql	2016-2026	Views		other	
+cdata-mysql	2017-2026	ZeroDatesToNull		other	
+cdata-mariadb	2021-2026	AllowUserVariables		other	
+cdata-mariadb	2023-2026	AuthScheme		other	
+cdata-mariadb	2023-2025	AutoCache		other	
+cdata-mariadb	2023-2026	AzureTenant		other	
+cdata-mariadb	2019-2026	BatchSize		other	
+cdata-mariadb	2021-2026	BrowsableSchemas		other	
+cdata-mariadb	2023-2025	CacheConnection		other	a whole JDBC URL; the check reads its settings' names as it reads the URL's own
+cdata-mariadb	2023-2025	CacheDriver		other	
+cdata-mariadb	2023-2025	CacheLocation		other	
+cdata-mariadb	2023-2025	CacheMetadata		other	
+cdata-mariadb	2023-2025	CacheTolerance		other	
+cdata-mariadb	2026	CallbackURL		other	
+cdata-mariadb	2019-2026	ConnectionLifeTime		other	
+cdata-mariadb	2026	ConnectionString		other	a whole connection string (hidden, removed in 25.0.9305); its names are read as the URL's own
+cdata-mariadb	2019-2026	ConnectOnOpen		other	
+cdata-mariadb	2019-2026	Database		other	
+cdata-mariadb	2023-2026	Domain		other	
+cdata-mariadb	2026	FirewallAutoDetect		other	
+cdata-mariadb	2019-2026	FirewallPassword		secret	the firewall or proxy server's password
+cdata-mariadb	2019-2026	FirewallPort		other	
+cdata-mariadb	2019-2026	FirewallServer		other	
+cdata-mariadb	2019-2026	FirewallType		other	
+cdata-mariadb	2019-2026	FirewallUser		user-name	the firewall or proxy server's user
+cdata-mariadb	2023-2026	InitiateOAuth		other	
+cdata-mariadb	2019-2020	IntegratedSecurity		other	
+cdata-mariadb	2019-2026	Location		other	
+cdata-mariadb	2019-2026	Logfile		other	
+cdata-mariadb	2020-2026	LogModules		other	
+cdata-mariadb	2019-2026	MaxLogFileCount		other	
+cdata-mariadb	2019-2026	MaxLogFileSize		other	
+cdata-mariadb	2019-2026	MaxRows		other	
+cdata-mariadb	2023-2026	NTLMVersion		other	
+cdata-mariadb	2023-2026	OAuthAccessToken		secret	an OAuth access token
+cdata-mariadb	2023-2026	OAuthClientId		other	identifies an OAuth application; its secret half is OAuthClientSecret
+cdata-mariadb	2023-2026	OAuthClientSecret		secret	the OAuth client secret
+cdata-mariadb	2026	OAuthEncryptKey		secret	the key that encrypts stored OAuth tokens
+cdata-mariadb	2023-2026	OAuthExpiresIn		other	
+cdata-mariadb	2026	OAuthJWTCert		secret	the JWT certificate: the key itself (or a service account's JSON) when OAuthJWTCertType is a BLOB type, a path otherwise
+cdata-mariadb	2026	OAuthJWTCertType		other	
+cdata-mariadb	2026	OAuthRefreshToken		secret	an OAuth refresh token
+cdata-mariadb	2023-2026	OAuthSettingsLocation		other	a file path; the file holds the tokens
+cdata-mariadb	2023-2026	OAuthTokenTimestamp		other	
+cdata-mariadb	2023-2026	OAuthVerifier		secret	the OAuth verifier code
+cdata-mariadb	2023-2025	Offline		other	
+cdata-mariadb	2019-2026	Other		other	its value can hold other settings; the check reads their names as it reads the URL's own
+cdata-mariadb	2019-2026	Password		login-password	the database password
+cdata-mariadb	2019-2026	PoolIdleTimeout		other	
+cdata-mariadb	2019-2026	PoolMaxSize		other	
+cdata-mariadb	2019-2026	PoolMinSize		other	
+cdata-mariadb	2019-2026	PoolWaitTime		other	
+cdata-mariadb	2019-2026	Port		other	
+cdata-mariadb	2019-2026	QueryPassthrough		other	
+cdata-mariadb	2019-2026	Readonly		other	
+cdata-mariadb	2023-2026	ReplaceInvalidDatesWithNull		other	
+cdata-mariadb	2019-2026	RTK		secret	the driver's licence key
+cdata-mariadb	2025-2026	Scope		other	
+cdata-mariadb	2019-2026	Server		other	
+cdata-mariadb	2022-2026	ServerTimeZone		other	
+cdata-mariadb	2021-2026	SSHAuthMode		other	
+cdata-mariadb	2019-2026	SSHClientCert		secret	the SSH client key: the key itself when SSHClientCertType is a BLOB type, a path otherwise
+cdata-mariadb	2019-2026	SSHClientCertPassword		secret	password of the SSH client certificate
+cdata-mariadb	2019-2026	SSHClientCertSubject		other	
+cdata-mariadb	2019-2026	SSHClientCertType		other	
+cdata-mariadb	2019-2026	SSHPassword		secret	the SSH tunnel's password
+cdata-mariadb	2019-2026	SSHPort		other	
+cdata-mariadb	2019-2026	SSHServer		other	
+cdata-mariadb	2019-2026	SSHServerFingerPrint		other	
+cdata-mariadb	2019-2026	SSHUser		user-name	the SSH tunnel's user
+cdata-mariadb	2019-2026	SSLClientCert		secret	the TLS client certificate: the key itself when SSLClientCertType is a BLOB type, a path otherwise
+cdata-mariadb	2019-2026	SSLClientCertPassword		secret	password of the TLS client certificate
+cdata-mariadb	2019-2026	SSLClientCertSubject		other	
+cdata-mariadb	2019-2026	SSLClientCertType		other	
+cdata-mariadb	2019-2026	SSLServerCert		other	
+cdata-mariadb	2019-2026	Tables		other	
+cdata-mariadb	2019-2026	Timeout		other	
+cdata-mariadb	2024-2026	TinyInt1Type		other	
+cdata-mariadb	2019-2026	UseConnectionPooling		other	
+cdata-mariadb	2019-2026	User		login-user	the database user
+cdata-mariadb	2019-2026	UseSSH		other	
+cdata-mariadb	2019-2026	UseSSL		other	
+cdata-mariadb	2019-2026	Verbosity		other	
+cdata-mariadb	2019-2026	Views		other	
+cdata-mariadb	2019-2026	ZeroDatesToNull		other	
+datadirect-postgresql	6.0	AccessKey		other	identifies an AWS access key; its secret half is SecretKey
+datadirect-postgresql	6.0	AccountingInfo		other	
+datadirect-postgresql	6.0	AlternateServers		other	its value can hold settings in parentheses; their names are read as the URL's own
+datadirect-postgresql	6.0	ApplicationName		other	
+datadirect-postgresql	6.0	AuthenticationMethod		other	
+datadirect-postgresql	6.0	AzureTenantID		other	
+datadirect-postgresql	6.0	BatchMechanism		other	
+datadirect-postgresql	6.0	BulkLoadBatchSize		other	
+datadirect-postgresql	6.0	CallEscapeBehavior		other	
+datadirect-postgresql	6.0	CatalogOptions		other	
+datadirect-postgresql	6.0	ClientHostName		other	
+datadirect-postgresql	6.0	ClientUser		user-name	client info: the user the application works for
+datadirect-postgresql	6.0	CodePageOverride		other	
+datadirect-postgresql	6.0	ConnectionRetryCount		other	
+datadirect-postgresql	6.0	ConnectionRetryDelay		other	
+datadirect-postgresql	6.0	ConvertNull		other	
+datadirect-postgresql	6.0	CryptoProtocolVersion		other	
+datadirect-postgresql	6.0	DatabaseName		other	
+datadirect-postgresql	6.0	EnableCancelTimeout		other	
+datadirect-postgresql	6.0	EnablePrepareThreshold		other	
+datadirect-postgresql	6.0	EncryptionMethod		other	
+datadirect-postgresql	6.0	ExtendedColumnMetadata		other	
+datadirect-postgresql	6.0	HostNameInCertificate		other	
+datadirect-postgresql	6.0	ImportStatementPool		other	
+datadirect-postgresql	6.0	InitializationString		other	SQL run at connect
+datadirect-postgresql	6.0	InsensitiveResultSetBufferSize		other	
+datadirect-postgresql	6.0	JavaDoubleToString		other	
+datadirect-postgresql	6.0	KeyPassword		secret	password of the key in the key store
+datadirect-postgresql	6.0	KeyStore		other	a file path
+datadirect-postgresql	6.0	KeyStorePassword		secret	password of the key store
+datadirect-postgresql	6.0	LoadBalancing		other	
+datadirect-postgresql	6.0	LoginConfigName		other	
+datadirect-postgresql	6.0	LoginTimeout		other	
+datadirect-postgresql	6.0	MaxLongVarcharSize		other	
+datadirect-postgresql	6.0	MaxNumericPrecision		other	
+datadirect-postgresql	6.0	MaxNumericScale		other	
+datadirect-postgresql	6.0	MaxPooledStatements		other	
+datadirect-postgresql	6.0	MaxStatements		other	
+datadirect-postgresql	6.0	MaxVarcharSize		other	
+datadirect-postgresql	6.0	Password		login-password	the database password
+datadirect-postgresql	6.0	PortNumber		other	
+datadirect-postgresql	6.0	PrepareThreshold		other	
+datadirect-postgresql	6.0	ProgramID		other	
+datadirect-postgresql	6.0	ProxyHost		other	
+datadirect-postgresql	6.0	ProxyPassword		secret	the HTTP proxy's password
+datadirect-postgresql	6.0	ProxyPort		other	
+datadirect-postgresql	6.0	ProxyUser		user-name	the HTTP proxy's user
+datadirect-postgresql	6.0	QueryTimeout		other	
+datadirect-postgresql	6.0	Region		other	
+datadirect-postgresql	6.0	RegisterStatementPoolMonitorMBean		other	
+datadirect-postgresql	6.0	ResultSetMetaDataOptions		other	
+datadirect-postgresql	6.0	SecretKey		secret	AWS secret access key
+datadirect-postgresql	6.0	ServerName		other	
+datadirect-postgresql	6.0	ServicePrincipalName		other	
+datadirect-postgresql	6.0	ShowSelectableTables		other	
+datadirect-postgresql	6.0	SpyAttributes		other	logging settings in parentheses
+datadirect-postgresql	6.0	SupportsCatalogs		other	
+datadirect-postgresql	6.0	TransactionErrorBehavior		other	
+datadirect-postgresql	6.0	TrustStore		other	a file path
+datadirect-postgresql	6.0	TrustStorePassword		secret	password of the trust store
+datadirect-postgresql	6.0	User		login-user	the database user
+datadirect-postgresql	6.0	ValidateServerCertificate		other	
+datadirect-postgresql	6.0	VarcharClobThreshold		other	
+datadirect-mysql	5.1.4	AccountingInfo		other	
+datadirect-mysql	5.1.4	AlternateServers		other	its value can hold settings in parentheses; their names are read as the URL's own
+datadirect-mysql	5.1.4	ApplicationName		other	
+datadirect-mysql	5.1.4	BulkLoadBatchSize		other	
+datadirect-mysql	5.1.4	CatalogOptions		other	
+datadirect-mysql	5.1.4	ClientHostName		other	
+datadirect-mysql	5.1.4	ClientUser		user-name	client info: the user the application works for
+datadirect-mysql	5.1.4	CodePageOverride		other	
+datadirect-mysql	5.1.4	ConnectionRetryCount		other	
+datadirect-mysql	5.1.4	ConnectionRetryDelay		other	
+datadirect-mysql	5.1.4	ConvertNull		other	
+datadirect-mysql	5.1.4	CryptoProtocolVersion		other	
+datadirect-mysql	5.1.4	DatabaseName	Database	other	
+datadirect-mysql	5.1.4	EncryptionMethod		other	
+datadirect-mysql	5.1.4	FailoverGranularity		other	
+datadirect-mysql	5.1.4	FailoverMode		other	
+datadirect-mysql	5.1.4	FailoverPreconnect		other	
+datadirect-mysql	5.1.4	HostNameInCertificate		other	
+datadirect-mysql	5.1.4	ImportStatementPool		other	
+datadirect-mysql	5.1.4	InitializationString		other	SQL run at connect
+datadirect-mysql	5.1.4	InOrderColumnAccess		other	
+datadirect-mysql	5.1.4	InsensitiveResultSetBufferSize		other	
+datadirect-mysql	5.1.4	InteractiveClient		other	
+datadirect-mysql	5.1.4	JavaDoubleToString		other	
+datadirect-mysql	5.1.4	JDBCBehavior		other	
+datadirect-mysql	5.1.4	KeyPassword		secret	password of the key in the key store
+datadirect-mysql	5.1.4	KeyStore		other	a file path
+datadirect-mysql	5.1.4	KeyStorePassword		secret	password of the key store
+datadirect-mysql	5.1.4	LoadBalancing		other	
+datadirect-mysql	5.1.4	LobCommandSize		other	
+datadirect-mysql	5.1.4	LoginTimeout		other	
+datadirect-mysql	5.1.4	MaxPooledStatements		other	
+datadirect-mysql	5.1.4	MaxStatements		other	
+datadirect-mysql	5.1.4	Password		login-password	the database password
+datadirect-mysql	5.1.4	PortNumber		other	
+datadirect-mysql	5.1.4	ProgramID		other	
+datadirect-mysql	5.1.4	ProxyHost		other	
+datadirect-mysql	5.1.4	ProxyPassword		secret	the HTTP proxy's password
+datadirect-mysql	5.1.4	ProxyPort		other	
+datadirect-mysql	5.1.4	ProxyUser		user-name	the HTTP proxy's user
+datadirect-mysql	5.1.4	QueryTimeout		other	
+datadirect-mysql	5.1.4	RegisterStatementPoolMonitorMBean		other	
+datadirect-mysql	5.1.4	ResultSetMetaDataOptions		other	
+datadirect-mysql	5.1.4	ServerName		other	
+datadirect-mysql	5.1.4	SpyAttributes		other	logging settings in parentheses
+datadirect-mysql	5.1.4	TreatBinaryAsChar		other	
+datadirect-mysql	5.1.4	TrustStore		other	a file path
+datadirect-mysql	5.1.4	TrustStorePassword		secret	password of the trust store
+datadirect-mysql	5.1.4	User		login-user	the database user
+datadirect-mysql	5.1.4	ValidateServerCertificate		other	
+opengauss-jdbc	7.0.0	adaptiveSetSQLType		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	ApplicationType		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	atfAddress		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	atfEnableResultCheck		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	atfLevel		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	atfReconnects		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	atfRecovery		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	atfSqlCount		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	atfSslcert		other	a file path
+opengauss-jdbc	7.0.0	atfStatementCacheQueries		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	atfStatementCacheSizeMiB		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	atfTimeout		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	autoReconnect		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	BCmptMode		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	bitOutput		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	bitToString		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	enable_ce		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	enableATF		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	enableQuickAutoBalance		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	enableStatementLoadBalance		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	forceTargetServerSlave		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	heartbeatPeriod		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	logger		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	masterFailureHeartbeatTimeout		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	maxBufferedStreamParameterChars		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	maxCopyDataReceiveBytes		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	maxIdleTimeBeforeTerminal		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	maxReconnects		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	minReservedConPerCluster		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	minReservedConPerDatanode		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	priorityServers		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	socketTimeoutInConnecting		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	sslcontext		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	sslenccert		other	a file path
+opengauss-jdbc	7.0.0	sslenckey		other	a file path
+opengauss-jdbc	7.0.0	sslprivatekeyfactory		other	a class name
+opengauss-jdbc	7.0.0	timestampNanoFormat		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	tlcp		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	TLSCiphersSupperted		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	useSSL		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	usingEip		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	verifyCert		other	the fork's own setting; the rest are pgjdbc's
+opengauss-jdbc	7.0.0	writeDataSourceAddress		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	allSendFunctionList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	BlackList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	BlackSqlList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	clearCountInterval		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	clientEncoding		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	CLUSTER_MONITOR		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	compressLevel		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	compressMax		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	compressMin		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	ConfigurePath		other	a file path
+postgresql-for-kingbase	9.0.0	CONNECT_POOLSIZE		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	differentLsn		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	fastFailover		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	fastTypeInfo		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	HOSTLOADRATE		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	ignoreSavepoint		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	initParams		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	loadBalanceStrategy		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	loadRate		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	MASTER_CHECK		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	MasterFunctionList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	masterKeyword		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	MONITORINTERVAL		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	monitorRetryTimes		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	monitorSocketTimeout		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	nodeList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	nullConvertEmptyLob		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	optimizeBatchedDML		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	passwordEncryption		other	how the password is encoded, not the password
+postgresql-for-kingbase	9.0.0	readListStrategy		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	RETRYINTERVAL		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	RETRYTIMES		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	returnBigintAsNumeric		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	rowidType		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	SLAVE_ADD		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	SLAVE_PORT		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	StableSlave		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	storeCase		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	structType		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	TempTable		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	timestamptype		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	TransactionDispatchStrategy		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	ukpwdcert		other	a file path
+postgresql-for-kingbase	9.0.0	ukpwdkey		other	a file path
+postgresql-for-kingbase	9.0.0	ukpwdpassword		secret	password of the client's UKPWD key
+postgresql-for-kingbase	9.0.0	ukpwdpasswordcallback		other	a class name
+postgresql-for-kingbase	9.0.0	ukpwdrootcert		other	a file path
+postgresql-for-kingbase	9.0.0	usbkeypin		secret	the PIN of the USB key that logs in
+postgresql-for-kingbase	9.0.0	USECONNECT_POOL		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	USEDISPATCH		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	useFetchSizeInAutoCommit		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	WhiteList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	writeIsRetry		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase	9.0.0	zipLevel		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	allSendFunctionList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	BlackList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	BlackSqlList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	clearCountInterval		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	clientEncoding		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	CLUSTER_MONITOR		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	compressLevel		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	compressMax		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	compressMin		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	ConfigurePath		other	a file path
+postgresql-for-kingbase-mysql	9.0.3	CONNECT_POOLSIZE		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	datetimeMappingTimestamp		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	differentLsn		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	fastFailover		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	fastTypeInfo		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	HOSTLOADRATE		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	initParams		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	loadBalanceStrategy		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	loadRate		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	MASTER_CHECK		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	MasterFunctionList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	masterKeyword		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	MONITORINTERVAL		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	monitorRetryTimes		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	monitorSocketTimeout		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	nodeList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	nullConvertEmptyLob		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	optimizeBatchedDML		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	passwordEncryption		other	how the password is encoded, not the password
+postgresql-for-kingbase-mysql	9.0.3	readListStrategy		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	RETRYINTERVAL		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	RETRYTIMES		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	rowidType		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	SLAVE_ADD		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	SLAVE_PORT		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	StableSlave		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	storeCase		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	structType		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	TempTable		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	timestamptype		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	TransactionDispatchStrategy		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	ukpwdcert		other	a file path
+postgresql-for-kingbase-mysql	9.0.3	ukpwdkey		other	a file path
+postgresql-for-kingbase-mysql	9.0.3	ukpwdpassword		secret	password of the client's UKPWD key
+postgresql-for-kingbase-mysql	9.0.3	ukpwdpasswordcallback		other	a class name
+postgresql-for-kingbase-mysql	9.0.3	ukpwdrootcert		other	a file path
+postgresql-for-kingbase-mysql	9.0.3	usbkeypin		secret	the PIN of the USB key that logs in
+postgresql-for-kingbase-mysql	9.0.3	USECONNECT_POOL		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	USEDISPATCH		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	useFetchSizeInAutoCommit		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	WhiteList		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	writeIsRetry		other	the fork's own setting; the rest are pgjdbc's
+postgresql-for-kingbase-mysql	9.0.3	zipLevel		other	the fork's own setting; the rest are pgjdbc's
+postgresql-holo	42.2.26.2	(none)		other	a pgjdbc fork with no setting of its own
+mysql-connector-java-tidb	8.0.29-tidb-1.0.2	sm3Auth		other	switches on TiDB's SM3 password login; the rest are Connector/J's
+tidb-loadbalance	0.0.6	tidb.discovery		other	load-balancing setting; reads jdbc:mysql: URLs as Connector/J does
+tidb-loadbalance	0.0.6	tidb.jdbc.max-discovery-interval		other	load-balancing setting; reads jdbc:mysql: URLs as Connector/J does
+tidb-loadbalance	0.0.6	tidb.jdbc.min-discovery-interval		other	load-balancing setting; reads jdbc:mysql: URLs as Connector/J does
+tidb-loadbalance	0.0.6	tidb.jdbc.url-mapper		other	load-balancing setting; reads jdbc:mysql: URLs as Connector/J does
+tidb-loadbalance	0.0.6	url.provider		other	load-balancing setting; reads jdbc:mysql: URLs as Connector/J does
+tidb-loadbalance	0.0.6	weight		other	load-balancing setting; reads jdbc:mysql: URLs as Connector/J does
+polardbx-connector-java	2.2.15	(none)		other	its bundled Connector/J for jdbc:mysql: URLs has no setting of its own
+aurora-dsql-jdbc-connector	1.5.0	ApplicationName		other	application name
+aurora-dsql-jdbc-connector	1.5.0	database		other	database name
+aurora-dsql-jdbc-connector	1.5.0	profile		other	AWS profile name
+aurora-dsql-jdbc-connector	1.5.0	region		other	AWS region
+aurora-dsql-jdbc-connector	1.5.0	sslfactory		other	TLS socket factory class
+aurora-dsql-jdbc-connector	1.5.0	sslmode		other	TLS mode
+aurora-dsql-jdbc-connector	1.5.0	sslNegotiation		other	TLS negotiation
+aurora-dsql-jdbc-connector	1.5.0	token-duration-secs		other	IAM token lifetime
+aurora-dsql-jdbc-connector	1.5.0	user		login-user	the database user to log in as
+alloydb-jdbc-connector	1.3.3	alloydbAdminServiceEndpoint		other	
+alloydb-jdbc-connector	1.3.3	alloydbDelegates		other	identifies service accounts to act through; not login names
+alloydb-jdbc-connector	1.3.3	alloydbEnableIAMAuth		other	
+alloydb-jdbc-connector	1.3.3	alloydbGoogleCredentialsPath		other	a file path; the file holds the key
+alloydb-jdbc-connector	1.3.3	alloydbInstanceName		other	
+alloydb-jdbc-connector	1.3.3	alloydbIpType		other	
+alloydb-jdbc-connector	1.3.3	alloydbNamedConnector		other	
+alloydb-jdbc-connector	1.3.3	alloydbQuotaProject		other	
+alloydb-jdbc-connector	1.3.3	alloydbRefreshStrategy		other	
+alloydb-jdbc-connector	1.3.3	alloydbTargetPrincipal		other	identifies a service account to act as; not a login name
+jdbc-ssh	1.0.10	jdbc.ssh.config		other	a file path
+jdbc-ssh	1.0.10	jdbc.ssh.host		other	SSH host
+jdbc-ssh	1.0.10	jdbc.ssh.host.remote		other	database host behind the tunnel
+jdbc-ssh	1.0.10	jdbc.ssh.key.private		other	a file path
+jdbc-ssh	1.0.10	jdbc.ssh.key.public		other	a file path
+jdbc-ssh	1.0.10	jdbc.ssh.known.hosts		other	a file path
+jdbc-ssh	1.0.10	jdbc.ssh.passphrase		secret	the passphrase of the SSH key
+jdbc-ssh	1.0.10	jdbc.ssh.password		secret	the SSH password
+jdbc-ssh	1.0.10	jdbc.ssh.port		other	SSH port
+jdbc-ssh	1.0.10	jdbc.ssh.port.auto		other	local port choice
+jdbc-ssh	1.0.10	jdbc.ssh.port.remote		other	database port behind the tunnel
+jdbc-ssh	1.0.10	jdbc.ssh.username		user-name	the SSH user
+jdbc-ssh-tunnel	0.1.0	sshHost		other	SSH host
+jdbc-ssh-tunnel	0.1.0	sshKey		other	a file path
+jdbc-ssh-tunnel	0.1.0	sshPassphrase		secret	the passphrase of the SSH key
+jdbc-ssh-tunnel	0.1.0	sshPort		other	SSH port
+jdbc-ssh-tunnel	0.1.0	sshUser		user-name	the SSH user
+jdbc-sshj	1.0.13	driver		other	a class name
+jdbc-sshj	1.0.13	drivers		other	class names
+jdbc-sshj	1.0.13	password		secret	the SSH password, in the SSH part before ;;; - not the database login's
+jdbc-sshj	1.0.13	private.key.file		other	a file path
+jdbc-sshj	1.0.13	private.key.file.format		other	key file format
+jdbc-sshj	1.0.13	private.key.password		secret	password of the SSH key
+jdbc-sshj	1.0.13	public.key.file		other	a file path
+jdbc-sshj	1.0.13	remote		other	database host and port behind the tunnel
+jdbc-sshj	1.0.13	username		user-name	the SSH user
+jdbc-sshj	1.0.13	verify_hosts		other	host key checking on/off
+jdbcdslog	1.0.6.2	targetDriver		other	the real driver's class name
+jamon	2.82	jamonrealdriver		other	the real driver's class name
+opentracing-jdbc	0.2.15	ignoreForTracing		other	SQL not to trace
+opentracing-jdbc	0.2.15	traceWithActiveSpanOnly		other	tracing switch
+druid	1.2.28	driver		other	the real driver's class name; written as name=value: before the real jdbc: URL
+druid	1.2.28	filters		other	filter names; written as name=value: before the real jdbc: URL
+druid	1.2.28	jmx		other	JMX switch; written as name=value: before the real jdbc: URL
+druid	1.2.28	name		other	data source name; written as name=value: before the real jdbc: URL
+druid	1.2.28	passwordCallback		other	a class name; written as name=value: before the real jdbc: URL
+drizzle-jdbc	1.4	allowMultiQueries		other	
+drizzle-jdbc	1.4	connectTimeout		other	
+drizzle-jdbc	1.4	createDB		other	
+drizzle-jdbc	1.4	enableBlobStreaming		other	
+drizzle-jdbc	1.4	noPrepStmtCache		other	
+drizzle-jdbc	1.4	password		login-password	the login password (also read from user:password@)
+drizzle-jdbc	1.4	useAffectedRows		other	
+drizzle-jdbc	1.4	user		login-user	the database user (also read from user@ before the host)
+drizzle-jdbc	1.4	useSSL		other	
+mysql-connector-mxj	5.0.12	server.<mysqld option>		other	passes an option to the embedded MySQL server it starts
+mysql-connector-mxj	5.0.12	server.initialize-user		other	create the user on first start
+mysql-connector-mxj	5.0.12	server.initialize-user.password		secret	that user's password (overwritten from password)
+mysql-connector-mxj	5.0.12	server.initialize-user.user		user-name	the user created on first start (overwritten from user)
+javamelody-core	2.8.0	driver		other	the real driver's class name, from the properties or ?driver= at the end of the URL
+javamelody-core	2.8.0	javamelody		other	set to false on the connection it hands on
+aliyun-secretsmanager-jdbc	1.3.7	urlUnique		other	a cache key; the secret's name comes from username
+proxool	0.9.1	(none)		other	no URL setting of its own; it hands the real URL to the real driver
+jdbc-perf-logger-driver	0.9.0	(none)		other	no URL setting of its own; it hands the real URL to the real driver
+log4jdbc	1.2	(none)		other	no URL setting of its own; it hands the real URL to the real driver
+log4jdbc-remix	0.2.7	(none)		other	no URL setting of its own; it hands the real URL to the real driver
+polardb	42.5.7.0.16.1	allowSelectInExecuteUpdate		other	Allow executeUpdate to execute SELECT queries without throwing an error; the fork's own setting
+polardb	42.5.7.0.16.1	autoCommit		other	Connection is autoCommit or not.; the fork's own setting
+polardb	42.5.7.0.16.1	autocommitFetch		other	When true and server supports polar_enable_autocommit_cursor, use server-side cursor (fetchSize) even in autoCommit mode. The server materializes rema; the f...
+polardb	42.5.7.0.16.1	autoCommitSpecCompliant		other	Call commit compliant or not if autoCommit is on; the fork's own setting
+polardb	42.5.7.0.16.1	bigintAsNumeric		other	Treat BIGINT as NUMERIC (BigDecimal) instead of Long.; the fork's own setting
+polardb	42.5.7.0.16.1	blobAsBytea		other	Treat BLOB as bytea rather than as PostgreSQL Large Objects; the fork's own setting
+polardb	42.5.7.0.16.1	blobUpperHex		other	Output bytea/blob as uppercase hex string (Oracle style) instead of PG \x prefix format; the fork's own setting
+polardb	42.5.7.0.16.1	boolAsInt		other	Treat bool as int or not.; the fork's own setting
+polardb	42.5.7.0.16.1	callFunctionMode		other	enable oracle style's call function.; the fork's own setting
+polardb	42.5.7.0.16.1	clobAsText		other	Treat CLOB as text rather than as PostgreSQL Large Objects; the fork's own setting
+polardb	42.5.7.0.16.1	collectWarning		other	collect notice/warning in PLSQL; the fork's own setting
+polardb	42.5.7.0.16.1	commentStyle		other	comment Style in oracle mode or not.; the fork's own setting
+polardb	42.5.7.0.16.1	defaultPolarMaxFetchSize		other	Max limit number of rows that should be fetched from the database when more rows are needed for ResultSet by each fetch iteration; the fork's own setting
+polardb	42.5.7.0.16.1	driverPrefix		other	PolarDB dirver prefix; the fork's own setting
+polardb	42.5.7.0.16.1	extraFloatDigits		other	set extraFloatDigits; the fork's own setting
+polardb	42.5.7.0.16.1	forceDriverType		other	PolarDB force type pg; the fork's own setting
+polardb	42.5.7.0.16.1	lowerCaseLogin		other	Convert the login username to lower case for both the startup message and password hashing (MD5). Aligns with Oracle/PolarDB behavior where unquoted i; the f...
+polardb	42.5.7.0.16.1	mapDateToTimestamp		other	Map date to timestamp.; the fork's own setting
+polardb	42.5.7.0.16.1	namedParam		other	Use named parameters or not.; the fork's own setting
+polardb	42.5.7.0.16.1	nlsLocaleInit		other	Initialize session nls_language/nls_territory from the JVM FORMAT Locale on each new physical connection (Oracle JDBC Thin compatible). Only for jdbc:; the f...
+polardb	42.5.7.0.16.1	numberStripTrailingZeros		other	Strip trailing zeros from NUMERIC/DECIMAL string representation (e.g. 911.000 -> 911).; the fork's own setting
+polardb	42.5.7.0.16.1	oracleCase		other	The column/table name is upper case or not.; the fork's own setting
+polardb	42.5.7.0.16.1	oracleMetadataCase		other	Enable Oracle-style DatabaseMetaData behaviour: resolve upper-case schema/table/object names to the stored case, fold returned identifiers to upper ca; the f...
+polardb	42.5.7.0.16.1	proxyUserLogin		other	Support Oracle-style proxy login format user[proxyUser]. The full string (e.g. abc[def]) is sent in the startup message, but only the primary user (ab; the f...
+polardb	42.5.7.0.16.1	resetNlsFormat		other	Reset nls_timestamp_format/nls_timestamptz_format/nls_date_format at connection startup; the fork's own setting
+polardb	42.5.7.0.16.1	unnamedProc		other	Support prepared statement anonymous transaction block.; the fork's own setting
+delinea-jdbc	4.2.0	(none)		other	its settings are in delineadriver.properties; the URL holds a secret's id, not the secret
+cyberark-ascp	(docs)	ascp_AppId		other	application id
+cyberark-ascp	(docs)	ascp_ConnectionPort		other	port
+cyberark-ascp	(docs)	ascp_ConnectionTimeout		other	timeout
+cyberark-ascp	(docs)	ascp_Query		other	which credential to fetch; a Username=... inside it is refused like any user name in a URL
+cyberark-ascp	(docs)	ascp_VendorClass		other	a class name
+broadcom-devtest-lisasim	(docs)	driver		other	the real driver's class name
+broadcom-devtest-lisasim	(docs)	jdbcSimPort		other	port
+broadcom-devtest-lisasim	(docs)	state		other	watch, record or playback
+broadcom-devtest-lisasim	(docs)	url		other	the real URL, last; its settings are read like the URL's own
+jdbcspy	(github)	(none)		other	its settings are in dbproxy.xml
+rmijdbc	(dead)	(none)		other	hands the nested real URL on
+junixsocket	2.11.1	junixsocket.file		other	a socket file path
+brave-instrumentation-mysql8	6.3.1	zipkinServiceName		other	a service name; its interceptors are Connector/J's own settings
+sentry-jdbc	(P6Spy)	(none)		other	built on P6Spy, same jdbc:p6spy: URL

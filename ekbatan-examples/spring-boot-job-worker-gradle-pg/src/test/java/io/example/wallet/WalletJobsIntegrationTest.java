@@ -2,8 +2,10 @@ package io.example.wallet;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import io.ekbatan.core.action.ActionExecutor;
+import io.ekbatan.core.shard.DatabaseRegistry;
 import io.ekbatan.core.shard.ShardIdentifier;
 import io.example.wallet.action.WalletCreateAction;
 import io.example.wallet.model.NotificationKind;
@@ -90,5 +92,24 @@ class WalletJobsIntegrationTest {
                     assertThat(mexicoNotifications)
                             .allSatisfy(n -> assertThat(n.kind).isEqualTo(NotificationKind.MONEY_DEPOSITED));
                 });
+    }
+
+    @Autowired
+    private DatabaseRegistry databaseRegistry;
+
+    @Test
+    void driver_settings_from_the_configuration_reach_the_database() throws Exception {
+        // application.yml gives every primaryConfig a dataSourceProperties entry (ApplicationName);
+        // each shard's primary pool must have handed it to the driver
+        for (var shard : java.util.List.of(ShardIdentifier.of(0, 0), ShardIdentifier.of(1, 0))) {
+            var pool = databaseRegistry.transactionManager(shard).primaryConnectionProvider;
+            var connection = pool.acquire();
+            try (var rows = connection.createStatement().executeQuery("SELECT current_setting('application_name')")) {
+                rows.next();
+                assertEquals("wallet-service", rows.getString(1), "shard " + shard);
+            } finally {
+                pool.release(connection);
+            }
+        }
     }
 }

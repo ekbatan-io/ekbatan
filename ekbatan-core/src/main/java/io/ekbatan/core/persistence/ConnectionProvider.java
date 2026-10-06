@@ -1,5 +1,6 @@
 package io.ekbatan.core.persistence;
 
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import io.ekbatan.core.config.DataSourceConfig;
 import java.sql.Connection;
@@ -21,6 +22,9 @@ import javax.sql.DataSource;
  * accessor returns {@link DataSource} (the JDBC standard interface) so {@code HikariDataSource}
  * never appears in this class's public API surface; consumers who need pool-specific tuning
  * may downcast, but must then declare HikariCP in their own build.
+ *
+ * <p>The pool draws every connection from {@link DataSources#driverDataSource(DataSourceConfig)},
+ * which a one-off job such as a migration uses directly, so the two connect the same way.
  *
  * <p>{@link #close()} is idempotent; the registry closes every provider on application
  * shutdown.
@@ -113,11 +117,11 @@ public class ConnectionProvider implements AutoCloseable {
      * @return a fresh provider with its own pool; the caller owns lifecycle and must {@link #close()} it.
      */
     public static ConnectionProvider hikariConnectionProvider(DataSourceConfig cfg) {
-        var hikari = new com.zaxxer.hikari.HikariConfig();
+        var hikari = new HikariConfig();
+        // The pool draws every connection from the data source a migration uses directly. Hikari
+        // ignores the URL when it is given a data source; it is set only so jdbcUrl() can report it.
+        hikari.setDataSource(DataSources.driverDataSource(cfg));
         hikari.setJdbcUrl(cfg.jdbcUrl);
-        hikari.setUsername(cfg.username);
-        hikari.setPassword(cfg.password);
-        cfg.driverClassName.ifPresent(hikari::setDriverClassName);
         hikari.setMaximumPoolSize(cfg.maximumPoolSize);
         hikari.setInitializationFailTimeout(-1);
         cfg.minimumIdle.ifPresent(hikari::setMinimumIdle);

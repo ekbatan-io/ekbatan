@@ -148,7 +148,7 @@ routes:
 
 One event can match multiple routes (it goes to all matching topics). The router is stateless, horizontally scalable, and crash-safe — the raw topic buffers events if the router is down.
 
-A reference implementation in ~130 lines lives in [`ekbatan-integration-tests/event-pipeline/debezium-kafka-json/.../EventRouter.java`](../../ekbatan-integration-tests/event-pipeline/debezium-kafka-json/src/test/java/io/ekbatan/test/event_pipeline/json/router/EventRouter.java). Adapt it for Avro/Protobuf by swapping the deserializer and re-emitter.
+A reference implementation in ~130 lines lives in [`ekbatan-integration-tests/event-pipeline/debezium-kafka-json/.../EventRouter.java`](https://github.com/ekbatan-io/ekbatan/blob/main/ekbatan-integration-tests/event-pipeline/debezium-kafka-json/src/test/java/io/ekbatan/test/event_pipeline/json/router/EventRouter.java). Adapt it for Avro/Protobuf by swapping the deserializer and re-emitter.
 
 The router is **not** a published framework artifact — Kafka client versions, error handling, retry, DLQ shape, and deployment topology are too org-specific to standardize as a library. Treat the integration tests as a working template.
 
@@ -173,7 +173,7 @@ Both:
 
 > `payload.field` and `event.type.field` name the source **column on the outbox row**, never the target field in the `ActionEvent` schema. The target field names are fixed by the schema.
 
-The integration tests under [`ekbatan-integration-tests/event-pipeline`](../../ekbatan-integration-tests/event-pipeline) (the `debezium-kafka-avro-smt` and `debezium-kafka-protobuf-smt` subprojects) wire up Debezium + Kafka + the SMT in TestContainers as a working reference, against PostgreSQL. `debezium-kafka-dialects-smt` runs the same pipeline against MySQL and MariaDB, writing through the real event persister so the dialect-specific column bindings are the ones under test.
+The integration tests under [`ekbatan-integration-tests/event-pipeline`](https://github.com/ekbatan-io/ekbatan/tree/main/ekbatan-integration-tests/event-pipeline) (the `debezium-kafka-avro-smt` and `debezium-kafka-protobuf-smt` subprojects) wire up Debezium + Kafka + the SMT in TestContainers as a working reference, against PostgreSQL. `debezium-kafka-dialects-smt` runs the same pipeline against MySQL and MariaDB, writing through the real event persister so the dialect-specific column bindings are the ones under test.
 
 ### SMT configuration
 
@@ -363,4 +363,4 @@ The router in the integration tests does this automatically.
 - [The outbox: atomic state + events](/learn/outbox/) — what Debezium reads from
 - [`eventlog.events`](/reference/tables/events/) — the SQL columns and indexes of the event table
 - [Listen-to-yourself: in-process event handlers](/reference/events/local-event-handler/) — the alternative consumer path; can coexist with this one
-- [`ekbatan-integration-tests/event-pipeline`](../../ekbatan-integration-tests/event-pipeline) — the runnable end-to-end tests for all three variants (JSON / Avro / Protobuf)
+- [`ekbatan-integration-tests/event-pipeline`](https://github.com/ekbatan-io/ekbatan/tree/main/ekbatan-integration-tests/event-pipeline) — the runnable end-to-end tests for all three variants (JSON / Avro / Protobuf)

@@ -235,6 +235,19 @@ ekbatan:
 
 Make sure `snakeyaml` is on the runtime classpath — Micronaut's `inspectRuntimeClasspath` verifies any `*.yml` has a YAML parser available.
 
+**Extra driver settings** go under `data-source-properties`, each name exactly as the driver spells it - a client key's password, say, or the application name the database shows for each connection. They reach the driver beside the URL, never inside it, for the pools and for migrations alike:
+
+```yaml
+              primary-config:
+                jdbc-url: jdbc:postgresql://primary:5432/wallets
+                username: wallets_app
+                data-source-properties:
+                  sslpassword: ${DB_KEY_PASSWORD}
+                  ApplicationName: wallet-service
+```
+
+Every value there is treated as a secret and never printed, and `username` and `password` may be left out when the login needs none. Every field, the rules, and each way to log in: [Connecting to the database](/reference/connecting/).
+
 ### 5. Use it
 
 ```java
@@ -281,7 +294,7 @@ The visitor only runs on classes being compiled with the visitor JAR on the AP c
 Two fixes:
 
 - **Recommended**: ensure the upstream module also includes the visitor on its `annotationProcessor` path, so its `BeanDefinition`s are generated up-front.
-- **Alternative**: see the recipe in [`ekbatan-integration-tests/di/shared/build.gradle.kts`](../../ekbatan-integration-tests/di/shared/build.gradle.kts), which pre-generates the BeanDefinitions in the shared jar.
+- **Alternative**: see the recipe in [`ekbatan-integration-tests/di/shared/build.gradle.kts`](https://github.com/ekbatan-io/ekbatan/blob/main/ekbatan-integration-tests/di/shared/build.gradle.kts), which pre-generates the BeanDefinitions in the shared jar.
 
 ### The three `@Factory` classes
 
@@ -474,4 +487,4 @@ Same `ekbatan.namespace` / `ekbatan.local-event-handler.*` / `ekbatan.jobs.*` pr
 - [Listen-to-yourself: in-process event handlers](/reference/events/local-event-handler/) — what `@EkbatanEventHandler` consumes
 - [Distributed background jobs](/reference/jobs/distributed-jobs/) — what `@EkbatanDistributedJob` schedules
 - [GraalVM native-image](/reference/runtime/native-image/) — Micronaut + native specifics
-- The runnable reference: [`ekbatan-integration-tests/di/micronaut`](../../ekbatan-integration-tests/di/micronaut)
+- The runnable reference: [`ekbatan-integration-tests/di/micronaut`](https://github.com/ekbatan-io/ekbatan/tree/main/ekbatan-integration-tests/di/micronaut)

@@ -1,9 +1,9 @@
 package io.example.wallet;
 
 import io.ekbatan.core.config.ShardingConfig;
+import io.ekbatan.flyway.FlywayMigrator;
 import java.util.Arrays;
 import java.util.stream.Stream;
-import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,12 +26,10 @@ public class FlywayConfiguration {
 
     @Bean
     public FlywayMigration flywayMigration(ShardingConfig shardingConfig) {
+        // FlywayMigrator connects the way the application's pools do - same driver, same
+        // dataSourceProperties - rather than handing Flyway a bare URL, user and password.
         var primary = shardingConfig.groups.getFirst().members.getFirst().primaryConfig();
-        Flyway.configure()
-                .dataSource(primary.jdbcUrl, primary.username, primary.password)
-                .locations("classpath:db/migration")
-                .load()
-                .migrate();
+        FlywayMigrator.migrate(primary, "classpath:db/migration");
         return new FlywayMigration();
     }
 

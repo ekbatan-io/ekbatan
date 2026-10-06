@@ -72,6 +72,11 @@ dependencies {
 
     testImplementation("org.testcontainers:testcontainers:${project.property("testcontainersVersion")}")
     testImplementation("org.testcontainers:testcontainers-postgresql:${project.property("testcontainersVersion")}")
+    testImplementation("org.bouncycastle:bcpkix-jdk18on:${project.property("bouncyCastleVersion")}")
+
+    // A real SLF4J backend for the tests only, so what Flyway and the migrator log - and what
+    // they put in the MDC - can be captured and checked. Without one, both are silently dropped.
+    testRuntimeOnly("org.slf4j:slf4j-jdk14:${project.property("slf4jVersion")}")
 
     // @AutoBuilder generation for the Wallet domain models; compileOnly exposes the annotation
     // to javac, annotationProcessor runs the processor. Neither leaks to runtime.

@@ -42,7 +42,7 @@ import javax.tools.Diagnostic;
  * ({@code id}, {@code state}, {@code version}, {@code createdDate}/{@code updatedDate} for
  * Models) through their own builder hierarchies.
  *
- * <p>Wire-up: add {@code annotationProcessor("io.ekbatan:ekbatan-annotation-processor:<v>")}
+ * <p>Wire-up: add {@code annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:<v>")}
  * to your module's Gradle dependencies. The Spring Boot / Quarkus / Micronaut samples all
  * include this on their starter pages.
  */

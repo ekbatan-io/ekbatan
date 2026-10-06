@@ -86,7 +86,7 @@ dependencies {
 
     // ── MySQL ───────────────────────────────────────────────────────────────
     // Explicit version: Spring Boot 4.0.x's BOM pins it but we may want a newer connector for
-    // the latest TLS / serverTimezone behaviour.
+    // the latest TLS behaviour.
     runtimeOnly("com.mysql:mysql-connector-j:$mysqlConnectorVersion")
     jooqCodegen("com.mysql:mysql-connector-j:$mysqlConnectorVersion")
     // The codegen task migrates the container with Flyway, so it needs flyway-mysql too.

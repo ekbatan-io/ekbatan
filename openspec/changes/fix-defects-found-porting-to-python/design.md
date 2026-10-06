@@ -18,82 +18,9 @@ Findings are ordered by consequence, not by discovery.
 
 ## Finding 1: `EmbeddedBitsShardingStrategy` decodes shard bits it has not checked
 
-**Severity: correctness, silent, low probability.** Measured.
-
-`resolveShardIdentifier(Persistable)` has two branches and only one of them is guarded:
-
-```java
-if (id instanceof ShardedId<?> sid) {
-    return Optional.of(sid.resolveShardIdentifier());        // no version check
-}
-if (id instanceof Id<?> regularId) {
-    return resolveShardIdentifierById(regularId.getValue()); // checks version() != 7
-}
-```
-
-`resolveShardIdentifierById` refuses anything that is not a version 7 UUID and returns
-`Optional.empty()`, which the caller reads as "use the default shard". The `ShardedId` branch goes
-straight to `ShardedUUID.resolveShardIdentifier()`, which reads the bits at the reserved offsets
-without asking whether they mean anything.
-
-Reachable because `ShardedUUID.from(UUID)` is public and its own javadoc invites exactly this:
-
-> Wraps an arbitrary UUID (typically read back from storage) without re-checking that the shard
-> bits are valid.
-
-So an aggregate whose ids predate sharding - version 4, minted before the layout existed, read
-back from its own table - produces a `ShardedId` that decodes to a coordinate with no meaning.
-
-### Evidence
-
-Compiling `ShardedUUID`, `ShardIdentifier`, `ShardAwareId` and `Validate` unmodified and running
-five random version 4 UUIDs through `ShardedUUID.from(...).resolveShardIdentifier()`:
-
-```
-v4 58869e62-d68a-4fa5-9455-8045fca9f3ce  version=4  ->  ShardIdentifier(81, 21)
-v4 73e6b6c8-988c-4363-8685-d621828f3206  version=4  ->  ShardIdentifier(26, 5)
-v4 cd069a41-41ef-4736-83c5-189179333bf3  version=4  ->  ShardIdentifier(15, 5)
-v4 dfe191e1-e076-45d1-9e44-020e76df4562  version=4  ->  ShardIdentifier(121, 4)
-v4 3a239756-bdaf-431e-b2a4-ae14f9b74d13  version=4  ->  ShardIdentifier(202, 36)
-
-nil uuid -> ShardIdentifier(0, 0)
-```
-
-No exception. `ShardIdentifier.of` cannot reject these: group is read from 8 bits so it is always
-0..255, and member from 6 bits so it is always 0..63. Every possible decode is a legal coordinate.
-
-### Why it is not worse than it looks
-
-`DatabaseRegistry.effectiveShard` falls back to the default for any coordinate that is not
-registered, so on a small deployment the garbage lands on nothing and is corrected. It bites only
-when the decoded coordinate happens to be a *registered* shard - roughly 8 in 16,384 per id for an
-eight-shard layout.
-
-### Why it is not better than it looks
-
-When it does bite it is silent and self-consistent. The row is written to the wrong database, and
-every later read by the same id decodes the same wrong coordinate and finds it there. Nothing
-fails. It surfaces as a scatter-gather that disagrees with a direct read, or as a shard migration
-that leaves rows behind - a long way from the id that caused it.
-
-### Suggested fix
-
-One line: make the `ShardedId` branch go through the same check.
-
-```java
-if (id instanceof ShardedId<?> sid) {
-    return resolveShardIdentifierById(sid.getId());
-}
-```
-
-`ShardedId.getId()` already returns the underlying `UUID`, so this reuses the guard rather than
-duplicating it. A test in `ShardIdentifierTest` or `EmbeddedBitsShardingStrategyTest` asserting
-that a version 4 id resolves to `Optional.empty()` would have caught it.
-
-### What the Python port does
-
-`ShardedId.shard` raises with a message naming the version, and `EmbeddedBitsShardingStrategy`
-returns `None` - which means "use the default". Refused or safely defaulted, never a wrong answer.
+Moved to its own change, `openspec/changes/guard-sharded-id-decode`, with the evidence, the paths
+that reach it, and what to find out - including whether deployed data is affected - before it is
+fixed.
 
 ---
 
@@ -135,37 +62,7 @@ Python port passes the value through unchanged, as this does, and documents the 
 
 ---
 
-## Finding 3: `Model.equals` ignores subclass fields
-
-**Severity: latent surprise.** Read.
-
-`Model.equals` compares `id`, `state`, `version`, `createdDate` and `updatedDate`; `hashCode` is
-`id.hashCode()` alone. Fields declared by the concrete model - a wallet's balance and currency -
-take no part in either.
-
-So two `Wallet` instances with the same id, state, version and timestamps are `equals` even when
-their balances differ. In practice the version moves whenever the content does, so a pair produced
-by the framework's own read and write paths will differ on version too. Where it shows is a test:
-
-```java
-assertThat(loadedWallet).isEqualTo(expectedWallet);   // passes with a different balance
-```
-
-`Entity.equals` has the same shape over its three fields.
-
-### The decision to make
-
-Either this is intended - equality means "the same row at the same version", and the javadoc
-should say so, in which case a note on `equals` is the whole fix - or it is not, and both should
-include subclass state. It is not obviously a bug and should not be changed without deciding
-which.
-
-The Python port compares every field, because a frozen dataclass does; the divergence is recorded
-in `ekbatan-py/DIVERGENCE.md` under "Equality compares the whole row".
-
----
-
-## Finding 4: `ActionPlan.addAll(null)` reports success
+## Finding 3: `ActionPlan.addAll(null)` reports success
 
 **Severity: low.** Read.
 
@@ -190,6 +87,20 @@ turns a silent no-op into a stack trace at the line that made the mistake.
 ---
 
 ## Examined and deliberately not filed
+
+**`Model.equals` ignoring subclass fields.** `Model.equals` compares `id`, `state`, `version`,
+`createdDate` and `updatedDate`; `hashCode` is `id.hashCode()` alone. Fields declared by the
+concrete model - a wallet's balance and currency - take no part in either, so two `Wallet`
+instances with the same id and version are `equals` even when their balances differ.
+`Entity.equals` has the same shape over its three fields.
+
+This was raised during the port and is **deliberate**: equality means "the same row at the same
+version", not "the same values". Recorded here so it is not refiled as an oversight - which is
+exactly how it reads on a first pass, and how this document read it before asking.
+
+The Python port compares every field, because a frozen dataclass does. That divergence is recorded
+in `ekbatan-py/DIVERGENCE.md` under "Equality compares the whole row" and is not a defect on
+either side.
 
 **Within-action event ordering.** `eventlog.events` has no ordinal column, `EventEntityRepository`
 orders by `EVENT_DATE`, and every row of one action carries that action's completion instant - so

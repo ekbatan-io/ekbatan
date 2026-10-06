@@ -160,6 +160,7 @@ import static io.ekbatan.events.localeventhandler.EventHandlerRegistry.eventHand
 import static io.ekbatan.events.localeventhandler.job.EventFanoutJob.eventFanoutJob;
 import static io.ekbatan.events.localeventhandler.job.EventHandlingJob.eventHandlingJob;
 import io.ekbatan.flyway.FlywayMigrator;
+import java.util.Map;
 // …
 
 public class Application {
@@ -174,6 +175,9 @@ public class Application {
                 .jdbcUrl("jdbc:postgresql://primary:5432/wallets")
                 .username("wallets_app")
                 .password(System.getenv("APP_DB_PASSWORD"))
+                // extra driver settings, each name as the driver spells it; passed to the
+                // driver beside the URL and never printed (see "Connecting to the database")
+                .dataSourceProperties(Map.of("ApplicationName", "wallet-service"))
                 .maximumPoolSize(20)
                 .build();
 
@@ -194,9 +198,10 @@ public class Application {
                 .build();
 
         // ─── 2. Run Flyway migrations ────────────────────────────────────────
-        // FlywayMigrator is GraalVM-native-image-aware. On JVM it's a thin wrapper
-        // around Flyway.configure().dataSource(...).migrate().
-        FlywayMigrator.migrate(primary.jdbcUrl, primary.username, primary.password);
+        // FlywayMigrator connects the way the pools above do - same driver, same
+        // settings - but on connections of its own, closed when it is done. It is
+        // also GraalVM-native-image-aware.
+        FlywayMigrator.migrate(primary);
 
         // ─── 3. TransactionManager + DatabaseRegistry ────────────────────────
         // Each shard gets its own TransactionManager. With one shard (the default),
@@ -290,7 +295,7 @@ public class Application {
 
 | Block | Concept | Doc |
 |---|---|---|
-| 1. Datasources | `DataSourceConfig` carries the Hikari knobs and resolves the dialect from the JDBC URL | [Sharding](../database/sharding.md) covers the broader topology |
+| 1. Datasources | `DataSourceConfig` carries the login, the driver settings and the Hikari knobs, and resolves the dialect from the JDBC URL | [Connecting to the database](../database/connecting.md) covers every field; [Sharding](../database/sharding.md) the broader topology |
 | 2. Migrations | `FlywayMigrator.migrate(...)` runs Flyway, native-image-aware | [Native image](../runtime/native-image.md) |
 | 3. TM + registry | One `TransactionManager` per shard; `DatabaseRegistry` indexes them by `ShardIdentifier` | [The outbox](../concepts/outbox.md), [Sharding](../database/sharding.md) |
 | 4. Repositories | One repository instance per persistable type, registered into a `RepositoryRegistry` | [Repositories](../database/repositories.md) |

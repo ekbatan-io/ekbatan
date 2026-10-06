@@ -12,6 +12,8 @@ import io.ekbatan.core.shard.DatabaseRegistry;
 import io.ekbatan.distributedjobs.config.JobsConfig;
 import io.ekbatan.events.localeventhandler.config.LocalEventHandlerConfig;
 import io.ekbatan.spring.fixture.FixtureAction;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.Duration;
 import java.util.Map;
 import org.jooq.SQLDialect;
@@ -47,6 +49,29 @@ class EkbatanCoreConfigurationTest {
     private final ApplicationContextRunner contextRunner = new ApplicationContextRunner()
             .withConfiguration(AutoConfigurations.of(JacksonAutoConfiguration.class, EkbatanCoreConfiguration.class))
             .withUserConfiguration(MockDatabaseRegistryConfig.class);
+
+    @Test
+    void aUrlCarryingAPasswordFailsTheContextWithoutEverPrintingIt() {
+        contextRunner
+                .withPropertyValues(
+                        "ekbatan.sharding.defaultShard.group=0",
+                        "ekbatan.sharding.defaultShard.member=0",
+                        "ekbatan.sharding.groups[0].group=0",
+                        "ekbatan.sharding.groups[0].members[0].member=0",
+                        "ekbatan.sharding.groups[0].members[0].configs.primaryConfig.jdbcUrl="
+                                + "jdbc:postgresql://primary:5432/db?password=Zq7-secret-in-the-url",
+                        "ekbatan.sharding.groups[0].members[0].configs.primaryConfig.username=app")
+                .run(ctx -> {
+                    // the whole printed failure - what a startup log shows - names the problem,
+                    // never the value
+                    assertThat(ctx).hasFailed();
+                    var printed = new StringWriter();
+                    ctx.getStartupFailure().printStackTrace(new PrintWriter(printed));
+                    assertThat(printed.toString())
+                            .contains("carries the login password")
+                            .doesNotContain("Zq7-secret-in-the-url");
+                });
+    }
 
     @Test
     void shouldBuildShardingConfigBeanFromProperties() {
@@ -104,6 +129,82 @@ class EkbatanCoreConfigurationTest {
                     var primary = cfg.groups.get(0).members.get(0).primaryConfig();
                     assertThat(primary.jdbcUrl).isEqualTo("jdbc:postgresql://primary:5432/db");
                     assertThat(primary.maximumPoolSize).isEqualTo(20);
+                });
+    }
+
+    @Test
+    void shouldReadDriverSettingsUnderTheCamelCaseKey() {
+        var prefix = "ekbatan.sharding.groups[0].members[0].configs.primaryConfig.dataSourceProperties.";
+        contextRunner
+                .withPropertyValues(
+                        "ekbatan.sharding.defaultShard.group=0",
+                        "ekbatan.sharding.defaultShard.member=0",
+                        "ekbatan.sharding.groups[0].group=0",
+                        "ekbatan.sharding.groups[0].name=global",
+                        "ekbatan.sharding.groups[0].members[0].member=0",
+                        "ekbatan.sharding.groups[0].members[0].configs.primaryConfig.jdbcUrl=jdbc:postgresql://primary:5432/db",
+                        "ekbatan.sharding.groups[0].members[0].configs.primaryConfig.username=app",
+                        prefix + "ApplicationName=orders",
+                        prefix + "ha.enableJMX=true",
+                        prefix + "keyStorePassword=k3y")
+                .run(ctx -> {
+                    assertThat(ctx).hasNotFailed();
+                    var primary = ctx.getBean(ShardingConfig.class)
+                            .groups
+                            .get(0)
+                            .members
+                            .get(0)
+                            .primaryConfig();
+                    assertThat(primary.dataSourceProperties)
+                            .containsOnly(
+                                    java.util.Map.entry("ApplicationName", "orders"),
+                                    java.util.Map.entry("ha.enableJMX", "true"),
+                                    java.util.Map.entry("keyStorePassword", "k3y"));
+                });
+    }
+
+    @Test
+    void shouldKeepDriverSettingNamesExactlyAsWritten() {
+        // The container key is normalised like any other; the driver setting names inside it are
+        // not, since a driver reads them exactly as written - capitals, dots and all.
+        var prefix = "ekbatan.sharding.groups[0].members[0].configs.primary-config.data-source-properties.";
+        contextRunner
+                .withPropertyValues(
+                        "ekbatan.sharding.default-shard.group=0",
+                        "ekbatan.sharding.default-shard.member=0",
+                        "ekbatan.sharding.groups[0].group=0",
+                        "ekbatan.sharding.groups[0].name=global",
+                        "ekbatan.sharding.groups[0].members[0].member=0",
+                        "ekbatan.sharding.groups[0].members[0].configs.primary-config.jdbc-url=jdbc:postgresql://primary:5432/db",
+                        "ekbatan.sharding.groups[0].members[0].configs.primary-config.username=app",
+                        prefix + "keyStorePassword=k3y",
+                        prefix + "ApplicationName=orders",
+                        prefix + "ha.enableJMX=true",
+                        prefix + "a=1",
+                        prefix + "a.b=2",
+                        prefix + "kms.region=eu-west-1",
+                        prefix + "connectionAttributes=team:orders,env:prod",
+                        // a placeholder, as the docs recommend for a key password
+                        prefix + "sslpassword=${EKBATAN_TEST_KEY_PASSWORD:k3y-from-default}")
+                .run(ctx -> {
+                    assertThat(ctx).hasNotFailed();
+                    var primary = ctx.getBean(ShardingConfig.class)
+                            .groups
+                            .get(0)
+                            .members
+                            .get(0)
+                            .primaryConfig();
+                    assertThat(primary.dataSourceProperties)
+                            .containsOnly(
+                                    java.util.Map.entry("keyStorePassword", "k3y"),
+                                    java.util.Map.entry("ApplicationName", "orders"),
+                                    java.util.Map.entry("ha.enableJMX", "true"),
+                                    java.util.Map.entry("a", "1"),
+                                    java.util.Map.entry("a.b", "2"),
+                                    java.util.Map.entry("kms.region", "eu-west-1"),
+                                    java.util.Map.entry("connectionAttributes", "team:orders,env:prod"),
+                                    java.util.Map.entry("sslpassword", "k3y-from-default"));
+                    assertThat(primary.password).isEmpty();
                 });
     }
 

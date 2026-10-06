@@ -66,3 +66,41 @@ each driver rather than assumed.
 - **GIVEN** a setting present both in the JDBC URL and in the driver properties
 - **WHEN** a connection is opened on PostgreSQL, MySQL or MariaDB
 - **THEN** the documentation SHALL state which value takes effect on that dialect
+
+### Requirement: The JDBC URL carries no user name or secret
+
+A JDBC URL is logged and repeated, so a URL that carries a user name or a secret SHALL be refused
+when the configuration is built, and the refusal SHALL NOT repeat the URL or any value in it. A
+setting's name SHALL be read only where an accepted driver reads one, so a word anywhere else SHALL
+NOT cause a refusal.
+
+#### Scenario: A password in the query
+
+- **GIVEN** the URL `jdbc:postgresql://db:5432/orders?password=s3cret`
+- **WHEN** the configuration is built
+- **THEN** it SHALL be refused with a message naming the login password and `password(...)`
+- **AND** the message SHALL NOT contain the URL or `s3cret`
+
+#### Scenario: Every refused setting is named
+
+- **GIVEN** a URL carrying both `user` and `sslpassword`
+- **WHEN** the configuration is built
+- **THEN** one message SHALL name both, each with where it goes instead
+
+#### Scenario: A sensitive word outside a setting
+
+- **GIVEN** the URL `jdbc:postgresql://password:5432/user`, or a setting with no value such as
+  `?password=`
+- **WHEN** the configuration is built
+- **THEN** it SHALL be accepted
+
+### Requirement: Driver setting values are never printed
+
+Every driver property value SHALL be treated as a secret: no log line or exception SHALL contain
+one, whatever the log level.
+
+#### Scenario: A wrong key password
+
+- **GIVEN** an encrypted client key and a wrong `sslpassword` under the driver properties
+- **WHEN** the login fails
+- **THEN** neither the exception chain nor any log line SHALL contain that value

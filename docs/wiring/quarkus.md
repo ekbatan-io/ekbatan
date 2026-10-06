@@ -222,6 +222,15 @@ ekbatan.sharding.groups[0].members[0].configs.jobs-config.driver-class-name=org.
 
 The `ekbatan.sharding.*` subtree mirrors the structure described in [docs/database/sharding.md](../database/sharding.md).
 
+**Extra driver settings** go under `data-source-properties`, each name exactly as the driver spells it - a client key's password, say, or the application name the database shows for each connection. They reach the driver beside the URL, never inside it, for the pools and for migrations alike:
+
+```properties
+ekbatan.sharding.groups[0].members[0].configs.primary-config.data-source-properties.sslpassword=${DB_KEY_PASSWORD}
+ekbatan.sharding.groups[0].members[0].configs.primary-config.data-source-properties.ApplicationName=wallet-service
+```
+
+Every value there is treated as a secret and never printed, and `username` and `password` may be left out when the login needs none. Write each setting's name in the file: a value may come from an environment variable, but a name read from one loses its capitals. Every field, the rules, and each way to log in: [Connecting to the database](../database/connecting.md).
+
 ### 5. Use it
 
 ```java
@@ -304,7 +313,7 @@ Keep `quarkus-flyway` on the classpath for Flyway/Quarkus/native-image integrati
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.0")
 
     // Quarkus integration for Flyway and native-image support.
     implementation("io.quarkus:quarkus-flyway")
@@ -322,7 +331,7 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
 </dependency>
 <dependency>
     <groupId>io.quarkus</groupId>

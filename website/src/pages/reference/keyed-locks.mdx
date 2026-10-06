@@ -9,7 +9,7 @@ lead: 'Most of Ekbatan''s write path uses <strong>optimistic</strong> locking �
 - **Single-flight execution** — a reconciliation job that should run on exactly one node at a time.
 - **Hot-key write paths** — a wallet that takes 1000 deposits/sec where retry-on-conflict thrashes more than it succeeds.
 
-For these, `KeyedLockProvider` is a key-scoped mutex with a uniform contract across five backends. Two acquirers using the same key are mutually exclusive (the second waits up to `maxWait` for the first to release); acquirers using different keys don't block each other.
+For these, `KeyedLockProvider` is a key-scoped mutex with a uniform contract across four backends. Two acquirers using the same key are mutually exclusive (the second waits up to `maxWait` for the first to release); acquirers using different keys don't block each other.
 
 ## The contract
 
@@ -67,7 +67,7 @@ Three things worth highlighting:
 
 - **`maxWait` (2s) bounds how long the caller will block** before giving up and surfacing a domain error. Without it (e.g. the no-wait `acquire(key, maxHold)` variant), a caller would queue indefinitely behind any prior holders.
 - **`maxHold` (10s) is a safety net, not a hint.** If the locked region overruns, the lock auto-releases — capping the blast radius of a hung holder regardless of what the calling thread is doing.
-- **Each acquire borrows its own JDBC connection** (for the SQL-backed providers) for the lifetime of the lease and for the wait. For lock-heavy workloads, point the provider at a dedicated pool — see [the dedicated pool recipe below](#dedicated-pool-via-the-lockconfig-slot).
+- **Each acquire borrows its own JDBC connection** (for the SQL-backed providers) for the lifetime of the lease and for the wait. For lock-heavy workloads, point the provider at a dedicated pool — see [the dedicated pool recipe below](#dedicated-pool-via-the-lock-config--lockconfig-slot).
 
 ## Where to acquire the lock
 
@@ -119,7 +119,7 @@ For **write-path serialization** (the most common use case), acquire at the call
 
 The caller-side pattern works because the caller owns the boundary that *contains* the executor's transaction lifecycle. The lease closes after `execute(...)` returns, which is after the framework's commit.
 
-## Reentrancy contract — uniform across all five backends
+## Reentrancy contract — uniform across all four backends
 
 Same thread + same key acquires re-enter without blocking. The underlying backend lock is released only when the **outermost** lease is closed (or the `maxHold` watchdog fires).
 
@@ -129,7 +129,7 @@ Reentrancy is **per-thread, not per-call-stack**. A child thread spawned inside 
 
 This contract is enforced by a shared internal helper, `KeyedReentrantHolder`, which owns the per-`(thread, key)` counter, a virtual-thread watchdog, and the release-arbitration CAS. Each backend only has to implement low-level `acquire`/`release`.
 
-## Five backends
+## Four backends
 
 | Provider | Scope | Backend | Hold | Notes |
 |---|---|---|---|---|
@@ -138,7 +138,7 @@ This contract is enforced by a shared internal helper, `KeyedReentrantHolder`, w
 | `MySQLKeyedLockProvider` | cross-JVM | `GET_LOCK(...)` | session + watchdog | Sub-second `maxWait` rounds up to whole seconds (MySQL precision limit). |
 | `RedisKeyedLockProvider` | cross-JVM | Redisson `RLock` | TTL + watchdog | Sub-millisecond hand-off. Lives in `ekbatan-keyed-lock-redis`. Single-master only — **not** Redlock-based. |
 
-All five honor the same reentrancy contract via `KeyedReentrantHolder`. The Redis variant explicitly disables Redisson's own watchdog (passes `maxHold` as Redisson `leaseTime`) and uses a local virtual-thread watchdog so the framework's first-call-wins semantics win over Redisson's last-call-wins default.
+All four honor the same reentrancy contract via `KeyedReentrantHolder`. The Redis variant explicitly disables Redisson's own watchdog (passes `maxHold` as Redisson `leaseTime`) and uses a local virtual-thread watchdog so the framework's first-call-wins semantics win over Redisson's last-call-wins default.
 
 ### How the SQL backends wait
 
@@ -151,7 +151,7 @@ Two consequences worth knowing:
 
 A useful side effect: because the connection now sends traffic every 5 seconds, idle-connection reapers (NAT gateways, load balancers, PgBouncer) no longer silently drop a long lock wait — previously a 30-minute wait sent zero packets and looked exactly like an abandoned connection.
 
-**Known limitation.** A network partition that lands *inside* a segment still parks the caller in a blocking socket read, and no client-side loop can bound that. This isn't lock-specific — any long-running JDBC call has the same exposure — so it's left to deployment configuration. Set `socketTimeout` in the lock pool's JDBC URL if you need a hard bound.
+**Known limitation.** A network partition that lands *inside* a segment still parks the caller in a blocking socket read, and no client-side loop can bound that. This isn't lock-specific — any long-running JDBC call has the same exposure — so it's left to deployment configuration. Set the driver's `socketTimeout` under the lock pool's `data-source-properties` if you need a hard bound - in seconds on PostgreSQL, in milliseconds on MySQL and MariaDB (see [Connecting to the database](/reference/connecting/)).
 
 ### Wiring up a backend
 
@@ -204,7 +204,7 @@ The same builder shape works for `MariaDBKeyedLockProvider` and `MySQLKeyedLockP
 
 Each held lease (and each thread blocked waiting for one) pins a JDBC connection for its entire lifetime. For lock-heavy workloads, **point the provider at a dedicated pool** so locks don't starve normal queries.
 
-Add a user-defined `lock-config:` entry to the relevant member in your `ShardingConfig`. External config may use `lock-config` or `lockConfig`; datasource leaves may also use kebab-case or camelCase (`jdbc-url` / `jdbcUrl`, `maximum-pool-size` / `maximumPoolSize`, `leak-detection-threshold` / `leakDetectionThreshold`). After binding the Java key is always `lockConfig`, so `configFor(...)` must use camelCase.
+Add a user-defined `lock-config:` entry to the relevant member in your `ShardingConfig`. The slot is a complete datasource entry, so everything in [Connecting to the database](/reference/connecting/) applies to it too - an optional `username` and `password`, and `data-source-properties`. External config may use `lock-config` or `lockConfig`; datasource leaves may also use kebab-case or camelCase (`jdbc-url` / `jdbcUrl`, `maximum-pool-size` / `maximumPoolSize`, `leak-detection-threshold` / `leakDetectionThreshold`). After binding the Java key is always `lockConfig`, so `configFor(...)` must use camelCase.
 
 ```yaml
 sharding:

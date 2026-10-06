@@ -2,6 +2,7 @@ package io.ekbatan.micronaut;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 import io.ekbatan.core.config.ShardingConfig;
 import io.ekbatan.distributedjobs.config.JobsConfig;
@@ -9,6 +10,8 @@ import io.ekbatan.events.localeventhandler.config.LocalEventHandlerConfig;
 import io.micronaut.context.ApplicationContext;
 import io.micronaut.context.env.Environment;
 import io.micronaut.context.env.PropertySource;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -78,9 +81,87 @@ class EkbatanCoreConfigurationTest {
                 var primary = cfg.groups.get(0).members.get(0).configs.get("primaryConfig");
                 assertThat(primary).isNotNull();
                 assertThat(primary.jdbcUrl).isEqualTo("jdbc:postgresql://h/db");
-                assertThat(primary.username).isEqualTo("u");
-                assertThat(primary.password).isEqualTo("p");
+                assertThat(primary.username).contains("u");
+                assertThat(primary.password).contains("p");
             });
+        }
+
+        @Test
+        void readsDriverSettingsUnderTheCamelCaseKey() {
+            var p = minimalCamelCase();
+            var prefix = "ekbatan.sharding.groups[0].members[0].configs.primaryConfig.dataSourceProperties.";
+            p.put(prefix + "ApplicationName", "orders");
+            p.put(prefix + "ha.enableJMX", "true");
+            p.put(prefix + "keyStorePassword", "k3y");
+            withEnv(p, env -> assertThat(bind(env).groups.get(0).members.get(0).primaryConfig().dataSourceProperties)
+                    .containsOnly(
+                            Map.entry("ApplicationName", "orders"),
+                            Map.entry("ha.enableJMX", "true"),
+                            Map.entry("keyStorePassword", "k3y")));
+        }
+
+        @Test
+        void keepsDriverSettingNamesExactlyAsWritten() {
+            // The container key is normalised like any other; the driver setting names inside it
+            // are not, since a driver reads them exactly as written - capitals, dots and all.
+            var p = minimalCamelCase();
+            var prefix = "ekbatan.sharding.groups[0].members[0].configs.primary-config.data-source-properties.";
+            p.put(prefix + "keyStorePassword", "k3y");
+            p.put(prefix + "ApplicationName", "orders");
+            p.put(prefix + "ha.enableJMX", "true");
+            p.put(prefix + "a", "1");
+            p.put(prefix + "a.b", "2");
+            p.put(prefix + "kms.region", "eu-west-1");
+            p.put(prefix + "connectionAttributes", "team:orders,env:prod");
+            withEnv(p, env -> assertThat(bind(env).groups.get(0).members.get(0).primaryConfig().dataSourceProperties)
+                    .containsOnly(
+                            Map.entry("keyStorePassword", "k3y"),
+                            Map.entry("ApplicationName", "orders"),
+                            Map.entry("ha.enableJMX", "true"),
+                            Map.entry("a", "1"),
+                            Map.entry("a.b", "2"),
+                            Map.entry("kms.region", "eu-west-1"),
+                            Map.entry("connectionAttributes", "team:orders,env:prod")));
+        }
+
+        @Test
+        void keepsDriverSettingsWrittenInsideAYamlList() {
+            // A YAML file's groups list reaches the raw view only as the whole structure - a list
+            // of maps - not as flat keys; the driver settings inside it must still arrive exactly
+            // as written, a placeholder in a value resolved.
+            var p = minimalCamelCase();
+            p.remove("ekbatan.sharding.groups[0].group");
+            p.remove("ekbatan.sharding.groups[0].name");
+            p.remove("ekbatan.sharding.groups[0].members[0].member");
+            p.remove("ekbatan.sharding.groups[0].members[0].configs.primaryConfig.jdbcUrl");
+            p.remove("ekbatan.sharding.groups[0].members[0].configs.primaryConfig.username");
+            p.remove("ekbatan.sharding.groups[0].members[0].configs.primaryConfig.password");
+            var settings = new LinkedHashMap<String, Object>();
+            settings.put("ApplicationName", "orders");
+            settings.put("ha.enableJMX", "true");
+            settings.put("a", "1");
+            settings.put("a.b", "2");
+            settings.put("sslpassword", "${EKBATAN_TEST_KEY_PASSWORD:k3y-from-default}");
+            var primary = new LinkedHashMap<String, Object>();
+            primary.put("jdbc-url", "jdbc:postgresql://h/db");
+            primary.put("username", "u");
+            primary.put("data-source-properties", settings);
+            var member = new LinkedHashMap<String, Object>();
+            member.put("member", 0);
+            member.put("configs", Map.of("primary-config", primary));
+            var group = new LinkedHashMap<String, Object>();
+            group.put("group", 0);
+            group.put("name", "default");
+            group.put("members", java.util.List.of(member));
+            p.put("ekbatan.sharding.groups", java.util.List.of(group));
+
+            withEnv(p, env -> assertThat(bind(env).groups.get(0).members.get(0).primaryConfig().dataSourceProperties)
+                    .containsOnly(
+                            Map.entry("ApplicationName", "orders"),
+                            Map.entry("ha.enableJMX", "true"),
+                            Map.entry("a", "1"),
+                            Map.entry("a.b", "2"),
+                            Map.entry("sslpassword", "k3y-from-default")));
         }
 
         @Test
@@ -218,7 +299,7 @@ class EkbatanCoreConfigurationTest {
                 assertThat(configs).containsOnlyKeys("primaryConfig", "jobsConfig");
                 assertThat(configs.get("primaryConfig").jdbcUrl).isEqualTo("jdbc:postgresql://h/db");
                 assertThat(configs.get("jobsConfig").jdbcUrl).isEqualTo("jdbc:postgresql://h/db_jobs");
-                assertThat(configs.get("jobsConfig").username).isEqualTo("uj");
+                assertThat(configs.get("jobsConfig").username).contains("uj");
             });
         }
 
@@ -303,6 +384,26 @@ class EkbatanCoreConfigurationTest {
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessageContaining("ekbatan.sharding")
                     .hasMessageContaining("primaryConfig"));
+        }
+
+        @Test
+        void aUrlCarryingAPasswordFailsWithoutEverPrintingIt() {
+            // the whole printed failure - what a startup log shows - names the problem, never the value
+            var p = minimalCamelCase();
+            p.put(
+                    "ekbatan.sharding.groups[0].members[0].configs.primaryConfig.jdbcUrl",
+                    "jdbc:postgresql://h/db?password=Zq7-secret-in-the-url");
+
+            withEnv(p, env -> {
+                var failure = catchThrowable(() -> bind(env));
+                var printed = new StringWriter();
+                failure.printStackTrace(new PrintWriter(printed));
+
+                assertThat(failure).isInstanceOf(IllegalStateException.class);
+                assertThat(printed.toString())
+                        .contains("carries the login password")
+                        .doesNotContain("Zq7-secret-in-the-url");
+            });
         }
 
         @Test

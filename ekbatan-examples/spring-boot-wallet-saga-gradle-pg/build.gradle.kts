@@ -58,9 +58,10 @@ dependencies {
     // ── Flyway ──────────────────────────────────────────────────────────────
     // Spring Boot's own Flyway auto-config wants spring.datasource.*, but Ekbatan's
     // connection config lives under ekbatan.sharding.* — we don't want to duplicate
-    // credentials in two property trees. Instead we run Flyway programmatically
-    // (see FlywayConfiguration), reading the same ShardingConfig Ekbatan uses.
-    implementation("org.flywaydb:flyway-core")
+    // credentials in two property trees. Instead we run Flyway programmatically through
+    // ekbatan-flyway (see FlywayConfiguration), from the same ShardingConfig Ekbatan uses - so
+    // migrations connect exactly as the application does, dataSourceProperties included.
+    implementation("io.github.ekbatan-io:ekbatan-flyway:$ekbatanVersion")
     implementation("org.flywaydb:flyway-database-postgresql")
 
     // ── PostgreSQL ──────────────────────────────────────────────────────────

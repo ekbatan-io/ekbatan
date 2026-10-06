@@ -20,6 +20,9 @@ ekbatan:
             name: global
             configs:
               primaryConfig:
+                # Extra JDBC driver settings, each name exactly as the driver spells it; handed to the driver beside the URL, never printed.
+                dataSourceProperties:
+                  ApplicationName: wallet-service
                 jdbcUrl: jdbc:postgresql://localhost:5432/wallet_global
                 username: wallet
                 password: wallet
@@ -45,6 +48,8 @@ ekbatan:
             name: mexico
             configs:
               primaryConfig:
+                dataSourceProperties:
+                  ApplicationName: wallet-service
                 jdbcUrl: jdbc:postgresql://localhost:5433/wallet_mexico
                 username: wallet
                 password: wallet

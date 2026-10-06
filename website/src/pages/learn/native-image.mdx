@@ -107,7 +107,7 @@ Add this dependency only to modules that build native binaries:
 
 ```kotlin
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-native:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-native:1.1.0")
 }
 ```
 
@@ -119,7 +119,7 @@ dependencies {
 <dependency>
   <groupId>io.github.ekbatan-io</groupId>
   <artifactId>ekbatan-native</artifactId>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
@@ -215,7 +215,7 @@ Use the pattern your stack example uses:
 | Micronaut | A small startup migrator calls `FlywayMigrator.migrate(...)`; `micronaut-flyway` remains on the classpath for Flyway/native support, but the example does not use a `flyway:` auto-config block. |
 | Plain Java / raw Flyway | Call `FlywayMigrator.migrate(...)` yourself. |
 
-`FlywayMigrator` is a thin wrapper. On the JVM it behaves like normal `Flyway.configure().dataSource(...).load().migrate()`. In a native image it installs Ekbatan's internal resource scanner so Flyway can find `classpath:db/migration`.
+`FlywayMigrator` runs normal Flyway. It connects the way your application's pools do (same driver, `driver-class-name` included), on connections opened for the migration and closed when it ends. In a native image it also installs Ekbatan's internal resource scanner so Flyway can find `classpath:db/migration`.
 
 Native-image only bundles resources that are explicitly included. If your app runs Flyway from classpath SQL files, include the migrations in the native build:
 

@@ -4,6 +4,7 @@ import io.ekbatan.core.action.Action;
 import io.ekbatan.core.action.ActionExecutor;
 import io.ekbatan.core.action.ActionRegistry;
 import io.ekbatan.core.action.persister.event.EventPersister;
+import io.ekbatan.core.config.PropertyKeyNormalizer;
 import io.ekbatan.core.config.ShardingConfig;
 import io.ekbatan.core.repository.AbstractRepository;
 import io.ekbatan.core.repository.RepositoryRegistry;
@@ -17,6 +18,7 @@ import io.micronaut.core.naming.conventions.StringConvention;
 import jakarta.inject.Singleton;
 import java.io.IOException;
 import java.time.Clock;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -25,6 +27,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.dataformat.javaprop.JavaPropsMapper;
+import tools.jackson.dataformat.javaprop.JavaPropsSchema;
 
 /**
  * Micronaut {@code @Factory} class for Ekbatan's core surface. Binds {@code ekbatan.sharding.*}
@@ -72,17 +75,41 @@ public class EkbatanCoreConfiguration {
         // the flat leaf keys; skip those - JavaPropsMapper rebuilds the structure from the leaves.
         var props = new Properties();
         flat.forEach((k, v) -> {
-            if (v != null && !(v instanceof Map<?, ?>) && !(v instanceof List<?>)) {
+            if (v != null && !(v instanceof Map<?, ?>) && !(v instanceof List<?>) && !isDriverSetting(k)) {
                 props.setProperty(k, v.toString());
             }
         });
+        // Driver setting names must reach the driver exactly as written, and the camelCase view
+        // re-cases the segments of flat keys: ApplicationName arrives as applicationName,
+        // ha.enableJMX as ha.enableJmx, and the driver ignores both. Take those keys from the raw
+        // view instead, through the same normaliser Spring and Quarkus use, which leaves them
+        // untouched. The raw view holds a YAML list only as the whole structure - groups as a
+        // list of maps, every key in it as written - and flat keys (a properties file, a test's
+        // property provider) as leaves; both are walked, flat keys last so they take precedence.
+        var raw = environment.getProperties("ekbatan.sharding", StringConvention.RAW);
+        var driverSettings = new LinkedHashMap<String, String>();
+        raw.forEach((k, v) -> {
+            if (v instanceof Map<?, ?> || v instanceof List<?>) {
+                collectDriverSettings(k, v, driverSettings, environment);
+            }
+        });
+        raw.forEach((k, v) -> {
+            if (v != null && !(v instanceof Map<?, ?>) && !(v instanceof List<?>)) {
+                collectDriverSettings(k, v, driverSettings, environment);
+            }
+        });
+        driverSettings.forEach(props::setProperty);
         // Private mapper: FAIL_ON_UNKNOWN_PROPERTIES surfaces typos at startup without leaking
         // strictness into any application-level Jackson configuration.
         var mapper = JavaPropsMapper.builder()
                 .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .build();
         try {
-            return mapper.readPropertiesAs(props, ShardingConfig.class);
+            // Driver setting names keep their dots: the structure is read with '/' as its separator.
+            return mapper.readPropertiesAs(
+                    PropertyKeyNormalizer.toReaderKeys(props),
+                    JavaPropsSchema.emptySchema().withPathSeparator(PropertyKeyNormalizer.READER_PATH_SEPARATOR),
+                    ShardingConfig.class);
         } catch (IOException | JacksonException e) {
             // Jackson 3 throws unchecked JacksonException for binding failures (the IOException
             // path is declared on the method signature but only triggers on lower-level I/O
@@ -249,5 +276,37 @@ public class EkbatanCoreConfiguration {
         // Otherwise the builder falls back to its built-in SingleTableJsonEventPersister default.
         eventPersister.ifPresent(builder::eventPersister);
         return builder.build();
+    }
+
+    private static boolean isDriverSetting(String canonicalKey) {
+        return canonicalKey.contains(".dataSourceProperties.");
+    }
+
+    /**
+     * Walks one raw entry down to its leaves - map entries joined with '.', list items with
+     * {@code [i]}, every key exactly as written - and keeps the driver settings among them. A
+     * value inside a raw structure may still hold a {@code ${...}} placeholder, so each one is
+     * resolved here; a leaf the environment already resolved comes back unchanged.
+     */
+    private static void collectDriverSettings(
+            String path, Object value, Map<String, String> into, Environment environment) {
+        switch (value) {
+            case null -> {}
+            case Map<?, ?> map ->
+                map.forEach((key, nested) -> collectDriverSettings(path + "." + key, nested, into, environment));
+            case List<?> list -> {
+                for (int i = 0; i < list.size(); i++) {
+                    collectDriverSettings(path + "[" + i + "]", list.get(i), into, environment);
+                }
+            }
+            default -> {
+                var canonical = PropertyKeyNormalizer.kebabToCamel(path);
+                if (isDriverSetting(canonical)) {
+                    into.put(
+                            canonical,
+                            environment.getPlaceholderResolver().resolveRequiredPlaceholders(value.toString()));
+                }
+            }
+        }
     }
 }

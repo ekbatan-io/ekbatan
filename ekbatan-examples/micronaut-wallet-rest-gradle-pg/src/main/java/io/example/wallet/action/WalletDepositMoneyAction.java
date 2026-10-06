@@ -31,7 +31,7 @@ public class WalletDepositMoneyAction extends Action<WalletDepositMoneyAction.Pa
     @Override
     protected Wallet perform(Principal principal, Params params) {
         final var wallet = walletRepository.getById(params.walletId().getValue());
-        final var updated = wallet.deposit(params.amount());
-        return plan().update(updated);
+        final var updatedWallet = wallet.deposit(params.amount());
+        return plan().update(updatedWallet);
     }
 }

@@ -18,6 +18,9 @@ ekbatan:
             name: global
             configs:
               primaryConfig:
+                # Extra JDBC driver settings, each name exactly as the driver spells it; handed to the driver beside the URL, never printed.
+                dataSourceProperties:
+                  sessionVariables: innodb_lock_wait_timeout=10
                 jdbcUrl: jdbc:mariadb://localhost:3306/wallet
                 username: wallet
                 password: wallet
@@ -43,6 +46,8 @@ ekbatan:
             name: mexico
             configs:
               primaryConfig:
+                dataSourceProperties:
+                  sessionVariables: innodb_lock_wait_timeout=10
                 jdbcUrl: jdbc:mariadb://localhost:3307/wallet
                 username: wallet
                 password: wallet

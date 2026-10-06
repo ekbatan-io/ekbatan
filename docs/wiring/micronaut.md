@@ -232,6 +232,19 @@ ekbatan:
 
 Make sure `snakeyaml` is on the runtime classpath — Micronaut's `inspectRuntimeClasspath` verifies any `*.yml` has a YAML parser available.
 
+**Extra driver settings** go under `data-source-properties`, each name exactly as the driver spells it - a client key's password, say, or the application name the database shows for each connection. They reach the driver beside the URL, never inside it, for the pools and for migrations alike:
+
+```yaml
+              primary-config:
+                jdbc-url: jdbc:postgresql://primary:5432/wallets
+                username: wallets_app
+                data-source-properties:
+                  sslpassword: ${DB_KEY_PASSWORD}
+                  ApplicationName: wallet-service
+```
+
+Every value there is treated as a secret and never printed, and `username` and `password` may be left out when the login needs none. Every field, the rules, and each way to log in: [Connecting to the database](../database/connecting.md).
+
 ### 5. Use it
 
 ```java

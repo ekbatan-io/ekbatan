@@ -2,6 +2,7 @@ package io.ekbatan.core.config;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.entry;
 
 import io.ekbatan.core.shard.ShardIdentifier;
 import io.ekbatan.core.shard.UnknownShardPolicy;
@@ -42,6 +43,10 @@ class ShardingConfigJacksonBindingTest {
                             password: secret
                             maximumPoolSize: 20
                             minimumIdle: 5
+                            dataSourceProperties:
+                              ApplicationName: orders-service
+                              ha.enableJMX: true
+                              connectTimeout: 10
                           secondaryConfig:
                             jdbcUrl: jdbc:postgresql://replica-eu-1:5432/db
                             username: app
@@ -81,14 +86,21 @@ class ShardingConfigJacksonBindingTest {
 
         var primary = globalMember.primaryConfig();
         assertThat(primary.jdbcUrl).isEqualTo("jdbc:postgresql://primary-eu-1:5432/db");
-        assertThat(primary.username).isEqualTo("app");
-        assertThat(primary.password).isEqualTo("secret");
+        assertThat(primary.username).contains("app");
+        assertThat(primary.password).contains("secret");
         assertThat(primary.maximumPoolSize).isEqualTo(20);
         assertThat(primary.minimumIdle).contains(5);
         assertThat(primary.dialect).isEqualTo(SQLDialect.POSTGRES);
+        // names kept as written, dots included; every value becomes its text
+        assertThat(primary.dataSourceProperties)
+                .containsOnly(
+                        entry("ApplicationName", "orders-service"),
+                        entry("ha.enableJMX", "true"),
+                        entry("connectTimeout", "10"));
 
         assertThat(globalMember.secondaryConfig()).isPresent();
         assertThat(globalMember.secondaryConfig().get().jdbcUrl).isEqualTo("jdbc:postgresql://replica-eu-1:5432/db");
+        assertThat(globalMember.secondaryConfig().get().dataSourceProperties).isEmpty();
 
         var lockConfig = globalMember.configFor("lockConfig");
         assertThat(lockConfig).isPresent();

@@ -96,7 +96,7 @@ public abstract class AbstractRepository<
      */
     public final Class<PERSISTABLE> domainClass;
 
-    private static final Tracer TRACER = GlobalOpenTelemetry.get().getTracer("io.ekbatan.core", "1.0.1");
+    private static final Tracer TRACER = GlobalOpenTelemetry.get().getTracer("io.ekbatan.core", "1.1.0");
 
     private static final String VERSION_FIELD_NAME = "version";
     private static final String STATE_FIELD_NAME = "state";

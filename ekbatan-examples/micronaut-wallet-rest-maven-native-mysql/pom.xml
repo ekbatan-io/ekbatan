@@ -24,7 +24,7 @@
 
         <packaging>jar</packaging>
 
-        <ekbatan.version>1.0.1</ekbatan.version>
+        <ekbatan.version>1.1.0</ekbatan.version>
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>io.example.wallet.Application</exec.mainClass>
 
@@ -40,7 +40,7 @@
         <codegen.db.name>wallet</codegen.db.name>
         <codegen.db.user>root</codegen.db.user>
         <codegen.db.password>root</codegen.db.password>
-        <codegen.db.url>jdbc:mysql://localhost:${codegen.db.port}/${codegen.db.name}?serverTimezone=UTC</codegen.db.url>
+        <codegen.db.url>jdbc:mysql://localhost:${codegen.db.port}/${codegen.db.name}</codegen.db.url>
     </properties>
 
     <repositories>

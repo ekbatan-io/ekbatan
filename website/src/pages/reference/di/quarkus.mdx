@@ -225,6 +225,15 @@ ekbatan.sharding.groups[0].members[0].configs.jobs-config.driver-class-name=org.
 
 The `ekbatan.sharding.*` subtree mirrors the structure described in [docs/database/sharding.md](/reference/sharding/).
 
+**Extra driver settings** go under `data-source-properties`, each name exactly as the driver spells it - a client key's password, say, or the application name the database shows for each connection. They reach the driver beside the URL, never inside it, for the pools and for migrations alike:
+
+```properties
+ekbatan.sharding.groups[0].members[0].configs.primary-config.data-source-properties.sslpassword=${DB_KEY_PASSWORD}
+ekbatan.sharding.groups[0].members[0].configs.primary-config.data-source-properties.ApplicationName=wallet-service
+```
+
+Every value there is treated as a secret and never printed, and `username` and `password` may be left out when the login needs none. Write each setting's name in the file: a value may come from an environment variable, but a name read from one loses its capitals. Every field, the rules, and each way to log in: [Connecting to the database](/reference/connecting/).
+
 ### 5. Use it
 
 ```java
@@ -307,7 +316,7 @@ Keep `quarkus-flyway` on the classpath for Flyway/Quarkus/native-image integrati
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.0")
 
     // Quarkus integration for Flyway and native-image support.
     implementation("io.quarkus:quarkus-flyway")
@@ -325,7 +334,7 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
 </dependency>
 <dependency>
     <groupId>io.quarkus</groupId>
@@ -412,7 +421,7 @@ To customize the mapper (date formats, naming strategy, modules), implement `io.
 ### Native-image specifics
 
 - **JDBC drivers** come via `quarkus-jdbc-postgresql` / `quarkus-jdbc-mysql` / `quarkus-jdbc-mariadb`. Add the matching extension to your build; Quarkus registers the driver class for native automatically.
-- **HikariCP** is *not* covered by any Quarkus extension (Quarkus blesses Agroal). The framework integration tests vendor the upstream GraalVM Reachability Metadata Repository entry at [`ekbatan-integration-tests/di/quarkus/src/main/resources/META-INF/native-image/com.zaxxer/HikariCP/reachability-metadata.json`](../../ekbatan-integration-tests/di/quarkus). Copy that file into your app's `META-INF/native-image/com.zaxxer/HikariCP/`. (`ekbatan-native` ships the same file under its own coordinate, so depending on `ekbatan-native` is the cheapest way to pull it in.)
+- **HikariCP** is *not* covered by any Quarkus extension (Quarkus blesses Agroal). The framework integration tests vendor the upstream GraalVM Reachability Metadata Repository entry at [`ekbatan-integration-tests/di/quarkus/src/main/resources/META-INF/native-image/com.zaxxer/HikariCP/reachability-metadata.json`](https://github.com/ekbatan-io/ekbatan/blob/main/ekbatan-integration-tests/di/quarkus/src/main/resources/META-INF/native-image/com.zaxxer/HikariCP/reachability-metadata.json). Copy that file into your app's `META-INF/native-image/com.zaxxer/HikariCP/`. (`ekbatan-native` ships the same file under its own coordinate, so depending on `ekbatan-native` is the cheapest way to pull it in.)
 - **Jackson 3 records** — the `ekbatan-native` module's `Jackson3RecordsFeature` picks up the framework's records automatically. For your own records / `@AutoBuilder` builders, set `quarkus.native.additional-build-args=-Dio.ekbatan.graalvm.scan.packages=io.ekbatan\,com.your.package` (the comma in the value must be escaped — Quarkus uses `,` to separate multiple build args).
 
 For broader native-image considerations, see [docs/runtime/native-image.md](/reference/runtime/native-image/).
@@ -443,4 +452,4 @@ ekbatan.jobs.shutdown-max-wait=PT5S
 - [Listen-to-yourself: in-process event handlers](/reference/events/local-event-handler/) — what `@EkbatanEventHandler` consumes
 - [Distributed background jobs](/reference/jobs/distributed-jobs/) — what `@EkbatanDistributedJob` schedules
 - [GraalVM native-image](/reference/runtime/native-image/) — Quarkus + native specifics
-- The runnable reference: [`ekbatan-integration-tests/di/quarkus`](../../ekbatan-integration-tests/di/quarkus)
+- The runnable reference: [`ekbatan-integration-tests/di/quarkus`](https://github.com/ekbatan-io/ekbatan/tree/main/ekbatan-integration-tests/di/quarkus)

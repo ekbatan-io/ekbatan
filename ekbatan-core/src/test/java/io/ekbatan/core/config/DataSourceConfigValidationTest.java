@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * The numeric fields were unvalidated while every string beside them was checked, so a bad number
@@ -92,6 +94,23 @@ class DataSourceConfigValidationTest {
         assertThatThrownBy(() -> valid().driverClassName(null).build())
                 .isInstanceOf(NullPointerException.class)
                 .hasMessageContaining("driverClassName");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "   "})
+    void a_blank_driver_class_name_means_none(String blank) {
+        // An unset environment variable behind a placeholder gives a blank one; the driver is then
+        // found from the URL, as when the setting is left out.
+        var config = valid().driverClassName(blank).build();
+
+        assertThat(config.driverClassName).isEmpty();
+    }
+
+    @Test
+    void a_driver_class_name_loses_its_surrounding_spaces() {
+        var config = valid().driverClassName(" org.postgresql.Driver ").build();
+
+        assertThat(config.driverClassName).contains("org.postgresql.Driver");
     }
 
     @Test

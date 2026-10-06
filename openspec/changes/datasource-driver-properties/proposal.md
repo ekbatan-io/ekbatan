@@ -40,8 +40,12 @@ rejected because it silently discards every write made outside an explicit trans
 ## What Changes
 
 - `DataSourceConfig` gains a map of driver properties, defaulting to empty.
-- `ConnectionProvider.hikariConnectionProvider` forwards each entry via
-  `HikariConfig.addDataSourceProperty(key, value)`.
+- The settings reach the driver beside the URL - `Driver.connect(url, properties)` - through a
+  `DriverDataSource` Ekbatan builds itself and hands to Hikari (`HikariConfig.setDataSource`),
+  never through Hikari's `dataSourceProperties`, whose DEBUG output prints every entry except one
+  named exactly `password`. `FlywayMigrator` connects the same way.
+- Added while building: `username` and `password` become optional, and a JDBC URL that carries a
+  user name or a secret is refused (see `tasks.md`, section 5).
 - Documentation in `docs/database/` and the website mirror, including the `socketTimeout` and
   batch-rewrite examples above.
 
@@ -49,12 +53,15 @@ Verified while writing this proposal: because Ekbatan always configures Hikari w
 `dataSourceClassName`), `PoolBase.setupDataSource` (HikariCP 7.0.2, line 336) constructs a
 `DriverDataSource`, whose `getConnection()` (line 127) is `driver.connect(jdbcUrl, driverProperties)`.
 So Hikari's `dataSourceProperties` reach the JDBC driver directly on this path - the feature is a
-pass-through, not an emulation.
+pass-through, not an emulation. (The build does not use this path, for the DEBUG output above; its
+own `DriverDataSource` makes the same `driver.connect` call.)
 
 The three DI integrations need **no code changes**: all of them bind `ekbatan.sharding.*` through
 the same Jackson-hybrid path (flat property walk, kebab->camel canonicalization, strict
 `JavaPropsMapper`), so a new builder method is picked up automatically in Spring YAML, Quarkus
-properties and Micronaut YAML.
+properties and Micronaut YAML. (This turned out wrong: Jackson ignores its `\.` escape in a key
+holding `[0]`, so the readers now split keys at `/` - `PropertyKeyNormalizer.toReaderKey` - and
+Micronaut needs a walk over its raw view, where a YAML list is only an aggregate.)
 
 ## Capabilities
 
@@ -87,9 +94,22 @@ JDBC URL. Two things would raise it to medium:
 
 ### Backward compatibility
 
-Fully compatible. The map defaults to empty and nothing is forwarded when it is.
+The map itself is compatible: it defaults to empty, and nothing is passed when it is. What was
+added while building is not:
+
+- `DataSourceConfig.username` and `password` are `Optional<String>`, so code reading either as a
+  `String` no longer compiles.
+- A JDBC URL that carries a user name or a secret - `?user=`, `?password=`, `app:secret@`, a
+  keystore password - was accepted and is now refused when the configuration is built, so an
+  application configured that way fails at startup until the two move to `username` and
+  `password`, and any other secret to `data-source-properties`.
 
 ## Open questions
+
+All five are settled; `tasks.md` records each answer: `dataSourceProperties`; `Map<String, String>`
+of text values; left to the driver, measured and documented; `user` and `password` refused in any
+case; and no allow-list - a name containing `/`, `[` or `]` is refused, since no supported driver
+has one.
 
 1. **Naming.** `driverProperties` (what they are), `dataSourceProperties` (Hikari's term, but
    misleading here since Ekbatan never uses `dataSourceClassName`), or `properties` (terse).

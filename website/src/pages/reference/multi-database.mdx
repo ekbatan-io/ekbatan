@@ -5,16 +5,20 @@ activeSection: reference
 lead: 'Ekbatan supports PostgreSQL, MySQL, and MariaDB out of the box. Most of the framework is dialect-agnostic — the differences are concentrated in three places: column types in your migrations, JOOQ converters in your repository field constants, and the codegen container that introspects your schema at build time.'
 ---
 
-For the *what & why* of codegen (generated classes, converters, modeling rationale), see [JOOQ codegen](/reference/jooq-codegen/). For the per-dialect build-tool syntax, see [JOOQ codegen on Gradle](/learn/complete-project-setup/#jooq-codegen) (`build.gradle.kts`) or [JOOQ codegen on Maven](/learn/complete-project-setup/#jooq-codegen) (`pom.xml`). This page covers everything else.
+For the *what & why* of codegen (generated classes, converters, modeling rationale), see [JOOQ codegen](https://github.com/ekbatan-io/ekbatan/blob/main/docs/database/jooq-codegen.md). For the per-dialect build-tool syntax, see [JOOQ codegen on Gradle](/learn/complete-project-setup/#6-wire-jooq-codegen) (`build.gradle.kts`) or [JOOQ codegen on Maven](/learn/complete-project-setup/#6-wire-jooq-codegen) (`pom.xml`). This page covers everything else.
 
 ## Always UTC
 
 Every timestamp Ekbatan writes is UTC. This is enforced project-wide and is **not** negotiable per-table.
 
-- **SQL column type — use `TIMESTAMP`, never `TIMESTAMPTZ`.** PostgreSQL's `TIMESTAMP WITHOUT TIME ZONE`, MySQL/MariaDB's `DATETIME(6)`. The DB server is pinned to UTC, so plain `TIMESTAMP` round-trips correctly with Java `Instant`. Mixing `TIMESTAMP` and `TIMESTAMPTZ` within Ekbatan creates subtle JOOQ codegen and converter inconsistencies.
-- **Database server timezone** — set the DB container or machine to `TZ=UTC`. Otherwise `TIMESTAMP` columns silently shift values between read and write.
+- **SQL column type — use `TIMESTAMP`, never `TIMESTAMPTZ`.** PostgreSQL's `TIMESTAMP WITHOUT TIME ZONE`, MySQL/MariaDB's `DATETIME(6)`. `InstantConverter` turns each `Instant` into UTC wall time in Java and back, so plain `TIMESTAMP` round-trips with Java `Instant` whatever zone the database server or the JVM runs in. Mixing `TIMESTAMP` and `TIMESTAMPTZ` within Ekbatan creates subtle JOOQ codegen and converter inconsistencies.
+- **The database's own clock** — what a zone outside UTC changes is the clock your own SQL reads: `NOW()`, `CURRENT_TIMESTAMP` and `LOCALTIMESTAMP` then read local time, hours away from the UTC values Ekbatan wrote. Ekbatan itself never reads that clock. Whose zone it follows depends on the database:
+  - **MySQL/MariaDB: the server's.** Run the server in UTC (`TZ=UTC` on the container or machine). Where you can't, set each connection's zone under [`data-source-properties`](/reference/connecting/#data-source-properties): `sessionVariables: "time_zone='+00:00'"`.
+  - **PostgreSQL: the JVM's.** Its driver sets each session to the JVM's zone when it connects, over the server's and over `options=-c TimeZone=...`. Run the JVM in UTC (`-Duser.timezone=UTC`), or compare with `NOW() AT TIME ZONE 'UTC'`.
+- **No driver time-zone setting.** Not MySQL's `serverTimezone` or `connectionTimeZone`: whenever the JVM is outside UTC, MySQL's driver then stores Ekbatan's values shifted by the JVM's offset, while reading them back still looks right. MariaDB's driver has no `serverTimezone`, and ignores it.
 - **TestContainers** — always configure `.withEnv("TZ", "UTC")`.
-- **JDBC connections** — for MySQL/MariaDB, consider adding `serverTimezone=UTC` to the JDBC URL if you can't set it on the container.
+
+Ekbatan's integration tests check each of these against real PostgreSQL, MySQL and MariaDB servers on Tehran time, written by a JVM on Tokyo time.
 
 ## Column-type cheatsheet
 
@@ -51,7 +55,7 @@ ForcedType()
     .withIncludeExpression(".*\\.my_json_column")
 ```
 
-MariaDB only - MySQL reports `JSON` correctly and keeps `withIncludeTypes("(?i:JSON)")`. See [JOOQ codegen on Gradle](/learn/complete-project-setup/#jooq-codegen) (for `generateJooqClasses { … }`) or [JOOQ codegen on Maven](/learn/complete-project-setup/#jooq-codegen) (for `<forcedType>`) for the full block.
+MariaDB only - MySQL reports `JSON` correctly and keeps `withIncludeTypes("(?i:JSON)")`. See [JOOQ codegen on Gradle](/learn/complete-project-setup/#6-wire-jooq-codegen) (for `generateJooqClasses { … }`) or [JOOQ codegen on Maven](/learn/complete-project-setup/#6-wire-jooq-codegen) (for `<forcedType>`) for the full block.
 
 ### Why MySQL UUID converter is `CHAR(36)`-shaped, not `BINARY(16)`
 
@@ -126,13 +130,13 @@ Reference implementations: `ekbatan-core/.../single_table_json/EventEntityReposi
 4. Implement a `DummyRepository` for the new dialect with the right field-constant set.
 5. Create a test runner extending `BaseRepositoryTest`.
 6. If the dialect requires new SQL strategies (e.g. a different idiom for batch update), branch on `dialect.family()` in `AbstractRepository`.
-7. Add the per-dialect codegen block to the new test module — [Gradle](/learn/complete-project-setup/#jooq-codegen) (`build.gradle.kts`) or [Maven](/learn/complete-project-setup/#jooq-codegen) (`pom.xml`).
+7. Add the per-dialect codegen block to the new test module — [Gradle](/learn/complete-project-setup/#6-wire-jooq-codegen) (`build.gradle.kts`) or [Maven](/learn/complete-project-setup/#6-wire-jooq-codegen) (`pom.xml`).
 
 ## See also
 
-- [JOOQ codegen](/reference/jooq-codegen/) — what codegen generates, the seven framework converters, per-dialect modeling rationale
-- [JOOQ codegen on Gradle](/learn/complete-project-setup/#jooq-codegen) — the per-dialect `build.gradle.kts` blocks
-- [JOOQ codegen on Maven](/learn/complete-project-setup/#jooq-codegen) — the equivalent `pom.xml` plugin chain
+- [JOOQ codegen](https://github.com/ekbatan-io/ekbatan/blob/main/docs/database/jooq-codegen.md) — what codegen generates, the seven framework converters, per-dialect modeling rationale
+- [JOOQ codegen on Gradle](/learn/complete-project-setup/#6-wire-jooq-codegen) — the per-dialect `build.gradle.kts` blocks
+- [JOOQ codegen on Maven](/learn/complete-project-setup/#6-wire-jooq-codegen) — the equivalent `pom.xml` plugin chain
 - [Repositories on JOOQ](/reference/repository/) — how field constants and converters fit together
 - [The outbox: atomic state + events](/learn/outbox/) — the framework's canonical schema this page enables you to author
 - [Framework tables](/reference/tables/) — the on-disk shape of `eventlog.events` and friends

@@ -229,6 +229,19 @@ ekbatan:
 The `ekbatan.sharding.*` subtree mirrors the structure described in [docs/database/sharding.md](../database/sharding.md). For a single-database deployment, the shape above is all you need.
 Both kebab-case and camelCase config keys are accepted; the starter normalizes keys before binding them to Ekbatan's typed config classes. That includes `jobs-config` / `jobsConfig`, `lock-config` / `lockConfig`, and datasource leaves like `jdbc-url` / `jdbcUrl`. If application code reads an extra datasource from `ShardMemberConfig.configFor(...)`, pass the camelCase key (`configFor("jobsConfig")`, `configFor("lockConfig")`), not the kebab-case spelling.
 
+**Extra driver settings** go under `data-source-properties`, each name exactly as the driver spells it - a client key's password, say, or the application name the database shows for each connection. They reach the driver beside the URL, never inside it, for the pools and for migrations alike:
+
+```yaml
+              primary-config:
+                jdbc-url: jdbc:postgresql://primary:5432/wallets
+                username: wallets_app
+                data-source-properties:
+                  sslpassword: ${DB_KEY_PASSWORD}
+                  ApplicationName: wallet-service
+```
+
+Every value there is treated as a secret and never printed, and `username` and `password` may be left out when the login needs none. Every field, the rules, and each way to log in: [Connecting to the database](../database/connecting.md).
+
 ### 5. Use it
 
 ```java
@@ -335,7 +348,7 @@ The application still decides when migrations run. The usual setup is one startu
 // build.gradle.kts
 dependencies {
     // Ekbatan's migrator reads ekbatan.sharding.* and runs Flyway on every primary shard.
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.0")
 
     // Spring Boot's starter keeps Flyway and Spring Boot's Flyway/native integration
     // on the classpath; Ekbatan's starter prevents Boot's single-datasource
@@ -352,7 +365,7 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
 </dependency>
 <dependency>
     <groupId>org.springframework.boot</groupId>

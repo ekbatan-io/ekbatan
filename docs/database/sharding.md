@@ -17,7 +17,7 @@ public static final ShardIdentifier MEXICO_SHARD  = ShardIdentifier.of(1, 0);
 public static final ShardIdentifier MEXICO_2      = ShardIdentifier.of(1, 1);
 ```
 
-`ShardIdentifier.DEFAULT == ShardIdentifier.of(0, 0)`. Unregistered shards fall back to the default — see [`DatabaseRegistry.effectiveShard`](#unregistered-shards-fall-back-to-default) below.
+`ShardIdentifier.DEFAULT == ShardIdentifier.of(0, 0)`. Unregistered shards fall back to the default — see [`DatabaseRegistry.effectiveShard`](#unregistered-shards-fall-back-to-default-and-say-so) below.
 
 ## Self-describing IDs: `ShardedUUID`
 
@@ -278,6 +278,10 @@ About the `configs:` map of each member:
 - **`primary-config` / `primaryConfig` is required.** Every member must have one; missing it fails the build at startup.
 - **`secondary-config` / `secondaryConfig` is optional but encouraged.** If absent, non-transactional reads transparently fall back to the primary pool. If present, they go to the replica, offloading primary.
 - **Any other named entry is user-defined.** `jobs-config` / `jobsConfig`, `lock-config` / `lockConfig`, `analytics-config` / `analyticsConfig`, etc. are equivalent in external config. After binding, the internal Java map key is always camelCase, so code must use `member.configFor("jobsConfig")`, `member.configFor("lockConfig")`, etc. Do not pass kebab-case to `configFor(...)`.
+- **Each config is one database connection** - `jdbc-url`, an optional `username` and `password`,
+  extra driver settings under `data-source-properties`, pool sizes. Secrets never go in `jdbc-url`;
+  it is refused when it carries one. See [Connecting to the database](connecting.md) for every field,
+  the rules of `data-source-properties`, and each way to log in.
 
 ```java
 ShardMemberConfig member = …;

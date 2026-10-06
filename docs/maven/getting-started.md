@@ -32,7 +32,7 @@ Pick the block for your stack. Everything below — the compiler flag, the codeg
         <!-- (1) Spring Boot 4.0.x's BOM pins jOOQ to 3.19.x; Ekbatan needs 3.20.x. -->
         <jooq.version>3.20.10</jooq.version>
 
-        <ekbatan.version>1.0.1</ekbatan.version>
+        <ekbatan.version>1.1.0</ekbatan.version>
     </properties>
 
     <dependencies>
@@ -126,7 +126,7 @@ Pick the block for your stack. Everything below — the compiler flag, the codeg
              NoSuchMethodError as on Spring Boot. -->
         <jooq.version>3.20.10</jooq.version>
 
-        <ekbatan.version>1.0.1</ekbatan.version>
+        <ekbatan.version>1.1.0</ekbatan.version>
         <quarkus.platform.version>3.34.6</quarkus.platform.version>
     </properties>
 
@@ -251,7 +251,7 @@ The Micronaut parent POM pre-configures `maven-compiler-plugin` with `micronaut-
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
         <jooq.version>3.20.10</jooq.version>
-        <ekbatan.version>1.0.1</ekbatan.version>
+        <ekbatan.version>1.1.0</ekbatan.version>
         <micronaut.version>4.10.7</micronaut.version>
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>com.example.Application</exec.mainClass>
@@ -356,7 +356,7 @@ The Micronaut parent POM pre-configures `maven-compiler-plugin` with `micronaut-
 
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
-        <ekbatan.version>1.0.1</ekbatan.version>
+        <ekbatan.version>1.1.0</ekbatan.version>
     </properties>
 
     <dependencies>
@@ -607,7 +607,9 @@ ekbatan:
                 maximumPoolSize: 5
 ```
 
-The structure is documented in [docs/database/sharding.md](../database/sharding.md) and the [Wiring with Spring Boot](../wiring/spring.md#4-the-configuration) page.
+The structure is documented in [docs/database/sharding.md](../database/sharding.md) and the [Wiring with Spring Boot](../wiring/spring.md#4-the-configuration) page; every field of a datasource entry - including `data-source-properties` for extra driver settings - in [Connecting to the database](../database/connecting.md).
+
+**Time zones.** Ekbatan writes every timestamp as UTC itself, so what it stores is right whatever zone the database or the JVM runs in, and no time-zone setting goes in the URL. A zone does change the database clock your own SQL reads (`NOW()`, `CURRENT_TIMESTAMP`): on PostgreSQL it follows the JVM's zone, since the driver sets each session to it, so run the JVM in UTC (`-Duser.timezone=UTC`); on MySQL and MariaDB it follows the server's, so keep the server in UTC or set `sessionVariables: "time_zone='+00:00'"` under [`data-source-properties`](../database/connecting.md#data-source-properties). Not MySQL's `serverTimezone`: with the JVM outside UTC it shifts what is stored. See [Always UTC](../database/multi-database.md#always-utc).
 
 The examples in this Maven page use camelCase, but the DI integrations also accept kebab-case: `default-shard` / `defaultShard`, `primary-config` / `primaryConfig`, `jobs-config` / `jobsConfig`, `lock-config` / `lockConfig`, and datasource leaves like `jdbc-url` / `jdbcUrl`. If Java code later reads a user-defined datasource via `member.configFor(...)`, use the camelCase key (`jobsConfig`, `lockConfig`), not the kebab-case spelling.
 

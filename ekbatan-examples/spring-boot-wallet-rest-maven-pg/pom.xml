@@ -27,7 +27,7 @@
              Override the parent's property so the generated record classes and the runtime jOOQ classpath agree. -->
         <jooq.version>3.20.10</jooq.version>
 
-        <ekbatan.version>1.0.1</ekbatan.version>
+        <ekbatan.version>1.1.0</ekbatan.version>
         <!-- Avoid the `flyway.*` namespace for Maven properties - Flyway's maven plugin scans
              system properties and rejects anything prefixed with `flyway.` that isn't a known
              Flyway configuration key. Same caution applies to `jooq.*` (the codegen plugin scans

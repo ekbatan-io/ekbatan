@@ -28,7 +28,7 @@ Ekbatan is published on [Maven Central](https://central.sonatype.com/namespace/i
 
 ```kotlin
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.0")
 }
 ```
 
@@ -36,7 +36,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.0")
 }
 ```
 
@@ -44,8 +44,8 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.0.1")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.0")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.0")
     annotationProcessor("io.micronaut:micronaut-inject-java")
 }
 ```
@@ -55,35 +55,35 @@ dependencies {
 ```kotlin
 dependencies {
     // ── Required ────────────────────────────────────────────────────────────
-    implementation("io.github.ekbatan-io:ekbatan-core:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-core:1.1.0")
 
     // ── Optional capabilities ───────────────────────────────────────────────
 
     // @AutoBuilder code generation — generates *Builder classes for Models/Entities
     // (skip if you'd rather write the builders by hand)
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.0.1")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.0.1")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.0")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.0")
 
     // In-process event handlers (fanout + handling jobs over the eventlog)
-    implementation("io.github.ekbatan-io:ekbatan-local-event-handler:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-local-event-handler:1.1.0")
 
     // Distributed background jobs (db-scheduler facade; cluster-exclusive scheduling)
-    implementation("io.github.ekbatan-io:ekbatan-distributed-jobs:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-distributed-jobs:1.1.0")
 
     // Redis-backed distributed KeyedLockProvider (Redisson under the hood)
-    implementation("io.github.ekbatan-io:ekbatan-keyed-lock-redis:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-keyed-lock-redis:1.1.0")
 
     // GraalVM native-image Features (auto-loaded; include only if you build native binaries)
-    implementation("io.github.ekbatan-io:ekbatan-native:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-native:1.1.0")
 
     // Testing helpers: ActionSpec, ActionAssert, VirtualClock, and Testcontainers utilities
-    testImplementation("io.github.ekbatan-io:ekbatan-test-support:1.0.1")
+    testImplementation("io.github.ekbatan-io:ekbatan-test-support:1.1.0")
 
     // ── Wire-format DTOs (only for Kafka consumer apps reading from the eventlog) ──
     // Pick the one matching your Kafka serializer; not needed in the producer app itself.
-    implementation("io.github.ekbatan-io:ekbatan-action-event-json:1.0.1")
-    implementation("io.github.ekbatan-io:ekbatan-action-event-avro:1.0.1")
-    implementation("io.github.ekbatan-io:ekbatan-action-event-protobuf:1.0.1")
+    implementation("io.github.ekbatan-io:ekbatan-action-event-json:1.1.0")
+    implementation("io.github.ekbatan-io:ekbatan-action-event-avro:1.1.0")
+    implementation("io.github.ekbatan-io:ekbatan-action-event-protobuf:1.1.0")
 }
 ```
 
@@ -95,7 +95,7 @@ Substitute the artifactId for your stack — `ekbatan-spring-boot-starter`, `ekb
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-spring-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -166,7 +166,7 @@ public class WalletDepositAction extends Action<WalletDepositAction.Params, Wall
 }
 ```
 
-The `plan()` accessor inside `perform(...)` returns the **ActionPlan** — a per-action staging area for everything the framework should persist. Call `plan().add(newDomainObject)` for inserts and `plan().update(modifiedDomainObject)` for updates; the call above (`plan().update(updated)`) registers the deposited wallet and returns the same value as the action's result. Nothing is committed yet: the plan is just an in-memory list of intended writes. The executor flushes the whole plan, plus any attached events, in a single transaction once `perform(...)` returns — see [the two-phase lifecycle](#the-two-phase-lifecycle) below.
+The `plan()` accessor inside `perform(...)` returns the **ActionPlan** — a per-action staging area for everything the framework should persist. Call `plan().add(newDomainObject)` for inserts and `plan().update(modifiedDomainObject)` for updates; the call above (`plan().update(updated)`) registers the deposited wallet and returns the same value as the action's result. Nothing is committed yet: the plan is just an in-memory list of intended writes. The executor flushes the whole plan, plus any attached events, in a single transaction once `perform(...)` returns — see [the two-phase lifecycle](#the-action-lifecycle) below.
 
 ### Action Executor
 
@@ -398,7 +398,8 @@ Each topic links to a focused deep-dive doc with the full surface area, schema, 
 - [TransactionManager](docs/database/transaction-manager.md) - direct transactional DB access outside the Action pipeline
 - [Outbox schema](docs/database/outbox-schema.md) - the SQL DDL of `eventlog.events`, the `delivered` flag, `event_notifications`, indexes
 - [Sharding](docs/database/sharding.md) - group + member, `ShardedUUID`, custom `ShardingStrategy`, cross-shard rules
-- [Pessimistic locking via `KeyedLockProvider`](docs/database/keyed-locks.md) - five backends (Postgres, MySQL, MariaDB, Redis, in-process), reentrancy contract, caller-side acquisition pattern
+- [Connecting to the database](docs/database/connecting.md) - `username`, `password`, `data-source-properties`, and every way to log in: passwords, client certificates, IAM, Kerberos, driver plugins
+- [Pessimistic locking via `KeyedLockProvider`](docs/database/keyed-locks.md) - four backends (Postgres, MySQL, MariaDB, Redis), reentrancy contract, caller-side acquisition pattern
 - [Multi-database (PostgreSQL / MySQL / MariaDB)](docs/database/multi-database.md) - cross-dialect cheatsheet: type mapping, init scripts, partial indexes
 - [PostgreSQL setup](docs/database/postgresql.md) - native `UUID` + `JSONB`, real schemas, partial indexes — the smoothest fit
 - [MariaDB setup](docs/database/mariadb.md) - native `UUID` (10.7+), `JSON`, `DATETIME(6)`, `eventlog` as a separate database
@@ -461,7 +462,8 @@ Two directories, two audiences. Read this section if you want to copy code into 
 
 | Pattern | Spring Boot wallet | Quarkus wallet | Micronaut wallet |
 |---|---|---|---|
-| Framework Flyway extension | [`spring-boot-starter-flyway`](./docs/wiring/spring.md#flyway--use-spring-boot-starter-flyway--a-flywaydatasource-bean) + `@FlywayDataSource @Bean DataSource` | [`quarkus-flyway`](./docs/wiring/quarkus.md#flyway--use-quarkus-flyway--a-flywayconfigurationcustomizer) + `FlywayConfigurationCustomizer` (CDI) | [`micronaut-flyway`](./docs/wiring/micronaut.md#flyway--use-micronaut-flyway--a-flywayconfigurationcustomizer) + `FlywayConfigurationCustomizer @Named("default")` |
+| Flyway | [`ekbatan-flyway`](./docs/wiring/spring.md#flyway--use-ekbatan-flyway--spring-boots-flyway-dependencies) + an `EkbatanShardFlywayMigrator` bean over every shard | [`ekbatan-flyway`](./docs/wiring/quarkus.md#flyway--use-ekbatan-flyway--a-startup-migrator) + a `StartupEvent` migrator over every shard | [`ekbatan-flyway`](./docs/wiring/micronaut.md#flyway--programmatic-context-bean) + an eager `@Context` migrator over every shard |
+| Driver settings | [`dataSourceProperties`](./docs/database/connecting.md) on every `primaryConfig` in `application.yml`, read back from each shard's live connection | the same in `application.properties` | the same in `application.yml` |
 | HTTP serialization | `spring-boot-starter-web` (Jackson via auto-config) | `quarkus-rest-jackson` (pulls `quarkus-jackson`) | [`micronaut-serde-jackson`](./docs/wiring/micronaut.md#serialization--use-micronaut-serde-jackson-not-micronaut-jackson-databind) + `@Serdeable` (compile-time serdes) |
 | Native-image | `nativeTest` (Spring AOT + GraalVM Build Tools) | `testNative` (Quarkus native pipeline) | `nativeTest` (Micronaut + GraalVM Build Tools) |
 
@@ -481,7 +483,7 @@ Per-stack starting points (every one has 6 sibling DB / build-tool variants — 
 
 ### [`ekbatan-integration-tests/`](./ekbatan-integration-tests) — framework's own smoke tests
 
-These are **not** examples in the "copy me" sense — they're the framework's own integration test suite, exercising `ekbatan-core`, `ekbatan-events:local-event-handler`, `ekbatan-distributed-jobs`, the four `KeyedLockProvider` backends, and the three Debezium SMT serializers directly. Each runs against real Testcontainers and produces real coverage; together they're the green-light check before a release. They deliberately **do not** use a DI framework (except where the test target is the DI integration itself), and they call **raw Flyway** via `FlywayMigrator.migrate(url, user, pass)` — see [Flyway on native](./docs/runtime/native-image.md#flyway-on-native) for why that's right for these tests and usually not the first choice for framework apps.
+These are **not** examples in the "copy me" sense — they're the framework's own integration test suite, exercising `ekbatan-core`, `ekbatan-events:local-event-handler`, `ekbatan-distributed-jobs`, the four `KeyedLockProvider` backends, and the three Debezium SMT serializers directly. Each runs against real Testcontainers and produces real coverage; together they're the green-light check before a release. They deliberately **do not** use a DI framework (except where the test target is the DI integration itself), and they run Flyway programmatically via `FlywayMigrator.migrate(url, user, pass)` - which connects exactly as `migrate(dataSourceConfig)` does — see [Flyway on native](./docs/runtime/native-image.md#flyway-on-native) for why that's right for these tests and usually not the first choice for framework apps.
 
 | Subproject | What it covers |
 |---|---|

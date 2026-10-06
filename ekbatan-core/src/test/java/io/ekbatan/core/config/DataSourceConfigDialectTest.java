@@ -66,4 +66,33 @@ class DataSourceConfigDialectTest {
                 .hasMessageContaining("does not support")
                 .hasMessageContaining("PostgreSQL, MySQL, MariaDB");
     }
+
+    @ParameterizedTest
+    @CsvSource(
+            delimiter = ';',
+            value = {
+                // unrecognisable, with the password in it
+                "not-a-jdbc-url?user=app&password=Zq7-s3cret",
+                "app:Zq7-s3cret@db1/orders",
+                // recognised but unsupported, with the password in the query and inline
+                "jdbc:h2:mem:test;USER=app;PASSWORD=Zq7-s3cret",
+                "jdbc:oracle:thin:app/Zq7-s3cret@db1:1521/orders",
+                "jdbc:sqlserver://db1;user=app;password=Zq7-s3cret",
+            })
+    void never_repeats_a_refused_url_since_it_can_carry_the_password(String jdbcUrl) {
+        // GIVEN / WHEN / THEN
+        assertThatThrownBy(() -> dialectOf(jdbcUrl.trim()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .message()
+                .doesNotContain("Zq7-s3cret");
+    }
+
+    @Test
+    void still_names_the_scheme_of_a_refused_url() {
+        // GIVEN / WHEN / THEN
+        assertThatThrownBy(() -> dialectOf("jdbc:h2:mem:test;PASSWORD=Zq7-s3cret"))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("H2")
+                .hasMessageNotContaining("Zq7-s3cret");
+    }
 }

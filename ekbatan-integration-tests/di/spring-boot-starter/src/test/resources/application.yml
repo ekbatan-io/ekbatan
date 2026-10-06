@@ -1,0 +1,14 @@
+# Driver settings for the application's primary pool, written the way an application writes them:
+# in its configuration file, under the kebab-case key, each name exactly as the driver spells it.
+# The rest of the shard - URL, user, password, pool sizes - comes from the test and its container.
+# EkbatanSpringBootStarterIntegrationTest reads both back from a live connection.
+ekbatan:
+  sharding:
+    groups:
+      - members:
+          - configs:
+              primary-config:
+                data-source-properties:
+                  # a placeholder, resolved by Spring before Ekbatan reads it
+                  ApplicationName: ${EKBATAN_DI_APPLICATION_NAME:ekbatan-spring-di}
+                  options: "-c statement_timeout=4321"

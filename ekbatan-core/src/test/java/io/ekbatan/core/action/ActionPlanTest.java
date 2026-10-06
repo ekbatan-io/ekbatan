@@ -5,8 +5,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import io.ekbatan.core.domain.Id;
+import io.ekbatan.core.domain.Persistable;
 import io.ekbatan.testsupport.time.VirtualClock;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 class ActionPlanTest {
@@ -123,15 +126,41 @@ class ActionPlanTest {
     }
 
     @Test
-    void addAll_with_null_returns_empty() {
+    void addAll_with_null_is_refused() {
+        // GIVEN - a null collection is a caller's mistake, not "nothing to stage"
+        var plan = new ActionPlan();
+
+        // WHEN / THEN
+        assertThatThrownBy(() -> plan.addAll(null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("entities cannot be null");
+
+        // AND - nothing was staged
+        assertThat(plan.hasChanges()).isFalse();
+    }
+
+    @Test
+    void add_with_null_is_refused() {
         // GIVEN
         var plan = new ActionPlan();
 
-        // WHEN
-        var result = plan.addAll(null);
+        // WHEN / THEN
+        assertThatThrownBy(() -> plan.add(null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("entity cannot be null");
+    }
 
-        // THEN
-        assertThat(result).isEmpty();
+    @Test
+    void addAll_with_a_null_inside_is_refused() {
+        // GIVEN
+        var plan = new ActionPlan();
+        var entities = new ArrayList<Persistable<UUID>>();
+        entities.add(null);
+
+        // WHEN / THEN
+        assertThatThrownBy(() -> plan.addAll(entities))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("entity cannot be null");
     }
 
     @Test
@@ -150,15 +179,28 @@ class ActionPlanTest {
     }
 
     @Test
-    void updateAll_with_null_returns_empty() {
+    void updateAll_with_null_is_refused() {
         // GIVEN
         var plan = new ActionPlan();
 
-        // WHEN
-        var result = plan.updateAll(null);
+        // WHEN / THEN
+        assertThatThrownBy(() -> plan.updateAll(null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("entities cannot be null");
 
-        // THEN
-        assertThat(result).isEmpty();
+        // AND - nothing was staged
+        assertThat(plan.hasChanges()).isFalse();
+    }
+
+    @Test
+    void update_with_null_is_refused() {
+        // GIVEN
+        var plan = new ActionPlan();
+
+        // WHEN / THEN
+        assertThatThrownBy(() -> plan.update(null))
+                .isInstanceOf(NullPointerException.class)
+                .hasMessage("entity cannot be null");
     }
 
     @Test

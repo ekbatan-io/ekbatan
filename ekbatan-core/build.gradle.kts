@@ -39,6 +39,10 @@ dependencies {
     // reachability-metadata repo registers those classes against a classpath that doesn't have
     // JNA. Test fixtures still need the driver for the integration-test runners.
     testImplementation("org.postgresql:postgresql:${project.property("postgresqlVersion")}")
+    // The other two supported drivers, so the check that a URL carries no password is tested with
+    // each driver's own URL parser - the one that would send it.
+    testRuntimeOnly("org.mariadb.jdbc:mariadb-java-client:${project.property("mariadbJavaClientVersion")}")
+    testRuntimeOnly("com.mysql:mysql-connector-j:${project.property("mysqlConnectorVersion")}")
 
     // HikariCP is compileOnly: the framework calls Hikari-specific APIs internally
     // (HikariConfig, HikariDataSource#evictConnection), but does not expose Hikari types on its
@@ -54,6 +58,9 @@ dependencies {
     testImplementation("org.mockito:mockito-core:${project.property("mockitoVersion")}")
     testImplementation("net.javacrumbs.json-unit:json-unit-assertj:${project.property("jsonUnitVersion")}")
     testImplementation("tools.jackson.dataformat:jackson-dataformat-yaml:${project.property("jacksonDatabindVersion")}")
+    // The reader every DI integration binds the sharding config with, for the round-trip test of
+    // driver setting names.
+    testImplementation("tools.jackson.dataformat:jackson-dataformat-properties:${project.property("jacksonDatabindVersion")}")
     testImplementation(project(":ekbatan-test-support"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 

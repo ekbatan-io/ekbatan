@@ -1,0 +1,129 @@
+---
+layout: ../../layouts/DocLayout.astro
+title: 'Connecting to the database'
+activeSection: reference
+lead: 'Every entry of a shard member’s configs map (primary-config, secondary-config, jobs-config, lock-config, or any name you add) says how Ekbatan connects to one database. The application’s connection pools and Flyway migrations connect the same way, from the same entry.'
+---
+
+## The fields
+
+| Field | Required | What it is |
+|---|---|---|
+| `jdbc-url` | yes | The JDBC URL. It may not carry a user name or a secret; see [No user name or secret in the URL](#no-user-name-or-secret-in-the-url). |
+| `username` | no | The database user. Leave it out only when something else supplies the user, such as a driver's login plugin. An empty value is refused. |
+| `password` | no | The login password. Leave it out for a login that has none: an IAM token, a client certificate, Kerberos, or a driver plugin that supplies it. The empty string stays a valid password. |
+| `driver-class-name` | no | The JDBC driver class, when it should not be found from the URL. A blank value means none, as when it is left out. |
+| `data-source-properties` | no | Extra settings for the driver; see below. |
+| `maximum-pool-size`, `minimum-idle`, `idle-timeout`, `leak-detection-threshold` | no | Pool settings. |
+
+With no `username`, and nothing else supplying one, the PostgreSQL, MySQL and MariaDB drivers all log in as the operating-system user. Ekbatan therefore logs a warning when a pool or a migration is built without a username.
+
+## `data-source-properties`
+
+Extra settings handed to the JDBC driver - the same settings you could put in the URL's query string as `?name=value`, given as a map instead. They are never added to the URL: Ekbatan passes them to the driver beside it, the JDBC standard way - `Driver.connect(url, properties)`, with `user` and `password` in the same properties - for every connection a pool or a migration opens. The driver merges them with the URL's own settings, so the PostgreSQL, MySQL and MariaDB drivers each read a setting the same way from either place; kept out of the URL, they never appear where a URL is logged, and need no percent-encoding.
+
+```yaml
+primary-config:
+  jdbc-url: jdbc:postgresql://orders-db.internal:5432/orders?sslmode=verify-full&sslcert=/run/secrets/db/client.crt&sslkey=/run/secrets/db/client.pk8
+  username: orders_app            # no password: the client certificate is the login
+  data-source-properties:
+    sslpassword: ${DB_KEY_PASSWORD}
+    ApplicationName: orders-service
+```
+
+The rules:
+
+- **Names are kept exactly as written.** A driver reads its setting names as written: they are case-sensitive (`ApplicationName`, `keyStorePassword`) and some contain dots (`ha.enableJMX`, `kms.region`). Only the container key is normalised - `data-source-properties` and `dataSourceProperties` both work - never what is inside it.
+- **Values are text**, as a driver reads them. A value may hold any characters, `=` and `:` included. A nested block or a list is refused: no driver setting holds either.
+- **Every value is treated as a secret** and never printed, so a key password is safe here. (Hikari's own settings map is not used for them: Hikari's debug output prints every setting in it except one named exactly `password`.)
+- **`user` and `password` can't go in `data-source-properties`**, in any spelling: the configuration is refused with an error. If they were allowed there, they would quietly replace `username` and `password`, and MySQL's and MariaDB's drivers read `USER` and `Password` as the same two settings.
+- **Write the names in the file.** A value may come from the environment through a placeholder (`${DB_KEY_PASSWORD}`), but a name may not: an environment variable's name loses its capitals on the way in.
+- **Give a setting in one place only.** When it is in both the URL and `data-source-properties`, PostgreSQL and MariaDB use the URL's value and MySQL the other one. JDBC leaves the choice to each driver.
+- **Not accepted:** a config named `dataSourceProperties`, and a setting name containing `/`, `[` or `]` - no supported driver has such a setting.
+
+The same settings in each configuration format:
+
+```yaml
+# application.yml - Spring Boot, Micronaut
+ekbatan:
+  sharding:
+    groups:
+      - members:
+          - configs:
+              primary-config:
+                data-source-properties:
+                  ApplicationName: orders-service
+                  options: "-c statement_timeout=30000"
+```
+
+```properties
+# application.properties - Quarkus, or any properties file
+ekbatan.sharding.groups[0].members[0].configs.primary-config.data-source-properties.ApplicationName=orders-service
+ekbatan.sharding.groups[0].members[0].configs.primary-config.data-source-properties.options=-c statement_timeout=30000
+```
+
+```java
+// plain Java
+dataSourceConfig()
+        .jdbcUrl("jdbc:postgresql://orders-db.internal:5432/orders")
+        .username("orders_app")
+        .dataSourceProperties(Map.of("ApplicationName", "orders-service"))
+        .build();
+```
+
+## No user name or secret in the URL
+
+A URL is logged and repeated - Flyway logs it at startup, drivers repeat it in their errors - so a URL that carries a user name or a secret is refused when the configuration is built. The error names every such setting, each once, and where each goes, and never repeats the URL or a value:
+
+| In the URL | Goes to |
+|---|---|
+| the login user: `user`, or a name before an `@` (`jdbc:mysql://app@db/orders`) | `username` |
+| the login password: `password`, or `app:password@` | `password` |
+| any other user name or secret: a key or keystore password, an identity provider's, proxy's or SSH tunnel's user and password, a client secret, a token | `data-source-properties` |
+
+The check reads the URL's own text - the text that gets logged - and not what its driver makes of it: asked what a URL carries, PostgreSQL's driver adds the password from `.pgpass` and a service file's user and password, and MySQL's driver answers nothing at all for a URL with two hosts. It reads a name only where an accepted driver reads a setting's name: in the query, split at `&` (`?a=1&b=2`); inside the parentheses of MySQL's host forms (`(host=db1,user=a)`, `address=(host=db1)(user=a)`), each host on its own; in the `;` settings of DataDirect's and CData's drivers; and in any URL the URL holds - an SSH tunnel's or a proxy's real URL - read the same way. A word anywhere else is not a setting: a host or a database named `password`, or a value such as `ApplicationName=svc,user=batch`, is accepted. A setting with no value (`?password=`) carries nothing and is accepted too. Names are matched ignoring case and spaces, as MySQL's and MariaDB's drivers read them; values are never read.
+
+Which names hold a user name or a secret is decided once, in a ledger of every setting of every driver whose URL Ekbatan accepts - [`driver-settings.tsv`](https://github.com/ekbatan-io/ekbatan/blob/main/ekbatan-core/src/test/resources/io/ekbatan/core/config/driver-settings.tsv), each setting marked from the driver's own source code or, for a closed-source driver, its vendor's documentation. Besides `user` and `password`, these are refused:
+
+| Driver | Also refused |
+|---|---|
+| PostgreSQL (pgjdbc) | `sslpassword` |
+| MySQL Connector/J | `password1`, `password2`, `password3`, `clientCertificateKeyStorePassword`, `trustCertificateKeyStorePassword`, `xdevapi.ssl-keystore-password`, `xdevapi.ssl-truststore-password` (and their `xdevapiSsl...Password` aliases) |
+| MariaDB Connector/J | `keyStorePassword`, `trustStorePassword`, `keyPassword` (and their `...CertificateKeyStorePassword` aliases), `secretKey` (its AWS-IAM login plugin), `password2`, `password3`, ... (PAM) |
+| AWS Advanced JDBC Wrapper | `dbUser`, `idpUsername`, `idpPassword`, `cacheUsername`, `cachePassword`, `cp-username`, `cp-user`, `cp-password`, `cp-overrideDefaultUser`, `cp-overrideDefaultPassword`, and any refused name behind `monitoring-`, `topology-monitoring-`, `blue-green-monitoring-`, `limitless-router-monitor-` or `frt-`, which pass a setting on to its monitoring connections |
+| Azure identity extensions | `azure.username`, `azure.password`, `azure.clientSecret`, `azure.clientCertificatePassword` |
+| pgjdbc-ng (`jdbc:pgsql:`) | `ssl.key.password` (`sslPassword`), `ClientUser` |
+| CData (PostgreSQL, MySQL, MariaDB) | `SSHUser`, `SSHPassword`, `SSHClientCert`, `SSHClientCertPassword`, `FirewallUser`, `FirewallPassword`, `ProxyUser`, `ProxyPassword`, `KerberosUser`, `IntegratedUser`, `SSLClientCert`, `SSLClientCertPassword`, `CertificatePassword`, `OAuthClientSecret`, `OAuthAccessToken`, `OAuthRefreshToken`, `OAuthVerifier`, `OAuthJWTCert`, `OAuthJWTCertPassword`, `OAuthEncryptKey`, `MFAToken`, `AWSSecretKey`, `RTK` |
+| DataDirect (PostgreSQL, MySQL) | `ProxyUser`, `ProxyPassword`, `ClientUser`, `KeyStorePassword`, `KeyPassword`, `TrustStorePassword`, `SecretKey` |
+| Kingbase's pgjdbc forks | `ukpwdpassword`, `usbkeypin` |
+| SSH tunnel drivers (jdbc-ssh, jdbc-ssh-tunnel, jdbc-sshj) | `jdbc.ssh.username`, `jdbc.ssh.password`, `jdbc.ssh.passphrase`, `sshUser`, `sshPassphrase`, `username`, `private.key.password`, and jdbc-sshj's SSH `password` and a user before its SSH host's `@`, refused as the login's - see the jdbc-sshj note below |
+| MySQL Connector/MXJ | `server.initialize-user.user`, `server.initialize-user.password` |
+| Google Cloud SQL and AlloyDB connectors, AWS and Aliyun Secrets Manager JDBC, Aurora DSQL connector, Drizzle, Testcontainers, OpenTelemetry, OpenTracing, P6Spy, Sentry, log4jdbc, jdbcdslog, JAMon, Druid's `wrap-jdbc`, Proxool, JavaMelody, Delinea, CyberArk ASCP, Broadcom DevTest, junixsocket, Brave, the openGauss, Hologres, PolarDB and TiDB forks | nothing more |
+
+- **Identifiers are not secrets and stay allowed** - an application's or managed identity's id (`azure.clientId`, `OAuthClientId`), an AWS access key id (`accessKeyId`, `AWSAccessKey`), a service account to act as (`cloudSqlTargetPrincipal`), a role to assume (`iamRoleArn`), the name of a secret (`secretsManagerSecretId`). So is a file path to a key or token (`sslkey`, `idTokenFile`): the file holds the secret, the setting only its path.
+- **CData's `SSLClientCert`, `SSHClientCert` and `OAuthJWTCert` are refused even when they hold a path**: with a `...BLOB` certificate type, the same setting holds the key itself.
+- **Testcontainers' `jdbc:tc:` URLs**: Testcontainers logs in with the container's own user and password, whatever `username` and `password` say. Leave both out of the URL, and the container uses its default, `test` / `test`.
+- **A URL a platform hands out with the login in it is refused as written**: Heroku's `JDBC_DATABASE_URL` carries `?user=...&password=...`, and so do the JDBC URLs in Neon's and Supabase's documentation. Give Ekbatan the URL without the two, and give them to `username` and `password` - Heroku also sets them alone, as `JDBC_DATABASE_USERNAME` and `JDBC_DATABASE_PASSWORD`.
+- **jdbc-sshj can log in to its SSH host only with a key file that has no passphrase** (`private.key.file`), as the operating-system user running the application. It reads its SSH settings from its own URL only, never from `data-source-properties`, and Ekbatan refuses its SSH user, password and key passphrase in that URL - so the error's advice (`username(...)`, `password(...)`, `data-source-properties`) does not reach its SSH login. The refusal still earns its keep: jdbc-sshj writes its whole URL to the log when it opens a tunnel.
+
+## Ways to log in
+
+| Login | How | Status |
+|---|---|---|
+| A password from a secret store | `password: ${DB_PASSWORD}`, filled from a Kubernetes Secret, a mounted file, or a store read at startup | tested |
+| Client certificate, key without a password | `sslcert` / `sslkey` / `sslrootcert` in the URL, no `password` | configuration accepted |
+| Client certificate, encrypted key (PostgreSQL) | as above, plus `sslpassword` in `data-source-properties` | tested end to end |
+| Client certificate, keystore (MySQL, MariaDB) | keystore in the URL, `clientCertificateKeyStorePassword` (MySQL) or `keyStorePassword` (MariaDB) in `data-source-properties` | configuration accepted |
+| A driver plugin supplies user and password (MariaDB) | `credentialType` in `data-source-properties`, no `username` or `password` | tested end to end |
+| AWS RDS IAM | `jdbc:aws-wrapper:postgresql://...?wrapperPlugins=iam`, or MariaDB's `credentialType=AWS-IAM`; no `password` | configuration accepted; not run against AWS |
+| AWS Secrets Manager, rotating | `jdbc-secretsmanager:postgresql://...` with its `driver-class-name`; `username` is the secret's name | configuration accepted; not run against AWS |
+| Azure managed identity | Azure's login plugin class in the URL; no `password` | configuration accepted; not run against Azure |
+| GCP Cloud SQL IAM | Cloud SQL socket factory in the URL; no `password` | configuration accepted; not run against GCP |
+| Kerberos | `gsslib=gssapi` in the URL, plus the JVM's JAAS configuration; no `password` | configuration accepted |
+| Vault dynamic credentials (a new user every hour) | - | not supported yet on PostgreSQL and MySQL; on MariaDB, through a `credentialType` plugin |
+
+"Tested end to end" means one of Ekbatan's integration tests logs in that way against a real database and checks both a migration's connection and the application pool's.
+
+## How migrations connect
+
+`FlywayMigrator` hands Flyway connections made from the same `DataSourceConfig` as the application's pools - same driver, `driver-class-name` and `data-source-properties` included - one new connection each time Flyway asks, closed when Flyway is done. So a migration logs in the way the application does, through a wrapper driver too, and nothing a migration sets on a connection can reach the application's pool. A refused login fails at the first attempt, and Flyway's own `connectRetries` still applies.

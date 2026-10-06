@@ -8,10 +8,14 @@ For the *what & why* of codegen (generated classes, converters, modeling rationa
 
 Every timestamp Ekbatan writes is UTC. This is enforced project-wide and is **not** negotiable per-table.
 
-- **SQL column type — use `TIMESTAMP`, never `TIMESTAMPTZ`.** PostgreSQL's `TIMESTAMP WITHOUT TIME ZONE`, MySQL/MariaDB's `DATETIME(6)`. The DB server is pinned to UTC, so plain `TIMESTAMP` round-trips correctly with Java `Instant`. Mixing `TIMESTAMP` and `TIMESTAMPTZ` within Ekbatan creates subtle JOOQ codegen and converter inconsistencies.
-- **Database server timezone** — set the DB container or machine to `TZ=UTC`. Otherwise `TIMESTAMP` columns silently shift values between read and write.
+- **SQL column type — use `TIMESTAMP`, never `TIMESTAMPTZ`.** PostgreSQL's `TIMESTAMP WITHOUT TIME ZONE`, MySQL/MariaDB's `DATETIME(6)`. `InstantConverter` turns each `Instant` into UTC wall time in Java and back, so plain `TIMESTAMP` round-trips with Java `Instant` whatever zone the database server or the JVM runs in. Mixing `TIMESTAMP` and `TIMESTAMPTZ` within Ekbatan creates subtle JOOQ codegen and converter inconsistencies.
+- **The database's own clock** — what a zone outside UTC changes is the clock your own SQL reads: `NOW()`, `CURRENT_TIMESTAMP` and `LOCALTIMESTAMP` then read local time, hours away from the UTC values Ekbatan wrote. Ekbatan itself never reads that clock. Whose zone it follows depends on the database:
+  - **MySQL/MariaDB: the server's.** Run the server in UTC (`TZ=UTC` on the container or machine). Where you can't, set each connection's zone under [`data-source-properties`](connecting.md#data-source-properties): `sessionVariables: "time_zone='+00:00'"`.
+  - **PostgreSQL: the JVM's.** Its driver sets each session to the JVM's zone when it connects, over the server's and over `options=-c TimeZone=...`. Run the JVM in UTC (`-Duser.timezone=UTC`), or compare with `NOW() AT TIME ZONE 'UTC'`.
+- **No driver time-zone setting.** Not MySQL's `serverTimezone` or `connectionTimeZone`: whenever the JVM is outside UTC, MySQL's driver then stores Ekbatan's values shifted by the JVM's offset, while reading them back still looks right. MariaDB's driver has no `serverTimezone`, and ignores it.
 - **TestContainers** — always configure `.withEnv("TZ", "UTC")`.
-- **JDBC connections** — for MySQL/MariaDB, consider adding `serverTimezone=UTC` to the JDBC URL if you can't set it on the container.
+
+Ekbatan's integration tests check each of these against real PostgreSQL, MySQL and MariaDB servers on Tehran time, written by a JVM on Tokyo time.
 
 ## Column-type cheatsheet
 

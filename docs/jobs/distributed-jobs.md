@@ -228,7 +228,7 @@ The `ekbatan.jobs.*` properties also accept camelCase aliases: `polling-interval
 
 Use a dedicated `ConnectionProvider` for `JobRegistry` — separate from your primary application pool. db-scheduler polls continuously, so you don't want it competing with normal queries for connections. A small pool is enough (polling + heartbeats are low-volume).
 
-The DI integrations expect this pool under the user-defined `jobs-config` / `jobsConfig` slot of the default shard's first member, as shown above. Both spellings are accepted in external config. Manual wiring must use the canonical Java key: `member.configFor("jobsConfig")`, not `member.configFor("jobs-config")`.
+The DI integrations expect this pool under the user-defined `jobs-config` / `jobsConfig` slot of the default shard's first member, as shown above. The slot is a complete datasource entry, so everything in [Connecting to the database](../database/connecting.md) applies to it too - an optional `username` and `password`, and `data-source-properties`. Both spellings are accepted in external config. Manual wiring must use the canonical Java key: `member.configFor("jobsConfig")`, not `member.configFor("jobs-config")`.
 
 ## See also
 

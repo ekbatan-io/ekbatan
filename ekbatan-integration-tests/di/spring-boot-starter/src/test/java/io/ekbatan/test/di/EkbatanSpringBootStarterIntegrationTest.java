@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import io.ekbatan.core.action.ActionExecutor;
+import io.ekbatan.core.shard.DatabaseRegistry;
+import io.ekbatan.core.shard.ShardIdentifier;
 import io.ekbatan.test.di.shared.widget.action.WidgetCreateAction;
 import io.ekbatan.test.di.shared.widget.handler.WidgetCreatedCounterHandler;
 import io.ekbatan.test.di.shared.widget.models.WidgetState;
@@ -105,5 +107,29 @@ class EkbatanSpringBootStarterIntegrationTest {
         var fetched = widgetRepository.findById(created.id.getValue());
         assertThat(fetched).isPresent();
         assertThat(fetched.get().name).isEqualTo("handled widget");
+    }
+
+    @Autowired
+    DatabaseRegistry databaseRegistry;
+
+    @Test
+    void driver_settings_from_the_configuration_file_reach_the_application_connections() throws Exception {
+        // GIVEN - data-source-properties in this app's configuration file: ApplicationName, and
+        // options, whose value holds spaces and an '='
+        var pool = databaseRegistry.transactionManager(ShardIdentifier.of(0, 0)).primaryConnectionProvider;
+
+        // WHEN
+        var connection = pool.acquire();
+        try (var rows = connection
+                .createStatement()
+                .executeQuery("SELECT current_setting('application_name'), current_setting('statement_timeout')")) {
+            rows.next();
+
+            // THEN - PostgreSQL received both, exactly as written
+            assertThat(rows.getString(1)).isEqualTo("ekbatan-spring-di");
+            assertThat(rows.getString(2)).isEqualTo("4321ms");
+        } finally {
+            pool.release(connection);
+        }
     }
 }

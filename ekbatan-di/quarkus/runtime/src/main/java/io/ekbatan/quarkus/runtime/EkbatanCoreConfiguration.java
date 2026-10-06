@@ -33,6 +33,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.dataformat.javaprop.JavaPropsMapper;
+import tools.jackson.dataformat.javaprop.JavaPropsSchema;
 
 /**
  * Quarkus runtime CDI producer class for Ekbatan's core surface. Produces the
@@ -88,7 +89,11 @@ public class EkbatanCoreConfiguration {
                 .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .build();
         try {
-            return mapper.readPropertiesAs(props, ShardingConfig.class);
+            // Driver setting names keep their dots: the structure is read with '/' as its separator.
+            return mapper.readPropertiesAs(
+                    PropertyKeyNormalizer.toReaderKeys(props),
+                    JavaPropsSchema.emptySchema().withPathSeparator(PropertyKeyNormalizer.READER_PATH_SEPARATOR),
+                    ShardingConfig.class);
         } catch (IOException | JacksonException e) {
             // Jackson 3 throws unchecked JacksonException for binding failures; the IOException
             // path is declared on the method signature but only triggers on lower-level I/O

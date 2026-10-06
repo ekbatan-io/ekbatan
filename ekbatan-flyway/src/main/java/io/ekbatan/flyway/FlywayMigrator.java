@@ -2,6 +2,7 @@ package io.ekbatan.flyway;
 
 import io.ekbatan.core.config.DataSourceConfig;
 import io.ekbatan.core.config.ShardingConfig;
+import io.ekbatan.core.persistence.DataSources;
 import io.ekbatan.core.shard.ShardIdentifier;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -9,9 +10,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.flywaydb.core.api.output.MigrateResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 /**
  * Flyway migration utility for Ekbatan applications.
@@ -24,11 +29,39 @@ import org.flywaydb.core.api.output.MigrateResult;
  *   <li>an explicit set of shard targets, via {@link #migrate(Target...)} or the builder.
  * </ul>
  *
- * <p>On the JVM this is a thin wrapper around normal Flyway configuration. Inside a GraalVM native
- * image it installs an internal resource scanner automatically so Flyway can enumerate bundled
- * {@code classpath:} migrations.
+ * <p><b>How a migration connects.</b> Flyway is handed a data source rather than a URL: one built
+ * from the same {@link DataSourceConfig} the application's pools are built from, by
+ * {@link DataSources#driverDataSource(DataSourceConfig)}. It opens a new connection each
+ * time Flyway asks for one, and Flyway's closing it closes it for good. So a migration connects
+ * the way the application does - {@code driverClassName} included, and through a driver whose
+ * URL Flyway would refuse by itself: Flyway's free edition refuses the {@code jdbc-secretsmanager:}
+ * URL of AWS's Secrets Manager driver, and knows no URL it has no plugin for. Nothing a migration
+ * sets on a connection - a {@code SET statement_timeout} - can reach the application's pool, which
+ * a migration never draws from. A refused login fails at the first attempt, as it did when Flyway
+ * connected by itself, and Flyway's own {@code connectRetries} still applies. Every entry point
+ * connects this way, {@link #migrate(String, String, String, String...)} included.
+ *
+ * <p>Inside a GraalVM native image it installs an internal resource scanner automatically so
+ * Flyway can enumerate bundled {@code classpath:} migrations.
+ *
+ * <p><b>Which database a log line is about.</b> Flyway names only the schema in what it logs -
+ * {@code Migrating schema "public" to version "2"} - and every PostgreSQL shard is usually
+ * {@code public}, so the lines of a sharded run cannot be told apart. While each target is
+ * migrated, its shard and name are therefore put in the SLF4J MDC under {@link #MDC_SHARD}
+ * ({@code 1:0}) and {@link #MDC_TARGET} ({@code mexico/member-0}), so every line Flyway writes for
+ * it carries both wherever the log format or encoder includes MDC values; and one line is logged
+ * before and after each target, so a plain log shows where each one starts and ends. Values a
+ * caller had under those keys are put back afterwards.
  */
 public final class FlywayMigrator {
+
+    private static final Logger LOG = LoggerFactory.getLogger(FlywayMigrator.class);
+
+    /** MDC key holding the shard being migrated, as {@code group:member} - {@code 1:0}. */
+    public static final String MDC_SHARD = "ekbatanShard";
+
+    /** MDC key holding the name of the target being migrated - {@code mexico/member-0}. */
+    public static final String MDC_TARGET = "ekbatanTarget";
 
     /** Conventional Flyway migration location used when no locations are supplied. */
     public static final String DEFAULT_LOCATION = "classpath:db/migration";
@@ -44,11 +77,17 @@ public final class FlywayMigrator {
      */
     public static MigrateResult migrate(DataSourceConfig dataSourceConfig, String... locations) {
         Objects.requireNonNull(dataSourceConfig, "dataSourceConfig is required");
-        return migrate(dataSourceConfig.jdbcUrl, dataSourceConfig.username, dataSourceConfig.password, locations);
+        var normalized = normalizeLocations(locations);
+        return inLogContext(
+                ShardIdentifier.DEFAULT, "default", () -> migrateOne(dataSourceConfig, normalized, cfg -> {}));
     }
 
     /**
-     * Runs Flyway against one datasource.
+     * Runs Flyway against one datasource given by its URL, username and password.
+     *
+     * <p>Exactly {@link #migrate(DataSourceConfig, String...)} with a {@link DataSourceConfig} built
+     * from the three, its checks included: a URL that carries a user name or a secret, or that names
+     * a database Ekbatan does not support, is refused before anything connects.
      *
      * @param jdbcUrl the JDBC URL of the target database.
      * @param username the database username used to apply migrations.
@@ -57,7 +96,13 @@ public final class FlywayMigrator {
      * @return Flyway's migration result.
      */
     public static MigrateResult migrate(String jdbcUrl, String username, String password, String... locations) {
-        return migrateOne(jdbcUrl, username, password, normalizeLocations(locations), cfg -> {});
+        return migrate(
+                DataSourceConfig.Builder.dataSourceConfig()
+                        .jdbcUrl(jdbcUrl)
+                        .username(username)
+                        .password(password)
+                        .build(),
+                locations);
     }
 
     /**
@@ -148,16 +193,17 @@ public final class FlywayMigrator {
         return new Builder();
     }
 
+    /**
+     * Migrates one datasource through connections made the way the application makes its own; see
+     * "How a migration connects" above. The data source needs no closing: it holds no connection
+     * between Flyway's calls, and Flyway closes every connection it opened before
+     * {@code migrate()} returns, failed or not.
+     */
     private static MigrateResult migrateOne(
-            String jdbcUrl,
-            String username,
-            String password,
-            String[] locations,
-            Consumer<FluentConfiguration> customizer) {
-        requireNotBlank(jdbcUrl, "jdbcUrl is required");
-        requireNotBlank(username, "username is required");
-        Objects.requireNonNull(password, "password is required");
-        var cfg = Flyway.configure().dataSource(jdbcUrl, username, password).locations(locations);
+            DataSourceConfig dataSourceConfig, String[] locations, Consumer<FluentConfiguration> customizer) {
+        var cfg = Flyway.configure()
+                .dataSource(DataSources.driverDataSource(dataSourceConfig))
+                .locations(locations);
         applyCustomizerThenProvider(cfg, customizer, NativeImageFlywayResourceProvider.inNativeImage());
         return cfg.load().migrate();
     }
@@ -167,8 +213,7 @@ public final class FlywayMigrator {
      *
      * <p>Extracted from {@link #migrateOne} because the ordering of these two steps <em>is</em> the
      * behaviour: a test that performs them in its own order would prove nothing. Kept free of the
-     * datasource so it stays reachable without a database - {@code dataSource(...)} resolves a
-     * Flyway database plugin eagerly.
+     * datasource so it stays reachable without a database.
      *
      * @param cfg the configuration being prepared.
      * @param customizer the caller's configuration customizer.
@@ -204,6 +249,52 @@ public final class FlywayMigrator {
         }
         cfg.resourceProvider(new NativeImageFlywayResourceProvider(
                 cfg.getLocations(), Thread.currentThread().getContextClassLoader(), StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Runs one target's migration with its shard and name in the MDC, and a line logged before
+     * and after it.
+     *
+     * <p>Package-private so the MDC handling can be tested without a database. Values a caller
+     * had under the two keys are put back afterwards, whether the migration succeeded or not.
+     *
+     * @param shard the shard being migrated.
+     * @param name the target's name.
+     * @param migration the migration itself.
+     * @return what the migration returned.
+     */
+    static MigrateResult inLogContext(ShardIdentifier shard, String name, Supplier<MigrateResult> migration) {
+        var label = label(shard, name);
+        var previousShard = MDC.get(MDC_SHARD);
+        var previousTarget = MDC.get(MDC_TARGET);
+        MDC.put(MDC_SHARD, shard.group + ":" + shard.member);
+        MDC.put(MDC_TARGET, name);
+        try {
+            LOG.info("Migrating {}", label);
+            var result = migration.get();
+            var version = Objects.requireNonNullElse(
+                    result.targetSchemaVersion, Objects.requireNonNullElse(result.initialSchemaVersion, "<< empty >>"));
+            LOG.info("{} is at version {} ({} applied)", label, version, result.migrationsExecuted);
+            return result;
+        } catch (RuntimeException e) {
+            LOG.error("Migrating {} failed", label);
+            throw e;
+        } finally {
+            restore(MDC_SHARD, previousShard);
+            restore(MDC_TARGET, previousTarget);
+        }
+    }
+
+    private static String label(ShardIdentifier shard, String name) {
+        return name + " (" + shard.group + ":" + shard.member + ")";
+    }
+
+    private static void restore(String key, String previous) {
+        if (previous == null) {
+            MDC.remove(key);
+        } else {
+            MDC.put(key, previous);
+        }
     }
 
     private static String[] normalizeLocations(String[] locations) {
@@ -339,7 +430,8 @@ public final class FlywayMigrator {
          * <p>Runs before the native-image resource provider is installed, so changes made here -
          * including {@code locations(...)} - are what the native scanner is built from. A customizer
          * that sets its own {@link org.flywaydb.core.api.ResourceProvider} keeps it: the built-in
-         * one is only installed when none was supplied.
+         * one is only installed when none was supplied. Likewise a customizer that sets a data
+         * source of its own replaces the one built from the target's configuration.
          *
          * @param customizer Flyway configuration customizer.
          * @return this builder.
@@ -360,10 +452,21 @@ public final class FlywayMigrator {
             }
             List<Result> results = new ArrayList<>();
             for (var target : targets) {
-                var dataSource = target.dataSourceConfig();
-                var result =
-                        migrateOne(dataSource.jdbcUrl, dataSource.username, dataSource.password, locations, customizer);
-                results.add(new Result(target, result));
+                try {
+                    var result = inLogContext(
+                            target.shard(),
+                            target.name(),
+                            () -> migrateOne(target.dataSourceConfig(), locations, customizer));
+                    results.add(new Result(target, result));
+                } catch (RuntimeException e) {
+                    // Fail-fast leaves a cluster half-migrated; say which half, since Flyway's own
+                    // error names neither the shard nor the targets before it.
+                    LOG.error(
+                            "Stopped at {}; already migrated: {}",
+                            label(target.shard(), target.name()),
+                            results.stream().map(r -> r.target().name()).toList());
+                    throw e;
+                }
             }
             return List.copyOf(results);
         }

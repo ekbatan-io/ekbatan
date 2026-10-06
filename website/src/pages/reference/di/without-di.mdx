@@ -2,12 +2,12 @@
 layout: ../../../layouts/DocLayout.astro
 title: 'DI · Plain Java'
 activeSection: reference
-lead: 'Ekbatan does not require Spring, Quarkus, Micronaut, or any DI container. Everything the framework needs is reachable through a small set of builders. You can wire it up by hand from a plain <code>main()</code>, a CLI, a Servlet listener, or any plain-JVM bootstrap path. The integration tests under <a href="../../ekbatan-integration-tests/postgres-simple"><code>ekbatan-integration-tests/postgres-simple/</code></a> do exactly this — no Spring on the classpath.'
+lead: 'Ekbatan does not require Spring, Quarkus, Micronaut, or any DI container. Everything the framework needs is reachable through a small set of builders. You can wire it up by hand from a plain <code>main()</code>, a CLI, a Servlet listener, or any plain-JVM bootstrap path. The integration tests under <a href="https://github.com/ekbatan-io/ekbatan/tree/main/ekbatan-integration-tests/postgres-simple"><code>ekbatan-integration-tests/postgres-simple/</code></a> do exactly this — no Spring on the classpath.'
 ---
 
-This page walks through the **complete** wiring of one running app. Domain classes (the Wallet model, three actions, the repository) are taken straight from [`postgres-simple`](../../ekbatan-integration-tests/postgres-simple); the wiring step at the end is what you'd typically run from `main()` or from a once-per-startup hook in your own framework.
+This page walks through the **complete** wiring of one running app. Domain classes (the Wallet model, three actions, the repository) are taken straight from [`postgres-simple`](https://github.com/ekbatan-io/ekbatan/tree/main/ekbatan-integration-tests/postgres-simple); the wiring step at the end is what you'd typically run from `main()` or from a once-per-startup hook in your own framework.
 
-If you'd rather have most of this generated for you, jump to [Wiring with DI](with-di.md).
+If you'd rather have most of this generated for you, jump to your stack's guide: [Spring Boot](/reference/di/spring-boot/), [Quarkus](/reference/di/quarkus/), or [Micronaut](/reference/di/micronaut/).
 
 ## What we're wiring
 
@@ -163,6 +163,7 @@ import static io.ekbatan.events.localeventhandler.EventHandlerRegistry.eventHand
 import static io.ekbatan.events.localeventhandler.job.EventFanoutJob.eventFanoutJob;
 import static io.ekbatan.events.localeventhandler.job.EventHandlingJob.eventHandlingJob;
 import io.ekbatan.flyway.FlywayMigrator;
+import java.util.Map;
 // …
 
 public class Application {
@@ -177,6 +178,9 @@ public class Application {
                 .jdbcUrl("jdbc:postgresql://primary:5432/wallets")
                 .username("wallets_app")
                 .password(System.getenv("APP_DB_PASSWORD"))
+                // extra driver settings, each name as the driver spells it; passed to the
+                // driver beside the URL and never printed (see "Connecting to the database")
+                .dataSourceProperties(Map.of("ApplicationName", "wallet-service"))
                 .maximumPoolSize(20)
                 .build();
 
@@ -197,9 +201,10 @@ public class Application {
                 .build();
 
         // ─── 2. Run Flyway migrations ────────────────────────────────────────
-        // FlywayMigrator is GraalVM-native-image-aware. On JVM it's a thin wrapper
-        // around Flyway.configure().dataSource(...).migrate().
-        FlywayMigrator.migrate(primary.jdbcUrl, primary.username, primary.password);
+        // FlywayMigrator connects the way the pools above do - same driver, same
+        // settings - but on connections of its own, closed when it is done. It is
+        // also GraalVM-native-image-aware.
+        FlywayMigrator.migrate(primary);
 
         // ─── 3. TransactionManager + DatabaseRegistry ────────────────────────
         // Each shard gets its own TransactionManager. With one shard (the default),
@@ -293,7 +298,7 @@ public class Application {
 
 | Block | Concept | Doc |
 |---|---|---|
-| 1. Datasources | `DataSourceConfig` carries the Hikari knobs and resolves the dialect from the JDBC URL | [Sharding](/reference/sharding/) covers the broader topology |
+| 1. Datasources | `DataSourceConfig` carries the login, the driver settings and the Hikari knobs, and resolves the dialect from the JDBC URL | [Connecting to the database](/reference/connecting/) covers every field; [Sharding](/reference/sharding/) the broader topology |
 | 2. Migrations | `FlywayMigrator.migrate(...)` runs Flyway, native-image-aware | [Native image](/reference/runtime/native-image/) |
 | 3. TM + registry | One `TransactionManager` per shard; `DatabaseRegistry` indexes them by `ShardIdentifier` | [The outbox](/learn/outbox/), [Sharding](/reference/sharding/) |
 | 4. Repositories | One repository instance per persistable type, registered into a `RepositoryRegistry` | [Repositories](/reference/repository/) |
@@ -315,11 +320,11 @@ The 9 blocks are arranged so you can drop any **optional** piece by deleting a s
 
 ## Same thing with less code
 
-Most of the wiring above (datasources, registry construction, lifecycle) is mechanical glue your application doesn't really care about. If you're already running on Spring Boot, Quarkus, or Micronaut, the framework's DI integration replaces blocks 1–8 with a small dependency block and four `@Ekbatan*` annotations on the classes you write. See [Wiring with DI](with-di.md).
+Most of the wiring above (datasources, registry construction, lifecycle) is mechanical glue your application doesn't really care about. If you're already running on Spring Boot, Quarkus, or Micronaut, the framework's DI integration replaces blocks 1–8 with a small dependency block and four `@Ekbatan*` annotations on the classes you write. See [Spring Boot](/reference/di/spring-boot/), [Quarkus](/reference/di/quarkus/), or [Micronaut](/reference/di/micronaut/).
 
 ## See also
 
-- [Wiring with DI](with-di.md) — the same end state, in roughly 10% of the code
+- [Wiring with Spring Boot](/reference/di/spring-boot/) / [Quarkus](/reference/di/quarkus/) / [Micronaut](/reference/di/micronaut/) — the same end state, in roughly 10% of the code
 - [Actions](/learn/actions/) — what `ActionExecutor` actually does when you call `execute(...)`
 - [Sharding](/reference/sharding/) — extending block 3 to multiple shards
 - [Local event handler](/reference/events/local-event-handler/) — the fan-out / dispatch jobs registered in block 8

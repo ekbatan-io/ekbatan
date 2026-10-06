@@ -40,6 +40,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.dataformat.javaprop.JavaPropsMapper;
+import tools.jackson.dataformat.javaprop.JavaPropsSchema;
 
 /**
  * Spring Boot auto-configuration for Ekbatan's core surface: binds {@code ekbatan.sharding.*}
@@ -94,7 +95,11 @@ public class EkbatanCoreConfiguration {
                 .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .build();
         try {
-            return mapper.readPropertiesAs(props, ShardingConfig.class);
+            // Driver setting names keep their dots: the structure is read with '/' as its separator.
+            return mapper.readPropertiesAs(
+                    PropertyKeyNormalizer.toReaderKeys(props),
+                    JavaPropsSchema.emptySchema().withPathSeparator(PropertyKeyNormalizer.READER_PATH_SEPARATOR),
+                    ShardingConfig.class);
         } catch (IOException | JacksonException e) {
             throw new IllegalStateException("Failed to bind 'ekbatan.sharding' configuration to ShardingConfig", e);
         }

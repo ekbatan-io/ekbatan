@@ -623,7 +623,9 @@ public abstract class BaseRepositoryTest {
      *
      * <p>Both assertions below hold trivially under a UTC JVM. Running the suite with a non-UTC
      * default zone (for example {@code -Duser.timezone=America/New_York}) is what makes this test
-     * able to observe the timestamp defect at all.
+     * able to observe the timestamp defect at all. The {@code *TimeZoneIntegrationTest} classes
+     * run the JVM outside UTC themselves and check the stored value of both paths, so they catch
+     * it on a UTC machine too.
      */
     @Test
     void should_updateAll_and_update_store_identical_timestamps() {

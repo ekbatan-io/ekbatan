@@ -100,6 +100,7 @@ A few rules:
 
 - One id can be staged at most once per action. Re-staging the same id (whether `add` then `update` or twice as `add`) throws `IllegalStateException`.
 - `update(entity)` returns `entity.nextVersion()` so subsequent reads inside the same `perform()` see the incremented version.
+- `null` is refused with a `NullPointerException`: an entity, a collection, or a `null` inside a collection.
 - The plan is **not thread-safe**. If `perform()` spawns parallel work to gather data, join the children before mutating the plan.
 
 ## Singletons + per-call state via ScopedValue

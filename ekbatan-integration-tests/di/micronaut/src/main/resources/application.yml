@@ -2,6 +2,19 @@
 # the dynamic Testcontainers coordinates (ekbatan.sharding.*) — those override anything here.
 ekbatan:
   namespace: test.micronaut
+  # Driver settings for the application's primary pool, written the way an application writes
+  # them: under the kebab-case key, each name exactly as the driver spells it. The rest of the
+  # shard comes from the test's TestPropertyProvider and its container.
+  # EkbatanMicronautIntegrationTest reads both back from a live connection.
+  sharding:
+    groups:
+      - members:
+          - configs:
+              primary-config:
+                data-source-properties:
+                  # a placeholder, resolved before Ekbatan reads it
+                  ApplicationName: ${EKBATAN_DI_APPLICATION_NAME:ekbatan-micronaut-di}
+                  options: "-c statement_timeout=4321"
   local-event-handler:
     fanout-poll-delay: PT0.2S
     handling-poll-delay: PT0.2S
