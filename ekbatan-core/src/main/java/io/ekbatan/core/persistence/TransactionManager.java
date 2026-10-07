@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 public class TransactionManager implements AutoCloseable {
 
     private static final Logger LOG = LoggerFactory.getLogger(TransactionManager.class);
-    private static final Tracer TRACER = GlobalOpenTelemetry.get().getTracer("io.ekbatan.core", "1.1.0");
+    private static final Tracer TRACER = GlobalOpenTelemetry.get().getTracer("io.ekbatan.core", "1.1.1");
 
     /** The SQL dialect for this shard; consulted by repositories for dialect-specific SQL. */
     public final SQLDialect dialect;

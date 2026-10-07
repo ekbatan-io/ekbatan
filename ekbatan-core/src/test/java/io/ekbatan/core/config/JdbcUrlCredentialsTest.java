@@ -18,7 +18,6 @@ import java.util.TreeSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -91,21 +90,43 @@ class JdbcUrlCredentialsTest {
                 name.toLowerCase(Locale.ROOT),
                 "%" + Integer.toHexString(name.charAt(0)).toUpperCase(Locale.ROOT) + name.substring(1));
 
-        var softly = new SoftAssertions();
+        // WHEN - each refused, pointing where the value goes, never repeating it or the URL
+        var wrong = new ArrayList<String>();
         for (var spelling : spellings) {
             for (var url : urlsCarrying(spelling).entrySet()) {
-                // WHEN / THEN - refused, pointing where the value goes, never repeating it or the URL
                 var shown = spelling.startsWith("%") ? name : spelling;
-                softly.assertThatThrownBy(() -> JdbcUrlCredentials.requireNoneIn(url.getValue()))
-                        .as("%s, %s", url.getKey(), spelling)
-                        .isInstanceOf(IllegalArgumentException.class)
-                        .hasMessageContaining("'" + shown + "' setting")
-                        .hasMessageContaining(insteadOf(kind))
-                        .hasMessageNotContaining(VALUE)
-                        .hasMessageNotContaining("db1");
+                var problem = problemWithTheRefusal(url.getValue(), shown, kind);
+                if (problem != null) {
+                    wrong.add(url.getKey() + ", " + spelling + ": " + problem);
+                }
             }
         }
-        softly.assertAll();
+
+        // THEN
+        assertThat(wrong).isEmpty();
+    }
+
+    /** What is wrong with how a URL carrying the setting is refused, or {@code null} if nothing is. */
+    private static String problemWithTheRefusal(String url, String shown, JdbcUrlCredentials.Kind kind) {
+        try {
+            JdbcUrlCredentials.requireNoneIn(url);
+            return "accepted";
+        } catch (IllegalArgumentException e) {
+            var message = e.getMessage();
+            if (!message.contains("'" + shown + "' setting")) {
+                return "does not name the setting: " + message;
+            }
+            if (!message.contains(insteadOf(kind))) {
+                return "does not say where it goes: " + message;
+            }
+            if (message.contains(VALUE)) {
+                return "repeats the value";
+            }
+            if (message.contains("db1")) {
+                return "repeats the URL";
+            }
+            return null;
+        }
     }
 
     private static String insteadOf(JdbcUrlCredentials.Kind kind) {
@@ -171,13 +192,16 @@ class JdbcUrlCredentialsTest {
                 .toList();
 
         // WHEN / THEN - every marked name is refused as what the ledger says it holds
-        var softly = new SoftAssertions();
+        var wrong = new ArrayList<String>();
         for (var entry : ledger) {
-            var kind = softly.assertThat(JdbcUrlCredentials.kindOf(entry.getKey()))
-                    .as("%s: %s", entry.getValue().driver(), entry.getKey())
-                    .isPresent();
-            if (!otherMeaning(entry.getValue(), entry.getKey())) {
-                kind.contains(entry.getValue().checkKind());
+            var name = entry.getValue().driver() + ": " + entry.getKey();
+            var kind = JdbcUrlCredentials.kindOf(entry.getKey());
+            if (kind.isEmpty()) {
+                wrong.add(name + " is not refused");
+            } else if (!otherMeaning(entry.getValue(), entry.getKey())
+                    && kind.get() != entry.getValue().checkKind()) {
+                wrong.add(name + " is refused as " + kind.get() + ", the ledger says "
+                        + entry.getValue().checkKind());
             }
         }
 
@@ -186,13 +210,16 @@ class JdbcUrlCredentialsTest {
                 .collect(Collectors.toMap(
                         Map.Entry::getKey, entry -> entry.getValue().checkKind(), (a, b) -> a));
         for (var setting : JdbcUrlCredentials.SETTINGS.entrySet()) {
-            softly.assertThat(marked.get(setting.getKey())).as(setting.getKey()).isEqualTo(setting.getValue());
+            if (marked.get(setting.getKey()) != setting.getValue()) {
+                wrong.add(setting.getKey() + " is refused as " + setting.getValue() + ", the ledger says "
+                        + marked.get(setting.getKey()));
+            }
         }
+        assertThat(wrong).isEmpty();
 
         // AND - so is every prefix
-        softly.assertThat(JdbcUrlCredentials.PASSED_ON_PREFIXES)
+        assertThat(JdbcUrlCredentials.PASSED_ON_PREFIXES)
                 .containsExactlyInAnyOrderElementsOf(DriverSettingsLedger.prefixes());
-        softly.assertAll();
     }
 
     private static Stream<Arguments> prefixedNames() {

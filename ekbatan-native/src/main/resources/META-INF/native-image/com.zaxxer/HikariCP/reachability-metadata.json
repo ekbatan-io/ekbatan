@@ -125,6 +125,7 @@
         "typeReached" : "com.zaxxer.hikari.util.PropertyElf"
       },
       "type" : "com.zaxxer.hikari.HikariConfig",
+      "allPublicMethods" : true,
       "methods" : [
         {
           "name" : "setJdbcUrl",

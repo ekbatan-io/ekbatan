@@ -367,7 +367,7 @@ Why this shape:
 - **`@Context` is eager.** Micronaut instantiates `@Context` beans during application startup, before lazy `@Singleton` beans (including Ekbatan's `DatabaseRegistry`). The constructor calls `.migrate()` synchronously — so by the time anything else touches the database, the schema is in place.
 - **Single source of truth.** Connection coordinates live only in `ekbatan.sharding.*`. No YAML `flyway:` block, no placeholder interpolation, no `FlywayConfigurationCustomizer` override to maintain.
 - **Same shape for one shard or many.** `FlywayMigrator.migrate(shardingConfig)` runs the configured migration locations on every member's `primaryConfig`, sequentially. With a single member, that is just one migration run.
-- **Native works with the same application code.** In a native image, `FlywayMigrator` installs an internal classpath resource scanner so migrations can still be discovered inside the binary.
+- **Native works with the same application code.** In a native image, `FlywayMigrator` installs an internal resource scanner so migrations are still found, whether packed inside the binary (`classpath:`) or in a folder on disk (`filesystem:`).
 
 If you'd rather use the auto-wired customizer path (`@Singleton @Named("default") FlywayConfigurationCustomizer` bound to a `flyway.datasources.default` YAML block), that still works — it's just more moving parts.
 

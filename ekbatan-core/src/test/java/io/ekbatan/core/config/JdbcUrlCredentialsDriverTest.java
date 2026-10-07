@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.postgresql.Driver;
 
 /**
@@ -15,6 +16,10 @@ import org.postgresql.Driver;
  * driver reads, the check refuses; and a URL built only from harmless settings, or from empty
  * ones, is accepted, whatever its host and database are named.
  */
+// Reads the drivers' own URL readers by reflection, which a native image blocks unless every method
+// is registered. What it proves - the check agrees with the drivers - is the same in a native
+// image, where JdbcUrlCredentialsTest runs the check itself.
+@DisabledInNativeImage
 class JdbcUrlCredentialsDriverTest {
 
     private static final String SECRET = "Zq7v";

@@ -248,7 +248,7 @@ public final class FlywayMigrator {
             return;
         }
         cfg.resourceProvider(new NativeImageFlywayResourceProvider(
-                cfg.getLocations(), Thread.currentThread().getContextClassLoader(), StandardCharsets.UTF_8));
+                cfg, Thread.currentThread().getContextClassLoader(), StandardCharsets.UTF_8));
     }
 
     /**

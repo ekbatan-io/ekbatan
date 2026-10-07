@@ -20,7 +20,7 @@ Ekbatan native-image support is split across your build tool, your framework int
 Add the module to applications that build native binaries:
 
 ```kotlin
-implementation("io.github.ekbatan-io:ekbatan-native:1.1.0")
+implementation("io.github.ekbatan-io:ekbatan-native:1.1.1")
 ```
 
 or Maven:
@@ -29,21 +29,21 @@ or Maven:
 <dependency>
   <groupId>io.github.ekbatan-io</groupId>
   <artifactId>ekbatan-native</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
 </dependency>
 ```
 
 If your app calls Ekbatan's programmatic Flyway migrator, also add `ekbatan-flyway`:
 
 ```kotlin
-implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.0")
+implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.1")
 ```
 
 ```xml
 <dependency>
   <groupId>io.github.ekbatan-io</groupId>
   <artifactId>ekbatan-flyway</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
 </dependency>
 ```
 
@@ -125,7 +125,7 @@ Flyway's normal classpath scanner does not always work inside a native image bec
 | Micronaut | The native examples use a small startup migrator that calls `FlywayMigrator.migrate(...)`. They keep `micronaut-flyway` on the classpath for Flyway/native dependencies and hints, but do not use a `flyway:` auto-config block. |
 | Plain Java / raw tests | Use `FlywayMigrator.migrate(...)` directly. |
 
-`FlywayMigrator` runs normal Flyway, with two additions. It connects the way your application's pools do: Flyway gets connections made from the same `DataSourceConfig` (same driver, `driver-class-name` included), each opened for the migration and closed when it ends, never one of the application's pooled connections. And in a native image it installs an internal resource scanner that can walk bundled `classpath:` migrations.
+`FlywayMigrator` runs normal Flyway, with two additions. It connects the way your application's pools do: Flyway gets connections made from the same `DataSourceConfig` (same driver, `driver-class-name` included), each opened for the migration and closed when it ends, never one of the application's pooled connections. And in a native image it installs an internal resource scanner that reads both kinds of location built into Flyway: `classpath:` migrations packed into the binary, and `filesystem:` folders on disk. A kind that a Flyway plugin adds, such as `s3:`, stops the migration with an error rather than being skipped.
 
 ```java
 import io.ekbatan.flyway.FlywayMigrator;

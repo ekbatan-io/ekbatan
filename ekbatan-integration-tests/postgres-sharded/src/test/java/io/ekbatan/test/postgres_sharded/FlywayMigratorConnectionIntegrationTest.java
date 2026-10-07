@@ -19,6 +19,7 @@ import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.FlywayException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledInNativeImage;
 import org.junit.jupiter.api.io.TempDir;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -66,6 +67,9 @@ class FlywayMigratorConnectionIntegrationTest {
                 .build();
     }
 
+    // The driver is loaded by its class name, which a native image allows only for classes
+    // registered for reflection - this test's own driver is not.
+    @DisabledInNativeImage
     @Test
     void a_driver_named_in_the_config_is_the_one_a_migration_connects_through() throws Exception {
         // GIVEN - a database of its own, under a URL Flyway has no plugin for
@@ -93,6 +97,8 @@ class FlywayMigratorConnectionIntegrationTest {
                 .hasMessageContaining("No Flyway database plugin found");
     }
 
+    // Unregistering a driver throws SecurityException inside a native image.
+    @DisabledInNativeImage
     @Test
     void the_url_overload_connects_the_same_way() throws Exception {
         // GIVEN - the wrapping driver registered, as a real one registers itself, and a database

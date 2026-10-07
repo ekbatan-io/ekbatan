@@ -313,7 +313,7 @@ Keep `quarkus-flyway` on the classpath for Flyway/Quarkus/native-image integrati
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.0")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.1")
 
     // Quarkus integration for Flyway and native-image support.
     implementation("io.quarkus:quarkus-flyway")
@@ -331,7 +331,7 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 </dependency>
 <dependency>
     <groupId>io.quarkus</groupId>

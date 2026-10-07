@@ -1,0 +1,67 @@
+{
+  "reflection" : [
+    {
+      "condition" : {
+        "typeReached" : "org.flywaydb.core.internal.exception.FlywaySqlException"
+      },
+      "type" : "org.flywaydb.core.internal.exception.sqlExceptions.FlywaySqlServerUntrustedCertificateSqlException",
+      "methods" : [
+        {
+          "name" : "isFlywaySpecificVersionOf",
+          "parameterTypes" : [
+            "java.sql.SQLException"
+          ]
+        },
+        {
+          "name" : "<init>",
+          "parameterTypes" : [
+            "java.sql.SQLException",
+            "javax.sql.DataSource"
+          ]
+        }
+      ]
+    },
+    {
+      "condition" : {
+        "typeReached" : "org.flywaydb.core.internal.exception.FlywaySqlException"
+      },
+      "type" : "org.flywaydb.core.internal.exception.sqlExceptions.FlywaySqlNoIntegratedAuthException",
+      "methods" : [
+        {
+          "name" : "isFlywaySpecificVersionOf",
+          "parameterTypes" : [
+            "java.sql.SQLException"
+          ]
+        },
+        {
+          "name" : "<init>",
+          "parameterTypes" : [
+            "java.sql.SQLException",
+            "javax.sql.DataSource"
+          ]
+        }
+      ]
+    },
+    {
+      "condition" : {
+        "typeReached" : "org.flywaydb.core.internal.exception.FlywaySqlException"
+      },
+      "type" : "org.flywaydb.core.internal.exception.sqlExceptions.FlywaySqlNoDriversForInteractiveAuthException",
+      "methods" : [
+        {
+          "name" : "isFlywaySpecificVersionOf",
+          "parameterTypes" : [
+            "java.sql.SQLException"
+          ]
+        },
+        {
+          "name" : "<init>",
+          "parameterTypes" : [
+            "java.sql.SQLException",
+            "javax.sql.DataSource"
+          ]
+        }
+      ]
+    }
+  ]
+}
