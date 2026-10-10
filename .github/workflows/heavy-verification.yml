@@ -166,9 +166,64 @@ jobs:
             **/build/reports/tests/nativeTest/**
             **/build/test-results/nativeTest/**
 
+  # The examples get Ekbatan the way an application does, from a Maven repository - but from this
+  # commit, not from Maven Central. It is built once here and handed to every example job, which
+  # puts it in its runner's ~/.m2; the examples look there before Maven Central. So they test the
+  # latest code, and nothing has to be published.
+  ekbatan-artifacts:
+    name: Build Ekbatan For The Examples
+    needs: activity
+    if: needs.activity.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set Up JDK 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Set Up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # An example on another version would quietly fetch that version from Maven Central and test
+      # it instead of this commit.
+      - name: Check The Examples Use This Version
+        shell: bash
+        run: |
+          set -euo pipefail
+          version=$(sed -n 's/^version=//p' gradle.properties | tr -d '[:space:]')
+          other=$( { grep -H '^ekbatanVersion=' ekbatan-examples/*/gradle.properties || true; \
+                     grep -H '<ekbatan.version>' ekbatan-examples/*/pom.xml || true; } \
+            | grep -v -e "ekbatanVersion=$version\$" -e "<ekbatan.version>$version</ekbatan.version>" || true)
+          if [[ -n "$other" ]]; then
+            echo "::error::These examples are not on Ekbatan $version:"
+            echo "$other"
+            exit 1
+          fi
+          echo "Every example is on Ekbatan $version"
+
+      - name: Publish To The Local Maven Repository
+        shell: bash
+        run: |
+          ./gradlew publishToMavenLocal --stacktrace
+          mkdir -p ekbatan-m2/io/github
+          cp -R ~/.m2/repository/io/github/ekbatan-io ekbatan-m2/io/github/
+
+      - name: Upload Ekbatan
+        uses: actions/upload-artifact@v4
+        with:
+          name: ekbatan-m2
+          path: ekbatan-m2
+          if-no-files-found: error
+          retention-days: 1
+
   examples-jvm-tests:
     name: Example JVM Tests / ${{ matrix.project }}
-    needs: activity
+    needs: [activity, ekbatan-artifacts]
     if: needs.activity.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -232,6 +287,18 @@ jobs:
       - name: Set Up Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Download Ekbatan
+        uses: actions/download-artifact@v4
+        with:
+          name: ekbatan-m2
+          path: ekbatan-m2
+
+      - name: Put Ekbatan In The Local Maven Repository
+        shell: bash
+        run: |
+          mkdir -p ~/.m2/repository
+          cp -R ekbatan-m2/. ~/.m2/repository/
+
       - name: Run Example JVM Tests
         working-directory: ekbatan-examples/${{ matrix.project }}
         shell: bash
@@ -251,7 +318,7 @@ jobs:
 
   examples-native-tests:
     name: Example Native Verification / ${{ matrix.project }}
-    needs: activity
+    needs: [activity, ekbatan-artifacts]
     if: needs.activity.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 180
@@ -338,6 +405,18 @@ jobs:
         run: |
           java -version
           native-image --version
+
+      - name: Download Ekbatan
+        uses: actions/download-artifact@v4
+        with:
+          name: ekbatan-m2
+          path: ekbatan-m2
+
+      - name: Put Ekbatan In The Local Maven Repository
+        shell: bash
+        run: |
+          mkdir -p ~/.m2/repository
+          cp -R ekbatan-m2/. ~/.m2/repository/
 
       - name: Run Example Native Tests
         working-directory: ekbatan-examples/${{ matrix.project }}

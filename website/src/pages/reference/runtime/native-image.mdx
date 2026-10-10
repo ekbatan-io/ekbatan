@@ -154,7 +154,7 @@ The exact command depends on the stack:
 | Micronaut Gradle | `./gradlew nativeCompile` | `./gradlew nativeTest` |
 | Micronaut Maven | `./mvnw -Dpackaging=native-image -DskipTests package` | Native tests are not enabled in the Maven Micronaut examples. |
 
-Ekbatan's Heavy Verification workflow runs JVM tests plus native builds/tests for the examples. The root Gradle native sweep uses:
+Ekbatan's Heavy Verification workflow runs JVM tests plus native builds/tests for the examples. The examples use Ekbatan built from the same commit, not a release from Maven Central. The root Gradle native sweep uses:
 
 ```bash
 ./gradlew nativeTest --parallel --max-workers=4 --continue --stacktrace

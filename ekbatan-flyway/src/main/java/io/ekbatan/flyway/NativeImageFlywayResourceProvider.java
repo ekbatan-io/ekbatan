@@ -2,6 +2,7 @@ package io.ekbatan.flyway;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.FileSystem;
@@ -14,7 +15,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
-import org.flywaydb.core.api.CoreLocationPrefix;
 import org.flywaydb.core.api.FlywayException;
 import org.flywaydb.core.api.Location;
 import org.flywaydb.core.api.ResourceProvider;
@@ -30,6 +30,10 @@ import org.flywaydb.core.internal.scanner.filesystem.FileSystemScanner;
  * to Flyway's own scanner, which reads it in a native image as it does on the JVM. Any other
  * kind of location - one a Flyway plugin adds, such as {@code s3:} - is refused rather than skipped,
  * so a native image never migrates nothing in silence.
+ *
+ * <p>It runs on whichever Flyway the application ends up with, not only the one Ekbatan is built
+ * against: Spring Boot's Maven parent picks Flyway 11, and Micronaut's picks Flyway 10. So it uses
+ * nothing that is in Flyway 12 alone.
  *
  * <p>Application code calls {@link FlywayMigrator}; the migrator installs this provider
  * automatically when the process is running as a native image. This class is intentionally
@@ -90,7 +94,7 @@ final class NativeImageFlywayResourceProvider implements ResourceProvider {
     public Collection<LoadableResource> getResources(String prefix, String[] suffixes) {
         // resource:/ exists only inside a native image, so it is opened only when a classpath
         // location needs it
-        if (Arrays.stream(locations).noneMatch(CoreLocationPrefix::isClassPath)) {
+        if (Arrays.stream(locations).noneMatch(NativeImageFlywayResourceProvider::isClassPath)) {
             return collect(null, prefix, suffixes);
         }
         try (FileSystem image = FileSystems.newFileSystem(URI.create("resource:/"), Map.of())) {
@@ -103,9 +107,9 @@ final class NativeImageFlywayResourceProvider implements ResourceProvider {
     private List<LoadableResource> collect(FileSystem image, String prefix, String[] suffixes) {
         List<LoadableResource> out = new ArrayList<>();
         for (Location location : locations) {
-            if (CoreLocationPrefix.isClassPath(location)) {
+            if (isClassPath(location)) {
                 out.addAll(inTheImage(image, location, prefix, suffixes));
-            } else if (!CoreLocationPrefix.isFileSystem(location)) {
+            } else if (!isFileSystem(location)) {
                 // a kind a Flyway plugin adds - s3: from flyway-locations-s3, gcs: - refused rather than
                 // skipped, so a native image never migrates nothing in silence
                 throw new FlywayException("Migrations at " + location + " cannot be read in a native image: only"
@@ -142,12 +146,44 @@ final class NativeImageFlywayResourceProvider implements ResourceProvider {
 
     private List<LoadableResource> onDisk() {
         if (onDisk == null) {
-            var scanner = new FileSystemScanner(configuration);
+            var scanner = fileSystemScanner();
             onDisk = Arrays.stream(locations)
-                    .filter(CoreLocationPrefix::isFileSystem)
+                    .filter(NativeImageFlywayResourceProvider::isFileSystem)
                     .flatMap(location -> scanner.scanForResources(location).stream())
                     .toList();
         }
         return onDisk;
+    }
+
+    /**
+     * Flyway's own folder reader. Flyway 12 builds it from the configuration alone, where Flyway 10
+     * and 11 take the stream setting first, so the constructor this Flyway has is looked up.
+     */
+    private FileSystemScanner fileSystemScanner() {
+        try {
+            try {
+                return FileSystemScanner.class
+                        .getConstructor(Configuration.class)
+                        .newInstance(configuration);
+            } catch (NoSuchMethodException beforeFlyway12) {
+                return FileSystemScanner.class
+                        .getConstructor(boolean.class, Configuration.class)
+                        .newInstance(configuration.isStream(), configuration);
+            }
+        } catch (InvocationTargetException e) {
+            throw new FlywayException("Flyway's folder reader could not be made", e.getCause());
+        } catch (ReflectiveOperationException e) {
+            throw new FlywayException("This Flyway version's folder reader is not one Ekbatan knows", e);
+        }
+    }
+
+    // The prefix is compared, rather than Location.isClassPath() - deprecated in Flyway 12 - or
+    // CoreLocationPrefix, which Flyway 10 and 11 do not have
+    private static boolean isClassPath(Location location) {
+        return "classpath:".equals(location.getPrefix());
+    }
+
+    private static boolean isFileSystem(Location location) {
+        return "filesystem:".equals(location.getPrefix());
     }
 }

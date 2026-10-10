@@ -125,7 +125,6 @@
         "typeReached" : "com.zaxxer.hikari.util.PropertyElf"
       },
       "type" : "com.zaxxer.hikari.HikariConfig",
-      "allPublicMethods" : true,
       "methods" : [
         {
           "name" : "setJdbcUrl",
@@ -150,6 +149,162 @@
           "parameterTypes" : [
             "java.lang.String"
           ]
+        },
+        {
+          "name" : "getCatalog",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getConnectionTimeout",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getIdleTimeout",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getLeakDetectionThreshold",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getMaxLifetime",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getMaximumPoolSize",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getMinimumIdle",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getPassword",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getUsername",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getCredentials",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getValidationTimeout",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getConnectionTestQuery",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getConnectionInitSql",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getDataSource",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getDataSourceClassName",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getDataSourceJNDI",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getDataSourceProperties",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getDriverClassName",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getJdbcUrl",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "isAutoCommit",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "isAllowPoolSuspension",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getInitializationFailTimeout",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "isIsolateInternalQueries",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getMetricsTrackerFactory",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getMetricRegistry",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getHealthCheckRegistry",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getHealthCheckProperties",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getKeepaliveTime",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "isReadOnly",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "isRegisterMbeans",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getPoolName",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getScheduledExecutor",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getTransactionIsolation",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getSchema",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getCredentialsProviderClassName",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getCredentialsProvider",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getExceptionOverrideClassName",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getExceptionOverride",
+          "parameterTypes" : [ ]
+        },
+        {
+          "name" : "getThreadFactory",
+          "parameterTypes" : [ ]
         }
       ]
     },

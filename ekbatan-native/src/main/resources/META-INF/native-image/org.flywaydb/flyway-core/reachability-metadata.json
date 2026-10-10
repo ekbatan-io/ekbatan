@@ -62,6 +62,27 @@
           ]
         }
       ]
+    },
+    {
+      "condition" : {
+        "typeReached" : "io.ekbatan.flyway.NativeImageFlywayResourceProvider"
+      },
+      "type" : "org.flywaydb.core.internal.scanner.filesystem.FileSystemScanner",
+      "methods" : [
+        {
+          "name" : "<init>",
+          "parameterTypes" : [
+            "org.flywaydb.core.api.configuration.Configuration"
+          ]
+        },
+        {
+          "name" : "<init>",
+          "parameterTypes" : [
+            "boolean",
+            "org.flywaydb.core.api.configuration.Configuration"
+          ]
+        }
+      ]
     }
   ]
 }
