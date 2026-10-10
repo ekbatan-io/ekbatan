@@ -10,6 +10,13 @@ java {
     withSourcesJar()
 }
 
+// Since JDK 23, javadoc copies its web fonts - about 3.9 MB - into every javadoc jar, which made
+// up almost all of each release's size. Maven Central counts release size against a monthly
+// limit, so the fonts are left out; the pages use the browser's own fonts instead.
+tasks.named<Javadoc>("javadoc") {
+    (options as StandardJavadocDocletOptions).addBooleanOption("-no-fonts", true)
+}
+
 // Generate a Jandex bean-archive index (META-INF/jandex.idx) inside every published
 // ekbatan-* JAR. Quarkus, Spring, and Micronaut all consume `META-INF/jandex.idx` when
 // present, skipping their own on-the-fly indexing — which makes consumption transparent

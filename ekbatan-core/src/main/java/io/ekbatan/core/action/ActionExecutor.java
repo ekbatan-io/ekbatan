@@ -78,7 +78,7 @@ import tools.jackson.databind.ObjectMapper;
 public class ActionExecutor {
 
     private static final Logger LOG = LoggerFactory.getLogger(ActionExecutor.class);
-    private static final Tracer TRACER = GlobalOpenTelemetry.get().getTracer("io.ekbatan.core", "1.1.1");
+    private static final Tracer TRACER = GlobalOpenTelemetry.get().getTracer("io.ekbatan.core", "1.1.2");
 
     private final String namespace;
     private final DatabaseRegistry databaseRegistry;

@@ -2,7 +2,7 @@
 
 Ekbatan instruments its action execution pipeline with the **OpenTelemetry API** (`opentelemetry-api`). The library depends only on the API — no SDK. When no OTel SDK is registered at runtime, all tracing calls are no-ops with zero overhead. Consumers bring their own `opentelemetry-sdk` and exporters.
 
-The instrumentation scope is `io.ekbatan.core` version `1.1.1`, obtained from `GlobalOpenTelemetry.get().getTracer(...)`.
+The instrumentation scope is `io.ekbatan.core` version `1.1.2`, obtained from `GlobalOpenTelemetry.get().getTracer(...)`.
 
 ## Span hierarchy
 

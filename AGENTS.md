@@ -534,7 +534,7 @@ For MariaDB/MySQL TestContainers, place init SQL in `src/test/resources/<dialect
 
 Ekbatan instruments its action execution pipeline using the **OpenTelemetry API** (`opentelemetry-api`). The library depends only on the API — no SDK. When no OTel SDK is registered at runtime, all tracing calls are no-ops with zero overhead. Consumers bring their own `opentelemetry-sdk` and exporters.
 
-**Instrumentation scope:** `io.ekbatan.core` version `1.1.1`, obtained from `GlobalOpenTelemetry.get().getTracer(...)`.
+**Instrumentation scope:** `io.ekbatan.core` version `1.1.2`, obtained from `GlobalOpenTelemetry.get().getTracer(...)`.
 
 **Span hierarchy:**
 ```
