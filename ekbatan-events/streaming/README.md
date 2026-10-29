@@ -18,7 +18,7 @@ Consumer-side wire contracts — small, published to Maven Central, safe to depe
 | `action-event/avro` | `ekbatan-action-event-avro` | The generated class, plus `ActionEvent.avsc` at the jar root so the schema is fetchable without the repo. Also exposed through a Gradle `action.event.schema` configuration for builds inside this project. |
 | `action-event/protobuf` | `ekbatan-action-event-protobuf` | The generated class, plus `ActionEvent.proto` and the compiled `ActionEvent.desc` (`FileDescriptorSet`, built with `--include_imports`) that the SMT loads at runtime - both at the jar root. Also exposed through an `action.event.descriptor` configuration. |
 
-Connect-tier plumbing — fat JARs installed into a Kafka Connect worker, **not** published:
+Connect-tier plumbing — fat JARs installed into a Kafka Connect worker. **Not on Maven Central**: every [GitHub release](https://github.com/ekbatan-io/ekbatan/releases) attaches them instead:
 
 | Module | Produces | What it does |
 |---|---|---|
@@ -26,9 +26,16 @@ Connect-tier plumbing — fat JARs installed into a Kafka Connect worker, **not*
 | `debezium-smt/protobuf` | `ekbatan-debezium-smt-protobuf-<version>.jar` | `OutboxToProtobufTransform` — the same, in protobuf. |
 | `debezium-smt/common` | (bundled) | Shared Debezium value conversion and record classification. Has no artifact of its own; it is shaded into both fat JARs. |
 
-## Building and installing an SMT
+## Getting and installing an SMT
 
-The SMTs are not on Maven Central — Kafka Connect loads plugins from the filesystem, so you build the fat JAR and place it on the worker.
+The SMTs are not on Maven Central — Kafka Connect loads plugins from the filesystem. Every [GitHub release](https://github.com/ekbatan-io/ekbatan/releases) attaches both fat JARs, each signed (`.asc`), with SHA-256 checksums in `checksums_sha256.txt`, so the usual way is to download the one you need:
+
+```bash
+curl -LO https://github.com/ekbatan-io/ekbatan/releases/download/v<version>/ekbatan-debezium-smt-avro-<version>.jar
+curl -LO https://github.com/ekbatan-io/ekbatan/releases/download/v<version>/ekbatan-debezium-smt-protobuf-<version>.jar
+```
+
+Or build one from source:
 
 ```bash
 ./gradlew :ekbatan-events-streaming-debezium-smt-avro:shadowJar
@@ -202,7 +209,7 @@ This repo contains `RetryingEventConsumer`, `AvroRetryingEventConsumer` and `Pro
 
 | You want to... | Look at |
 |---|---|
-| Build and install an SMT | [Building and installing an SMT](#building-and-installing-an-smt) above |
+| Get and install an SMT | [Getting and installing an SMT](#getting-and-installing-an-smt) above |
 | Configure Debezium + the Avro SMT | The `@BeforeAll` in [`EventStreamingAvroSmtIntegrationTest`](../../ekbatan-integration-tests/event-pipeline/debezium-kafka-avro-smt/src/test/java/io/ekbatan/test/event_pipeline/avro_smt/EventStreamingAvroSmtIntegrationTest.java) |
 | Configure the protobuf SMT | [`EventStreamingProtobufSmtIntegrationTest`](../../ekbatan-integration-tests/event-pipeline/debezium-kafka-protobuf-smt/src/test/java/io/ekbatan/test/event_pipeline/protobuf_smt/EventStreamingProtobufSmtIntegrationTest.java) |
 | Run the pipeline on MySQL or MariaDB | [`MysqlSmtIntegrationTest`](../../ekbatan-integration-tests/event-pipeline/debezium-kafka-dialects-smt/src/test/java/io/ekbatan/test/event_pipeline/dialects/MysqlSmtIntegrationTest.java) |

@@ -242,6 +242,8 @@ The `OutboxToAvroTransform`:
 
 For Protobuf, swap `OutboxToAvroTransform` → `OutboxToProtobufTransform` and use descriptor-set paths instead of Avro schema paths. See [Streaming (Debezium)](/reference/events/streaming/) for the full SMT options and the DLQ caveat for source connector failures.
 
+The transform runs inside the Connect worker, not in your application. Download `ekbatan-debezium-smt-avro-<version>.jar`, or `ekbatan-debezium-smt-protobuf-<version>.jar`, from the [GitHub releases](https://github.com/ekbatan-io/ekbatan/releases) and put it in its own directory under the worker's `plugin.path`. The `ActionEvent.avsc` it reads sits at the root of the `ekbatan-action-event-avro` jar on Maven Central.
+
 ### B.2 Consume from Kafka
 
 Any Kafka consumer in any language can subscribe. Example with the Avro consumer in Java:

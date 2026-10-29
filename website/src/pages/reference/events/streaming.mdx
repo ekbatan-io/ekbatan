@@ -236,7 +236,7 @@ Three things follow from spelling the name out in full, and each fixes something
 
 Note the two naming styles: the schema properties are camelCase and the column properties are dotted. That is an inconsistency in the SMT's own `ConfigDef`, not a typo here.
 
-The SMT JARs are **not published to Maven Central** — Kafka Connect loads plugins from the filesystem. Build one with `./gradlew :ekbatan-events-streaming-debezium-smt-avro:shadowJar` and install it in **its own directory** under the worker's `plugin.path`. The separate directory matters: Connect gives each plugin directory its own classloader, which is what stops a plugin's bundled dependencies from colliding with anything else's. See the streaming module's `README.md` for the full install walkthrough.
+The SMT JARs are **not published to Maven Central** — Kafka Connect loads plugins from the filesystem. Every [GitHub release](https://github.com/ekbatan-io/ekbatan/releases) attaches both, `ekbatan-debezium-smt-avro-<version>.jar` and `ekbatan-debezium-smt-protobuf-<version>.jar`, each signed, with SHA-256 checksums; or build one with `./gradlew :ekbatan-events-streaming-debezium-smt-avro:shadowJar`. Install it in **its own directory** under the worker's `plugin.path`. The separate directory matters: Connect gives each plugin directory its own classloader, which is what stops a plugin's bundled dependencies from colliding with anything else's. See the streaming module's `README.md` for the full install walkthrough.
 
 ### Payload encoding
 
