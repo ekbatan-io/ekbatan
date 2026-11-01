@@ -50,7 +50,7 @@ def main() -> None:
     number = str(issue["number"])
     if state["clean"]:
         gh("issue", "edit", number, "--body-file", str(report_file))
-        gh("issue", "close", number, "--comment", "Nothing left to act on: no known vulnerability, and no newer release that isn't held back on purpose.")
+        gh("issue", "close", number, "--comment", "Nothing left to act on: no known vulnerability, and no newer release that is 2 weeks old and isn't held back on purpose.")
         print(f"closed #{number}")
         return
 
