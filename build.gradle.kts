@@ -58,6 +58,10 @@ subprojects {
             || project.path == ":ekbatan-di-quarkus-runtime"
             || project.path == ":ekbatan-di-quarkus-deployment"
             || project.path == ":ekbatan-integration-tests-di-quarkus"
+            // -Pmicronaut5 runs only this module's JVM tests. The Micronaut 5 Gradle plugin reads the
+            // native-image JDK the native-test conventions ask for as soon as it is applied, so
+            // with them it fails on a machine without GraalVM, before any test runs.
+            || (project.path == ":ekbatan-integration-tests-di-micronaut" && project.hasProperty("micronaut5"))
 
     if (isSmt) {
         apply(plugin = "ekbatan.smt-conventions")
