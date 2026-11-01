@@ -117,3 +117,79 @@ project(":ekbatan-integration-tests-di-shared").projectDir = file("ekbatan-integ
 project(":ekbatan-integration-tests-di-spring-boot-starter").projectDir = file("ekbatan-integration-tests/di/spring-boot-starter")
 project(":ekbatan-integration-tests-di-quarkus").projectDir = file("ekbatan-integration-tests/di/quarkus")
 project(":ekbatan-integration-tests-di-micronaut").projectDir = file("ekbatan-integration-tests/di/micronaut")
+
+// Libraries with known security holes that our build tools and test setups pull in. For each, the
+// first release that fixes them, one per version line. Nothing here ships to users.
+val securityFixes = mapOf(
+    // Avro Gradle plugin; Debezium's test library; JReleaser; the Quarkus Gradle plugins
+    "com.fasterxml.jackson.core:jackson-core" to listOf("2.18.11", "2.21.7", "2.22.3"),
+    "com.fasterxml.jackson.core:jackson-databind" to listOf("2.18.11", "2.21.7", "2.22.3"),
+    // Avro Gradle plugin
+    "org.apache.avro:avro" to listOf("1.11.5"),
+    "org.apache.avro:avro-compiler" to listOf("1.11.5"),
+    "org.apache.commons:commons-compress" to listOf("1.26.0"),
+    // Avro Gradle plugin; Spring Boot Gradle plugin
+    "org.apache.commons:commons-lang3" to listOf("3.18.0"),
+    // JReleaser
+    "org.apache.tika:tika-core" to listOf("3.2.2"),
+    "org.apache.httpcomponents.client5:httpclient5" to listOf("5.6.3"),
+    "org.apache.httpcomponents.core5:httpcore5-h2" to listOf("5.4.3"),
+    // JReleaser (3.x); the Quarkus Gradle plugins (4.x)
+    "org.codehaus.plexus:plexus-utils" to listOf("3.6.1", "4.0.3"),
+    // Checkstyle; the Quarkus Gradle plugins and test app
+    "com.google.guava:guava" to listOf("33.7.2-jre"),
+    // Quarkus's version list pins it below what ekbatan-core asks for, in the Quarkus tests
+    "io.opentelemetry:opentelemetry-api" to listOf("1.67.0"),
+    // Debezium's test library. okhttp 4.12.0 rather than the first fix (4.9.2): it is the release
+    // built for okio 3, the first okio line with a fix.
+    "com.squareup.okhttp3:okhttp" to listOf("4.12.0"),
+    "com.squareup.okio:okio" to listOf("3.4.0"),
+    // Kafka's client, in tests
+    "at.yawk.lz4:lz4-java" to listOf("1.11.4"),
+    "org.xerial.snappy:snappy-java" to listOf("1.1.10.9"),
+)
+
+fun versionParts(version: String) = Regex("\\d+").findAll(version).map { it.value.toLong() }.toList()
+
+fun compareVersions(a: List<Long>, b: List<Long>): Int {
+    for (i in 0 until maxOf(a.size, b.size)) {
+        val diff = a.getOrElse(i) { 0L }.compareTo(b.getOrElse(i) { 0L })
+        if (diff != 0) return diff
+    }
+    return 0
+}
+
+// The fixed release `version` should move to, or null when it needs no fix. The fixes of its own
+// minor line decide, else those of its major line; a line with no fix at all moves to the first
+// fix after it.
+fun securityFixFor(module: String, version: String): String? {
+    val requested = versionParts(version)
+    val fixes = securityFixes[module] ?: return null
+    fun sameLine(fix: String, parts: Int) = versionParts(fix).take(parts) == requested.take(parts)
+    val line = fixes.filter { sameLine(it, 2) }.ifEmpty { fixes.filter { sameLine(it, 1) } }.ifEmpty { fixes }
+    return line.firstOrNull { compareVersions(versionParts(it), requested) > 0 }
+}
+
+// Raises those libraries to their fixed release in every plugin classpath and every configuration
+// of every project - except the compileClasspath and runtimeClasspath of the published modules,
+// which show what users get: those versions come from each module's own dependencies, and the
+// weekly dependency check (.github/workflows/dependency-check.yml) must keep seeing them as they
+// are. Drop an entry once the tools that pull the library in have moved past the fix themselves.
+gradle.beforeProject {
+    val raise = Action<DependencyResolveDetails> {
+        val version = requested.version
+        if (!version.isNullOrEmpty()) {
+            securityFixFor("${requested.group}:${requested.name}", version)?.let {
+                useVersion(it)
+                because("known security holes before $it (settings.gradle.kts)")
+            }
+        }
+    }
+    val published = !path.startsWith(":ekbatan-integration-tests")
+    buildscript.configurations.configureEach { resolutionStrategy.eachDependency(raise) }
+    configurations.configureEach {
+        if (!(published && name in setOf("compileClasspath", "runtimeClasspath"))) {
+            resolutionStrategy.eachDependency(raise)
+        }
+    }
+}
