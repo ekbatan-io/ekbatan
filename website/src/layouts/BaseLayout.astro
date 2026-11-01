@@ -12,6 +12,7 @@ import "../styles/fonts.css";
 import "../styles/styles.css";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import OverlayScrollbar from "../components/OverlayScrollbar.astro";
 
 interface Props {
     /** <title> + og:title + twitter:title. */
@@ -44,6 +45,7 @@ const {
         <meta name="twitter:description" content={description} />
         <!-- Tiny no-op favicon until a real one is designed. Prevents 404s. -->
         <link rel="icon" href="data:," />
+        <OverlayScrollbar />
     </head>
     <body>
         <div class="min-h-screen text-ink bg-paper">
@@ -51,5 +53,23 @@ const {
             <slot />
             <Footer />
         </div>
+        <script is:inline>
+            // Overscrolling past either end shows the page's background colour - one colour for
+            // both ends - and nothing else can be painted there. So it is paper, like the top of
+            // the page, until the bottom is reached, and then ink, like the footer.
+            (() => {
+                const de = document.documentElement;
+                const paint = () => {
+                    const atEnd =
+                        window.scrollY + window.innerHeight >= de.scrollHeight - 4;
+                    de.style.backgroundColor = atEnd
+                        ? "var(--ink)"
+                        : "var(--paper)";
+                };
+                addEventListener("scroll", paint, { passive: true });
+                addEventListener("resize", paint);
+                paint();
+            })();
+        </script>
     </body>
 </html>

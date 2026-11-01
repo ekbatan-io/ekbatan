@@ -1,0 +1,153 @@
+---
+// The page scrollbar, drawn the way Android's Chrome draws it: a rounded thumb that floats over
+// the right edge of the page on a see-through rail, so it takes no width from the page. Unlike
+// Android's it never disappears: it is faint at rest, stronger while the page scrolls or the
+// mouse is near the right edge, and faint again a second later. Under the mouse, or while being
+// dragged, it is strongest and wider, so it is easy to grab on a desktop.
+//
+// Only with a mouse or trackpad: touch screens keep their own scrollbars, which already look
+// like this. Scrolling itself stays the browser's (wheel, trackpad, keys); only the drawn bar is
+// ours. Goes in <head>: the inline script hides the browser's bar before the first paint, so the
+// page doesn't jump sideways when ours takes over.
+---
+
+<script is:inline>
+    if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        document.documentElement.classList.add("overlay-scrollbar");
+    }
+</script>
+
+<style is:global>
+    html.overlay-scrollbar {
+        scrollbar-width: none;
+    }
+    html.overlay-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    /* At rest 25% ink, while scrolling 50%, under the mouse or while dragged 70% and wider. */
+    .overlay-scrollbar-thumb {
+        position: fixed;
+        top: 0;
+        right: 3px;
+        z-index: 2147483000;
+        width: 7px;
+        border-radius: 999px;
+        background: color-mix(in oklab, var(--ink) 25%, transparent);
+        transition:
+            width 0.15s ease,
+            background-color 0.3s ease;
+    }
+    .overlay-scrollbar-thumb.active {
+        background: color-mix(in oklab, var(--ink) 50%, transparent);
+    }
+    .overlay-scrollbar-thumb:hover,
+    .overlay-scrollbar-thumb.dragging {
+        width: 10px;
+        background: color-mix(in oklab, var(--ink) 70%, transparent);
+    }
+    html.overlay-scrollbar-dragging {
+        user-select: none;
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .overlay-scrollbar-thumb {
+            transition: none;
+        }
+    }
+    @media print {
+        .overlay-scrollbar-thumb {
+            display: none;
+        }
+    }
+</style>
+
+<script>
+    const root = document.documentElement;
+
+    if (root.classList.contains("overlay-scrollbar")) {
+        // How close to the right edge, in pixels, the mouse makes the bar stronger; the shortest
+        // thumb; how long it stays stronger after the last scroll or mouse move.
+        const EDGE = 24;
+        const MIN_SIZE = 40;
+        const LINGER_MS = 1000;
+
+        const thumb = document.createElement("div");
+        thumb.className = "overlay-scrollbar-thumb";
+        thumb.setAttribute("aria-hidden", "true");
+        document.body.append(thumb);
+
+        let size = 0;
+        let frame = 0;
+        let restTimer = 0;
+        let drag: { y: number; scroll: number } | null = null;
+
+        const scrollRange = () => root.scrollHeight - innerHeight;
+
+        const place = () => {
+            frame = 0;
+            const range = scrollRange();
+            thumb.hidden = range <= 0;
+            if (range <= 0) return;
+            size = Math.max(MIN_SIZE, (innerHeight * innerHeight) / root.scrollHeight);
+            thumb.style.height = `${size}px`;
+            thumb.style.transform = `translateY(${(scrollY / range) * (innerHeight - size)}px)`;
+        };
+        const placeSoon = () => {
+            if (!frame) frame = requestAnimationFrame(place);
+        };
+
+        const show = () => {
+            thumb.classList.add("active");
+            clearTimeout(restTimer);
+            restTimer = window.setTimeout(() => {
+                if (!drag && !thumb.matches(":hover")) thumb.classList.remove("active");
+            }, LINGER_MS);
+        };
+
+        addEventListener(
+            "scroll",
+            () => {
+                placeSoon();
+                show();
+            },
+            { passive: true },
+        );
+        addEventListener("resize", placeSoon);
+        new ResizeObserver(placeSoon).observe(document.body);
+        addEventListener(
+            "mousemove",
+            (event) => {
+                if (event.clientX >= innerWidth - EDGE) show();
+            },
+            { passive: true },
+        );
+        thumb.addEventListener("mouseleave", show);
+
+        thumb.addEventListener("pointerdown", (event) => {
+            if (event.button !== 0) return;
+            event.preventDefault();
+            drag = { y: event.clientY, scroll: scrollY };
+            thumb.setPointerCapture(event.pointerId);
+            thumb.classList.add("dragging");
+            root.classList.add("overlay-scrollbar-dragging");
+        });
+        thumb.addEventListener("pointermove", (event) => {
+            const travel = innerHeight - size;
+            if (drag && travel > 0) {
+                const top = drag.scroll + ((event.clientY - drag.y) * scrollRange()) / travel;
+                scrollTo({ top, behavior: "instant" });
+            }
+        });
+        const endDrag = () => {
+            if (!drag) return;
+            drag = null;
+            thumb.classList.remove("dragging");
+            root.classList.remove("overlay-scrollbar-dragging");
+            show();
+        };
+        thumb.addEventListener("pointerup", endDrag);
+        thumb.addEventListener("pointercancel", endDrag);
+        thumb.addEventListener("lostpointercapture", endDrag);
+
+        place();
+    }
+</script>
