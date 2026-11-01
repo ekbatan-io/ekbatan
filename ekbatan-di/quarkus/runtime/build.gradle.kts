@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     id("ekbatan.publishing")
-    id("io.quarkus.extension") version "3.34.6"
+    id("io.quarkus.extension") version "3.40.1.1"
 }
 
 ekbatanPublishing {

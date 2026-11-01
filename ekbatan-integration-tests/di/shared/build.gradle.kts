@@ -1,7 +1,7 @@
 import dev.monosoul.jooq.RecommendedVersions
 import org.jooq.meta.jaxb.ForcedType
 
-/**
+/*
  * Shared widget domain (action, repository, handler, models, events) plus the jOOQ-generated
  * Postgres tables and the Flyway migration scripts that build the `widgets` / `eventlog.events` /
  * `eventlog.event_notifications` / `scheduled_tasks` tables.
@@ -18,7 +18,7 @@ import org.jooq.meta.jaxb.ForcedType
  */
 plugins {
     `java-library`
-    id("dev.monosoul.jooq-docker") version "8.0.9"
+    id("dev.monosoul.jooq-docker") version "9.0.9"
 }
 
 java {
@@ -73,9 +73,11 @@ dependencies {
     // shared widget classes (Micronaut's Java AP can only process the module being compiled,
     // not classpath dependencies). Inert for Spring and Quarkus consumers — they don't read
     // Micronaut's BeanDefinitionReference files.
-    annotationProcessor("io.micronaut:micronaut-inject-java:${project.property("micronautVersion")}")
+    // -Pmicronaut5: compiled as a Micronaut 5 app would be (see gradle.properties).
+    val micronaut = project.property(if (project.hasProperty("micronaut5")) "micronaut5CoreVersion" else "micronautVersion")
+    annotationProcessor("io.micronaut:micronaut-inject-java:$micronaut")
     annotationProcessor(project(":ekbatan-di-micronaut"))
-    compileOnly("io.micronaut:micronaut-inject:${project.property("micronautVersion")}")
+    compileOnly("io.micronaut:micronaut-inject:$micronaut")
 
     api("org.jooq:jooq:${RecommendedVersions.JOOQ_VERSION}")
 

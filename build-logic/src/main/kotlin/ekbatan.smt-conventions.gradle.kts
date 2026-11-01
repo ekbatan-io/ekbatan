@@ -12,7 +12,7 @@ repositories {
 
 configure<CheckstyleExtension> {
     configFile = rootProject.file("config/checkstyle/checkstyle.xml")
-    toolVersion = "10.12.5"
+    toolVersion = "14.3.0"
     isIgnoreFailures = false
     isShowViolations = true
     reportsDir = layout.buildDirectory.dir("reports/checkstyle").get().asFile

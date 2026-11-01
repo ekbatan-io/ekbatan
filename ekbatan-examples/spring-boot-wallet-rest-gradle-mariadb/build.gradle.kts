@@ -2,19 +2,19 @@ import org.jooq.meta.jaxb.ForcedType
 
 plugins {
     java
-    id("org.springframework.boot") version "4.0.6"
-    id("io.spring.dependency-management") version "1.1.6"
-    id("dev.monosoul.jooq-docker") version "8.0.9"
-    id("com.diffplug.spotless") version "8.1.0"
+    id("org.springframework.boot") version "4.1.2"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("dev.monosoul.jooq-docker") version "9.0.9"
+    id("com.diffplug.spotless") version "8.10.4"
 }
 
 group = "io.example"
 version = "1.0.0-SNAPSHOT"
 
-// Spring Boot 4.0.x's bom pins jOOQ to 3.19.x, but Ekbatan (and our codegen plugin) target
-// 3.20.x. Pin the family explicitly so the generated record classes and the runtime jOOQ
-// classpath agree.
-extra["jooq.version"] = "3.20.10"
+// Spring Boot 4.1.2's bom pins jOOQ to 3.21.9, the version Ekbatan (and our codegen plugin)
+// target. Pin the family explicitly anyway, so the generated record classes and the runtime
+// jOOQ classpath keep agreeing when the bom moves.
+extra["jooq.version"] = "3.21.9"
 
 java {
     toolchain {
@@ -28,8 +28,8 @@ repositories {
 }
 
 val ekbatanVersion: String by project
-val flywayVersion = "12.0.0"
-val mariadbDriverVersion = "3.5.7"
+val flywayVersion = "13.10.3"
+val mariadbDriverVersion = "4.0.0"
 
 // jOOQ codegen needs a running MariaDB container to introspect the live schema. The plugin spins
 // one up at build time, runs Flyway against it, then walks the schema and writes Java classes
@@ -66,7 +66,7 @@ dependencies {
     annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:$ekbatanVersion")
 
     // Used by the domain classes for Validate.notNull / Validate.isTrue style guards.
-    implementation("org.apache.commons:commons-lang3:3.20.0")
+    implementation("org.apache.commons:commons-lang3:3.21.0")
 
     // ── Spring Boot ─────────────────────────────────────────────────────────
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -85,7 +85,7 @@ dependencies {
     implementation("org.flywaydb:flyway-mysql")
 
     // ── MariaDB ───────────────────────────────────────────────────────────────
-    // Explicit version: Spring Boot 4.0.x's BOM pins it but we may want a newer connector for
+    // Explicit version: Spring Boot 4.1.x's BOM pins it but we may want a newer connector for
     // a newer driver.
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client:$mariadbDriverVersion")
     jooqCodegen("org.mariadb.jdbc:mariadb-java-client:$mariadbDriverVersion")
@@ -170,8 +170,8 @@ sourceSets {
 // Force Flyway to the requested version even when the framework's BOM (Quarkus's
 // quarkus-bom, Spring Boot's spring-boot-dependencies, Micronaut's micronaut-bom) pins
 // an older one — they all do, to varying degrees:
-//   - Quarkus 3.34.6 pins flyway-core to 12.0.0
-//   - Spring Boot 4.x      pins flyway-core to 11.14.1
+//   - Quarkus 3.40.1.1 pins flyway-core to 12.0.0
+//   - Spring Boot 4.1.2    pins flyway-core to 12.4.0
 // Without this force, `org.flywaydb:flyway-core` gets resolved DOWN to the BOM's choice
 // and the runtime + jOOQ-codegen versions drift apart. Read from gradle.properties
 // directly so Spring Boot projects (which don't declare a local `flywayVersion` val,

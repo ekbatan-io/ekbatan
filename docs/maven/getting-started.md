@@ -245,14 +245,14 @@ The Micronaut parent POM pre-configures `maven-compiler-plugin` with `micronaut-
     <parent>
         <groupId>io.micronaut.platform</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>4.10.7</version>
+        <version>5.2.4</version>
     </parent>
 
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
         <jooq.version>3.20.10</jooq.version>
         <ekbatan.version>1.1.2</ekbatan.version>
-        <micronaut.version>4.10.7</micronaut.version>
+        <micronaut.version>5.2.4</micronaut.version>
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>com.example.Application</exec.mainClass>
     </properties>

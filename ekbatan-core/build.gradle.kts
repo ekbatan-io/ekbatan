@@ -81,7 +81,7 @@ dependencies {
     // GraalVM SVM API for the @TargetClass / @Substitute fix to jOOQ's Internal.arrayType.
     // compileOnly because the API is provided by native-image at AOT time and is never on
     // the JVM runtime classpath; the substitution class is invisible to JVM execution.
-    compileOnly("org.graalvm.nativeimage:svm:25.0.2")
+    compileOnly("org.graalvm.nativeimage:svm:25.0.5")
 }
 
 tasks.withType<Test> {

@@ -15,7 +15,7 @@
     <parent>
         <groupId>io.micronaut.platform</groupId>
         <artifactId>micronaut-parent</artifactId>
-        <version>4.10.7</version>
+        <version>5.2.4</version>
     </parent>
 
     <properties>
@@ -28,12 +28,12 @@
 
         <!-- Hyphenated property names - avoid the `flyway.*` / `jooq.*` namespace, which the
              respective Maven plugins scan and reject for unrecognized keys. -->
-        <flyway-version>12.0.0</flyway-version>
-        <postgresql.version>42.7.10</postgresql.version>
+        <flyway-version>13.10.3</flyway-version>
+        <postgresql.version>42.7.14</postgresql.version>
 
-        <fabric8-docker-plugin-version>0.48.1</fabric8-docker-plugin-version>
-        <flyway-maven-plugin-version>12.0.0</flyway-maven-plugin-version>
-        <jooq-codegen-maven-plugin-version>3.20.10</jooq-codegen-maven-plugin-version>
+        <fabric8-docker-plugin-version>0.49.0</fabric8-docker-plugin-version>
+        <flyway-maven-plugin-version>13.10.3</flyway-maven-plugin-version>
+        <jooq-codegen-maven-plugin-version>3.21.9</jooq-codegen-maven-plugin-version>
 
         <testcontainers.version>2.0.5</testcontainers.version>
 
@@ -81,37 +81,37 @@
             <version>${ekbatan.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Force jOOQ 3.20 runtime; the Micronaut parent POM transitively pulls jOOQ 3.19 via
-             its BOM, but the jooq-codegen-maven plugin generates classes against 3.20 APIs (e.g.
-             `VERSION_3_20`, `resetTouchedOnNotNull()`). Declared as a direct dependency so the
+        <!-- Force the jOOQ runtime to the version jooq-codegen-maven generates classes with; the
+             Micronaut parent POM pins its own via its BOM (3.21.8 in 5.2.4, 3.19 in 4.x). Declared as a
+             direct dependency so the
              explicit version wins over the BOM-managed transitive, without adding a
              <dependencyManagement> block - that breaks micronaut-maven-plugin 4.11.5's
              aot-analysis mojo. -->
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>
-            <version>3.20.10</version>
+            <version>3.21.9</version>
         </dependency>
 
         <!-- Jackson 3 (tools.jackson:jackson-databind:3.x) added new annotations to the
              com.fasterxml.jackson.annotation package (e.g. JsonSerializeAs in 2.20+).
-             Micronaut 4.10's parent BOM pins jackson-annotations to 2.19.2 which lacks
+             Micronaut 4.10.7's parent BOM pinned jackson-annotations to 2.19.2, which lacks
              these, so loading Ekbatan's @JsonDeserialize-bearing ShardingConfig blows
              up with NoClassDefFoundError at Micronaut bean instantiation. Pin to a
-             version that has them (2.21 is what the Gradle-side resolution naturally
-             picks via Jackson 3's transitive). Explicit-dependency override matches the
+             version that has them (2.22 is what the Gradle-side resolution picks, and
+             what Micronaut 5.2.4's BOM pins). Explicit-dependency override matches the
              jOOQ comment above - keeps it simple, avoids the dependencyManagement /
              micronaut-maven-plugin AOT issue. -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.21</version>
+            <version>2.22</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.20.0</version>
+            <version>3.21.0</version>
         </dependency>
 
         <!-- ── Micronaut runtime ─────────────────────────────────────────────────── -->
@@ -192,7 +192,7 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
-            <version>3.27.6</version>
+            <version>3.27.7</version>
             <scope>test</scope>
         </dependency>
         <!-- Testcontainers 2.x dropped commons-codec from its transitive closure (1.x carried it
@@ -201,7 +201,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.18.0</version>
+            <version>1.23.0</version>
             <scope>test</scope>
         </dependency>
 

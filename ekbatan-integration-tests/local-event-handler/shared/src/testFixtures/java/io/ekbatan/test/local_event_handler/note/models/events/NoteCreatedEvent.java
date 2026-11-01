@@ -18,7 +18,7 @@ public class NoteCreatedEvent extends ModelEvent<Note> {
     }
 
     @JsonCreator
-    private NoteCreatedEvent(
+    NoteCreatedEvent(
             @JsonProperty("modelId") String modelId,
             @JsonProperty("modelName") String modelName,
             @JsonProperty("widgetId") String widgetId,

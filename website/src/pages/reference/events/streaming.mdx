@@ -265,6 +265,14 @@ In both formats the same call works at both levels, and in both it is the method
 
 For Avro this is true because the SMT emits **single-object encoding**: a two-byte marker, the schema's 8-byte fingerprint, then the record. `fromByteBuffer` reads exactly that.
 
+**Avro 1.12.2 and later decode only into classes on Avro's allow-list**, and refuse any other with `SecurityException: Forbidden ... This class is not trusted`. `ActionEvent` puts itself on that list the first time it is used - through `fromByteBuffer`, `getDecoder()`, or a reader built from `ActionEvent.class` - so the envelope needs nothing. Your payload classes do: name their package, `<namespace>.avro`, when the consumer starts.
+
+```
+-Dorg.apache.avro.SERIALIZABLE_PACKAGES=acme.orders.avro
+```
+
+A reader that holds only a schema and finds the class by its name never touches `ActionEvent` first; list `io.ekbatan.events.streaming.actionevent.avro` in the same property for it.
+
 > **Upgrading from `1.0.0` or earlier — Avro only.** The SMT previously emitted bare Avro binary with no framing, which `fromByteBuffer` cannot read at all; it fails with `BadHeaderException: Not enough header bytes`. Anyone who worked around that by hand-rolling a `SpecificDatumReader` over a `binaryDecoder` should now delete that code and call `fromByteBuffer`. Messages gain 10 bytes each. Protobuf is unaffected — `parseFrom` always worked.
 
 The fingerprint is a bonus worth knowing about: it identifies *which* schema wrote each message, so a consumer holding several versions can resolve the right one via a `SchemaStore` rather than guessing. Note that Avro's parsing canonical form ignores logical types, so the `timestamp-micros` declaration above does not change the fingerprint and does not divide old readers from new.
@@ -289,7 +297,7 @@ Timestamps *inside* `payload` are a separate matter and were never ambiguous: Ja
 
 ### Unwrapped records and `ExtractNewRecordState`
 
-Debezium normally delivers each change inside an **envelope**: `{ before, after, source, op, ts_ms }`, where the row itself sits in `after` and `op` says what happened. Debezium 3.5 defines six operations - `c` insert, `r` snapshot read, `u` update, `d` delete, `t` truncate, `m` logical-decoding message - and both SMTs read that shape and publish only `c` and `r`. The filter is an allow-list, so any operation a future Debezium release adds is withheld rather than published unexamined.
+Debezium normally delivers each change inside an **envelope**: `{ before, after, source, op, ts_ms }`, where the row itself sits in `after` and `op` says what happened. Debezium 3.7 defines six operations - `c` insert, `r` snapshot read, `u` update, `d` delete, `t` truncate, `m` logical-decoding message - and both SMTs read that shape and publish only `c` and `r`. The filter is an allow-list, so any operation a future Debezium release adds is withheld rather than published unexamined.
 
 Some pipelines put Debezium's `ExtractNewRecordState` transform in front, which **unwraps** the envelope: the record value becomes the row's columns directly. The SMTs support that shape too - if the value carries the configured payload and event-type columns, it is treated as the row.
 

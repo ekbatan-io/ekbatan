@@ -120,7 +120,7 @@ Events are persisted via Jackson — the public final fields are serialized as J
 
 ### Deserialization (for in-process handlers)
 
-When events are read back from the outbox by the local-event-handler dispatch job to invoke a typed `EventHandler<E>`, Jackson reconstructs them. If your event has constructor parameters or non-default field names, add a `@JsonCreator` constructor:
+When events are read back from the outbox by the local-event-handler dispatch job to invoke a typed `EventHandler<E>`, Jackson reconstructs them. If your event has constructor parameters or non-default field names, add a `@JsonCreator` constructor. Leave it package-private, not `private`: Micronaut 5 refuses to compile a private `@JsonCreator` constructor, and Jackson reads either:
 
 ```java
 public class WidgetCreatedEvent extends ModelEvent<Widget> {
@@ -134,7 +134,7 @@ public class WidgetCreatedEvent extends ModelEvent<Widget> {
     }
 
     @JsonCreator
-    private WidgetCreatedEvent(
+    WidgetCreatedEvent(
             @JsonProperty("modelId") String modelId,
             @JsonProperty("modelName") String modelName,
             @JsonProperty("name") String name,

@@ -105,6 +105,7 @@ Which names hold a user name or a secret is decided once, in a ledger of every s
 - **Testcontainers' `jdbc:tc:` URLs**: Testcontainers logs in with the container's own user and password, whatever `username` and `password` say. Leave both out of the URL, and the container uses its default, `test` / `test`.
 - **A URL a platform hands out with the login in it is refused as written**: Heroku's `JDBC_DATABASE_URL` carries `?user=...&password=...`, and so do the JDBC URLs in Neon's and Supabase's documentation. Give Ekbatan the URL without the two, and give them to `username` and `password` - Heroku also sets them alone, as `JDBC_DATABASE_USERNAME` and `JDBC_DATABASE_PASSWORD`.
 - **jdbc-sshj can log in to its SSH host only with a key file that has no passphrase** (`private.key.file`), as the operating-system user running the application. It reads its SSH settings from its own URL only, never from `data-source-properties`, and Ekbatan refuses its SSH user, password and key passphrase in that URL - so the error's advice (`username(...)`, `password(...)`, `data-source-properties`) does not reach its SSH login. The refusal still earns its keep: jdbc-sshj writes its whole URL to the log when it opens a tunnel.
+- **MariaDB's driver 4 turns TLS on by default** (`sslMode=verify-full`; driver 3.5 used no TLS unless asked). A MariaDB 11.4 or newer server works as is, even with a certificate it made itself: the driver checks that certificate through the login password (`deferCertificateValidation`, on by default). An older server with such a certificate, or a server without TLS, needs `sslMode` in the URL: `trust`, `allow` or `disable`.
 
 ## Ways to log in
 
@@ -115,7 +116,7 @@ Which names hold a user name or a secret is decided once, in a ledger of every s
 | Client certificate, encrypted key (PostgreSQL) | as above, plus `sslpassword` in `data-source-properties` | tested end to end |
 | Client certificate, keystore (MySQL, MariaDB) | keystore in the URL, `clientCertificateKeyStorePassword` (MySQL) or `keyStorePassword` (MariaDB) in `data-source-properties` | configuration accepted |
 | A driver plugin supplies user and password (MariaDB) | `credentialType` in `data-source-properties`, no `username` or `password` | tested end to end |
-| AWS RDS IAM | `jdbc:aws-wrapper:postgresql://...?wrapperPlugins=iam`, or MariaDB's `credentialType=AWS-IAM`; no `password` | configuration accepted; not run against AWS |
+| AWS RDS IAM | `jdbc:aws-wrapper:postgresql://...?wrapperPlugins=iam`, or MariaDB's `credentialType=AWS-IAM` (driver 4 needs its `mariadb-java-client-aws` jar for it); no `password` | configuration accepted; not run against AWS |
 | AWS Secrets Manager, rotating | `jdbc-secretsmanager:postgresql://...` with its `driver-class-name`; `username` is the secret's name | configuration accepted; not run against AWS |
 | Azure managed identity | Azure's login plugin class in the URL; no `password` | configuration accepted; not run against Azure |
 | GCP Cloud SQL IAM | Cloud SQL socket factory in the URL; no `password` | configuration accepted; not run against GCP |
@@ -123,6 +124,8 @@ Which names hold a user name or a secret is decided once, in a ledger of every s
 | Vault dynamic credentials (a new user every hour) | - | not supported yet on PostgreSQL and MySQL; on MariaDB, through a `credentialType` plugin |
 
 "Tested end to end" means one of Ekbatan's integration tests logs in that way against a real database and checks both a migration's connection and the application pool's.
+
+PostgreSQL's driver, from 42.7.11, refuses a client key file that anyone but its owner can read, as `psql` does: give the key file `chmod 600`.
 
 ## How migrations connect
 

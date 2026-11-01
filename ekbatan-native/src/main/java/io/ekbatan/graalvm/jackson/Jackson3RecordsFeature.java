@@ -126,22 +126,22 @@ public final class Jackson3RecordsFeature implements Feature {
         int modelEventCount = 0;
         java.util.Set<String> creatorTargets = new java.util.HashSet<>();
         try (ScanResult scan = new ClassGraph()
-                .overrideClasspath((Object[]) classpath)
+                .enableClasspathEntries((Object[]) classpath)
                 .enableClassInfo()
                 .enableMethodInfo()
                 .enableAnnotationInfo()
                 // Jackson helper classes can be package-private inner classes; without this,
                 // ClassGraph skips them.
                 .ignoreClassVisibility()
-                // Several @JsonCreator-annotated constructors in the project are private
-                // (e.g. WidgetCreatedEvent's deserialization ctor) - without this,
+                // @JsonCreator-annotated constructors are often not public (e.g.
+                // WidgetCreatedEvent's package-private deserialization ctor) - without this,
                 // ClassGraph hides them and we miss the @JsonCreator marker.
                 .ignoreMethodVisibility()
                 .acceptPackages(scanRoots)
                 .scan()) {
 
             for (var ci : scan.getAllClasses()) {
-                Class<?> cls = tryLoad(ci);
+                Class<?> cls = tryLoad(access, ci);
                 if (cls == null) continue;
                 if (ci.isRecord()) {
                     // Records: Jackson 3 reads via canonical constructor + record
@@ -208,8 +208,8 @@ public final class Jackson3RecordsFeature implements Feature {
             // below; an event consumed only outside this JVM has no reason to carry one.
             //
             // walkChain=true so ModelEvent's own inherited state is registered alongside.
-            for (var ci : scan.getSubclasses(MODEL_EVENT_CLASS)) {
-                Class<?> cls = tryLoad(ci);
+            for (var ci : scan.getAllSubclasses(MODEL_EVENT_CLASS)) {
+                Class<?> cls = tryLoad(access, ci);
                 if (cls == null) continue;
                 register(cls, true, true);
                 modelEventCount++;
@@ -233,7 +233,7 @@ public final class Jackson3RecordsFeature implements Feature {
                 candidates.addAll(ci.getDeclaredConstructorInfo());
                 for (var mi : candidates) {
                     boolean methodHasCreator = false;
-                    for (var ai : mi.getAnnotationInfo()) {
+                    for (var ai : mi.getAllAnnotationInfo()) {
                         for (String wanted : JSON_CREATOR_ANNOTATIONS) {
                             if (wanted.equals(ai.getName())) {
                                 methodHasCreator = true;
@@ -254,7 +254,7 @@ public final class Jackson3RecordsFeature implements Feature {
                     }
                 }
                 if (!classHasCreator) continue;
-                Class<?> cls = tryLoad(ci);
+                Class<?> cls = tryLoad(access, ci);
                 if (cls == null) continue;
                 // Conservative: classes with @JsonCreator may also have @JsonProperty
                 // fields and arbitrary user-defined inheritance. Keep fields + walk.
@@ -295,14 +295,14 @@ public final class Jackson3RecordsFeature implements Feature {
     }
 
     /**
-     * Loads a class via ClassGraph but tolerates classes that can't be loaded - e.g. a
+     * Loads the class GraalVM knows by that name, but tolerates classes that can't be loaded - e.g. a
      * Micronaut {@code TypeElementVisitor} compile-time stub whose super-interface lives
      * in a build-time-only artifact. Skipping is safe: such classes aren't reachable at
      * native-image runtime anyway.
      */
-    private static Class<?> tryLoad(io.github.classgraph.ClassInfo ci) {
+    private static Class<?> tryLoad(Feature.FeatureAccess access, io.github.classgraph.ClassInfo ci) {
         try {
-            return ci.loadClass();
+            return access.findClassByName(ci.getName());
         } catch (Throwable t) {
             return null;
         }

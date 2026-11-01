@@ -42,7 +42,7 @@ public class TransferFailedEvent extends ModelEvent<Wallet> {
     }
 
     @JsonCreator
-    private TransferFailedEvent(
+    TransferFailedEvent(
             @JsonProperty("modelId") String modelId,
             @JsonProperty("modelName") String modelName,
             @JsonProperty("transferId") UUID transferId,

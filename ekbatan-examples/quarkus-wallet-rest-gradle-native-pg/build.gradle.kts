@@ -2,16 +2,16 @@ import org.jooq.meta.jaxb.ForcedType
 
 plugins {
     java
-    id("io.quarkus") version "3.34.6"
-    id("dev.monosoul.jooq-docker") version "8.0.9"
-    id("com.diffplug.spotless") version "8.1.0"
+    id("io.quarkus") version "3.40.1.1"
+    id("dev.monosoul.jooq-docker") version "9.0.9"
+    id("com.diffplug.spotless") version "8.10.4"
 }
 
 group = "io.example"
 version = "1.0.0-SNAPSHOT"
 
-// jOOQ codegen ships 3.20.x; pin runtime jOOQ to match.
-extra["jooq.version"] = "3.20.10"
+// jOOQ codegen ships 3.21.x; pin runtime jOOQ to match.
+extra["jooq.version"] = "3.21.9"
 
 java {
     toolchain {
@@ -25,9 +25,9 @@ repositories {
 }
 
 val ekbatanVersion: String by project
-val quarkusVersion = "3.34.6"
-val postgresqlVersion = "42.7.10"
-val flywayVersion = "12.0.0"
+val quarkusVersion = "3.40.1.1"
+val postgresqlVersion = "42.7.14"
+val flywayVersion = "13.10.3"
 
 // The dev.monosoul.jooq-docker plugin defaults to a Postgres container, so no explicit
 // `jooq { withContainer { … } }` block is needed for this project. The plugin spins up the
@@ -49,7 +49,7 @@ dependencies {
     implementation("io.github.ekbatan-io:ekbatan-native:$ekbatanVersion")
 
     // Used by the domain classes for Validate.notNull / Validate.isTrue style guards.
-    implementation("org.apache.commons:commons-lang3:3.20.0")
+    implementation("org.apache.commons:commons-lang3:3.21.0")
 
     // ── Quarkus REST ────────────────────────────────────────────────────────
     implementation("io.quarkus:quarkus-rest")
@@ -77,7 +77,7 @@ dependencies {
     testImplementation("io.quarkus:quarkus-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.assertj:assertj-core:3.27.6")
+    testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation("org.awaitility:awaitility:4.3.0")
     testImplementation("org.testcontainers:testcontainers-postgresql:2.0.5")
     testImplementation("org.testcontainers:testcontainers-junit-jupiter:2.0.5")
@@ -149,8 +149,8 @@ sourceSets {
 // Force Flyway to the requested version even when the framework's BOM (Quarkus's
 // quarkus-bom, Spring Boot's spring-boot-dependencies, Micronaut's micronaut-bom) pins
 // an older one — they all do, to varying degrees:
-//   - Quarkus 3.34.6 pins flyway-core to 12.0.0
-//   - Spring Boot 4.x      pins flyway-core to 11.14.1
+//   - Quarkus 3.40.1.1 pins flyway-core to 12.0.0
+//   - Spring Boot 4.1.2    pins flyway-core to 12.4.0
 // Without this force, `org.flywaydb:flyway-core` gets resolved DOWN to the BOM's choice
 // and the runtime + jOOQ-codegen versions drift apart. Read from gradle.properties
 // directly so Spring Boot projects (which don't declare a local `flywayVersion` val,

@@ -388,6 +388,7 @@ mariadb	2.7.13 3.5.7 3.5.10	createDatabaseIfNotExist		other	the specified databa
 mariadb	2.7.13 3.5.7 3.5.10	credentialType		other	Indicate the credential plugin type to use. Plugin must be present in classpath
 mariadb	3.5.7 3.5.10	database		other	Database
 mariadb	2.7.13 3.5.7 3.5.10	defaultFetchSize		other	The driver will call setFetchSize(n) with this value on all newly-created Statements. Default: 0.
+mariadb	4.0.0	deferCertificateValidation		other	When the server certificate cannot be validated against the system trust store (self-signed or unknown issuer), permit deferring server identity validation t...
 mariadb	3.5.7 3.5.10	deniedListTimeout		other	failover timing [read by name, not in the option list]
 mariadb	3.5.7 3.5.10	deprecateEof		other	protocol switch [read by name, not in the option list]
 mariadb	3.5.7 3.5.10	disablePipeline		other	option permitting disabling pipelining

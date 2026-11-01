@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # On tag push, github.ref is the tag and ${{ inputs.tag }} is empty → use the tag.
           # On workflow_dispatch with `tag` input, check out that tag explicitly so re-running
@@ -55,13 +55,15 @@ jobs:
           echo "OK: tag=$TAG_NAME matches gradle.properties version=$ACTUAL_VERSION"
 
       - name: Set up JDK 25 (Temurin)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 25
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic # open source; the default cache is closed-source, under Gradle's terms of use
 
       - name: clean build
         run: ./gradlew clean build --stacktrace
@@ -93,7 +95,7 @@ jobs:
       - name: Upload JReleaser logs
         # Always upload — useful for debugging staging failures even on success.
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: jreleaser-logs
           path: |

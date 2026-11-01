@@ -2,15 +2,15 @@ import org.jooq.meta.jaxb.ForcedType
 
 plugins {
     java
-    id("io.quarkus") version "3.34.6"
-    id("dev.monosoul.jooq-docker") version "8.0.9"
-    id("com.diffplug.spotless") version "8.1.0"
+    id("io.quarkus") version "3.40.1.1"
+    id("dev.monosoul.jooq-docker") version "9.0.9"
+    id("com.diffplug.spotless") version "8.10.4"
 }
 
 group = "io.example"
 version = "1.0.0-SNAPSHOT"
 
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 
 java {
     toolchain {
@@ -24,9 +24,9 @@ repositories {
 }
 
 val ekbatanVersion: String by project
-val quarkusVersion = "3.34.6"
-val mysqlConnectorVersion = "9.4.0"
-val flywayVersion = "12.0.0"
+val quarkusVersion = "3.40.1.1"
+val mysqlConnectorVersion = "26.10.0"
+val flywayVersion = "13.10.3"
 
 // The jooq-docker plugin needs a MySQL container at codegen time. Run as root so V0000's
 // `CREATE DATABASE eventlog` succeeds without an init script.
@@ -65,7 +65,7 @@ dependencies {
     // jOOQ classes, etc.) plus HikariCP reachability metadata.
     implementation("io.github.ekbatan-io:ekbatan-native:$ekbatanVersion")
 
-    implementation("org.apache.commons:commons-lang3:3.20.0")
+    implementation("org.apache.commons:commons-lang3:3.21.0")
 
     implementation("io.quarkus:quarkus-rest")
     implementation("io.quarkus:quarkus-rest-jackson")
@@ -86,7 +86,7 @@ dependencies {
     testImplementation("io.quarkus:quarkus-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.assertj:assertj-core:3.27.6")
+    testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation("org.awaitility:awaitility:4.3.0")
     testImplementation("org.testcontainers:testcontainers-mysql:2.0.5")
     testImplementation("org.testcontainers:testcontainers-junit-jupiter:2.0.5")
@@ -162,8 +162,8 @@ sourceSets {
 // Force Flyway to the requested version even when the framework's BOM (Quarkus's
 // quarkus-bom, Spring Boot's spring-boot-dependencies, Micronaut's micronaut-bom) pins
 // an older one — they all do, to varying degrees:
-//   - Quarkus 3.34.6 pins flyway-core to 12.0.0
-//   - Spring Boot 4.x      pins flyway-core to 11.14.1
+//   - Quarkus 3.40.1.1 pins flyway-core to 12.0.0
+//   - Spring Boot 4.1.2    pins flyway-core to 12.4.0
 // Without this force, `org.flywaydb:flyway-core` gets resolved DOWN to the BOM's choice
 // and the runtime + jOOQ-codegen versions drift apart. Read from gradle.properties
 // directly so Spring Boot projects (which don't declare a local `flywayVersion` val,

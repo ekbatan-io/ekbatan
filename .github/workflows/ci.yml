@@ -39,26 +39,32 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up JDK 25 (Temurin)
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 25
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
         with:
+          cache-provider: basic # open source; the default cache is closed-source, under Gradle's terms of use
           # Cache Gradle wrapper + dependencies + build cache. Saves ~2-3 min per build.
           cache-read-only: ${{ github.ref != 'refs/heads/main' }}
 
       - name: clean build
         run: ./gradlew clean build --stacktrace
 
+      # Ekbatan builds against Micronaut 4, the oldest it supports. This runs the Micronaut
+      # integration test again as a Micronaut 5 app, against the same Ekbatan jar.
+      - name: Micronaut integration test as a Micronaut 5 app
+        run: ./gradlew :ekbatan-integration-tests-di-micronaut:test -Pmicronaut5 --stacktrace
+
       - name: Upload test reports on failure
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-reports
           path: |

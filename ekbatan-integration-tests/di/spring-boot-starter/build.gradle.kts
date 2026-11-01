@@ -7,7 +7,7 @@ plugins {
     // wires it into `nativeTest`, generating AotTestContextInitializers + RuntimeHints
     // for every @SpringBootTest context. Without this, BootstrapUtils.<clinit> hits
     // Class.forName at runtime and the native test image fails before any test starts.
-    id("org.springframework.boot") version "4.0.6"
+    id("org.springframework.boot") version "4.1.2"
 }
 
 java {

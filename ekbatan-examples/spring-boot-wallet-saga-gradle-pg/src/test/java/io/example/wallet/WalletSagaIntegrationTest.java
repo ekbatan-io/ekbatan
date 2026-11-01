@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ekbatan.core.action.ActionExecutor;
 import io.ekbatan.core.domain.Id;
 import io.ekbatan.core.shard.DatabaseRegistry;
@@ -24,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * End-to-end integration test for the wallet transfer saga. The tests cover:

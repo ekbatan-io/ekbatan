@@ -4,7 +4,7 @@ import org.jooq.meta.jaxb.ForcedType
 
 plugins {
     id("java")
-    id("dev.monosoul.jooq-docker") version "8.0.9"
+    id("dev.monosoul.jooq-docker") version "9.0.9"
 }
 
 java {

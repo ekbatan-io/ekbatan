@@ -8,8 +8,8 @@ repositories {
 }
 
 dependencies {
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:8.1.0")
-    implementation("org.graalvm.buildtools:native-gradle-plugin:1.1.0")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:8.10.4")
+    implementation("org.graalvm.buildtools:native-gradle-plugin:1.1.18")
 
     // Powers the `jandexIndex` Gradle task wired into `ekbatan.publishing` (see
     // build-logic/src/main/kotlin/JandexIndexTask.kt). We invoke `org.jboss.jandex.Indexer`

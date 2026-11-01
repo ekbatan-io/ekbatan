@@ -23,7 +23,7 @@ public class WalletCreatedEvent extends ModelEvent<Wallet> {
     }
 
     @JsonCreator
-    private WalletCreatedEvent(
+    WalletCreatedEvent(
             @JsonProperty("modelId") String modelId,
             @JsonProperty("modelName") String modelName,
             @JsonProperty("ownerId") UUID ownerId,

@@ -7,6 +7,8 @@ lead: 'What you write in a Micronaut app to use Ekbatan: the integration jar plu
 
 For the equivalent in plain Java with no DI container, see [wiring/without-di.md](/reference/di/without-di/). For Spring Boot and Quarkus, see [spring.md](/reference/di/spring-boot/) and [quarkus.md](/reference/di/quarkus/).
 
+Ekbatan works with Micronaut 4 and Micronaut 5, and is tested on both. On Micronaut 5, leave each `@JsonCreator` constructor package-private, not `private`: Micronaut 5 refuses to compile a private one (see [models and entities](/learn/models-and-entities/#deserialization-for-in-process-handlers)).
+
 ## What you write
 
 ### 1. The integration jar + annotation processor
@@ -449,10 +451,10 @@ Records work out of the box (canonical constructor). For non-record DTOs, add `@
 ### Native-image specifics
 
 - The GraalVM Build Tools plugin auto-pulls the GraalVM Reachability Metadata Repository, which already covers HikariCP and the major JDBC drivers. Nothing extra to vendor.
-- The auto-applied native-build-tools plugin (0.11.x, brought by Micronaut 4.6.x) expects an old metadata-repo format; pin the repo to `0.3.35` (last 0.x release). The wallet examples show this in their `graalvmNative { metadataRepository { version.set("0.3.35") } }` block.
+- Leave the metadata repository's version alone on Micronaut 5: its Gradle plugin brings native-build-tools 1.1.x, which picks a repository it can read and refuses the old 0.3.x ones. On Micronaut 4 it is the other way round: its plugin (4.6.x) brings native-build-tools 0.11.x, which needs the old format, so pin the repository to `0.3.35`, the last 0.x release: `graalvmNative { metadataRepository { version.set("0.3.35") } }`.
 - For JUnit `nativeTest`, ship a minimal `src/main/resources/logback.xml` that pins `com.zaxxer.hikari` to INFO. Hikari's `HikariConfig.logConfiguration()` at DEBUG reflects over every JavaBean property, which trips a missing-reflection-metadata error at runtime; raising the level short-circuits the gating `if (LOGGER.isDebugEnabled()) logConfiguration();`.
 - For Testcontainers init scripts (the `mariadb_init.sql` / `mysql_init.sql` that grants the test user cross-DB privileges), replace `MountableFile.forClasspathResource(...)` with `Transferable.of(<inline-bytes>.getBytes(UTF_8))`. Classpath-resource resolution doesn't work reliably inside an in-process native test image; inlining the bytes does.
-- Add init-at-build-time hints for the JUnit and Logback classes the bundled 0.3.35 metadata-repo doesn't cover:
+- On Micronaut 4 with the `0.3.35` repository only, add init-at-build-time hints for the JUnit and Logback classes that repository doesn't cover. Leave them out on Micronaut 5: with its newer repository, Logback initialized at build time fails the build on its XML parser state (`Cannot read instance field of a class that is initialized at run time: org.xml.sax.helpers.LocatorImpl`).
   ```kotlin
   buildArgs.add("--initialize-at-build-time=org.junit.platform.commons.logging.LoggerFactory")
   buildArgs.add("--initialize-at-build-time=org.junit.platform.commons.logging.LoggerFactory\$DelegatingLogger")

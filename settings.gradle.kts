@@ -6,6 +6,14 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
+    // -Pmicronaut5 runs the Micronaut integration test as a Micronaut 5 app (see gradle.properties).
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "io.micronaut.library" && settings.providers.gradleProperty("micronaut5").isPresent) {
+                useVersion(settings.providers.gradleProperty("micronaut5GradlePluginVersion").get())
+            }
+        }
+    }
 }
 
 // Each project's path is its full directory path flattened with '-'. Disk layout is preserved

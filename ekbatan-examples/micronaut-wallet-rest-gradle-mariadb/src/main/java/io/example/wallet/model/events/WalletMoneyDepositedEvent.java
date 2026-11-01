@@ -19,7 +19,7 @@ public class WalletMoneyDepositedEvent extends ModelEvent<Wallet> {
     }
 
     @JsonCreator
-    private WalletMoneyDepositedEvent(
+    WalletMoneyDepositedEvent(
             @JsonProperty("modelId") String modelId,
             @JsonProperty("modelName") String modelName,
             @JsonProperty("amount") BigDecimal amount,

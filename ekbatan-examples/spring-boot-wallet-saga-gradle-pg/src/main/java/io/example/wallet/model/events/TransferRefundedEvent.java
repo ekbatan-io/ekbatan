@@ -37,7 +37,7 @@ public class TransferRefundedEvent extends ModelEvent<Wallet> {
     }
 
     @JsonCreator
-    private TransferRefundedEvent(
+    TransferRefundedEvent(
             @JsonProperty("modelId") String modelId,
             @JsonProperty("modelName") String modelName,
             @JsonProperty("transferId") UUID transferId,

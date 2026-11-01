@@ -71,7 +71,7 @@ public final class KafkaClientsFeature implements Feature {
 
         int registered = 0;
         try (ScanResult scan = new ClassGraph()
-                .overrideClasspath((Object[]) classpath)
+                .enableClasspathEntries((Object[]) classpath)
                 .enableClassInfo()
                 .ignoreClassVisibility()
                 .acceptPackages(SCAN_PACKAGES)
@@ -80,10 +80,11 @@ public final class KafkaClientsFeature implements Feature {
             for (var ci : scan.getAllClasses()) {
                 Class<?> cls;
                 try {
-                    cls = ci.loadClass();
+                    cls = access.findClassByName(ci.getName());
                 } catch (Throwable ignored) {
                     continue;
                 }
+                if (cls == null) continue;
                 if (registerForFullReflection(cls)) {
                     registered++;
                 }

@@ -18,7 +18,7 @@ public class WidgetCreatedEvent extends ModelEvent<Widget> {
     }
 
     @JsonCreator
-    private WidgetCreatedEvent(
+    WidgetCreatedEvent(
             @JsonProperty("modelId") String modelId,
             @JsonProperty("modelName") String modelName,
             @JsonProperty("name") String name,

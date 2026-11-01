@@ -391,7 +391,7 @@ The framework uses the [`dev.monosoul.jooq-docker`](https://github.com/monosoul/
 ```kotlin
 plugins {
     id("java")
-    id("dev.monosoul.jooq-docker") version "8.0.9"
+    id("dev.monosoul.jooq-docker") version "9.0.9"
 }
 
 tasks {
@@ -1010,6 +1010,7 @@ void retry_recovers_after_transient_failure() throws Exception {
 - **Checkstyle** — Custom rules in `config/checkstyle/checkstyle.xml`
 - **JOOQ Docker Plugin** (Gradle) — Generates type-safe SQL classes from Flyway migrations via Docker
 - **Dependency versions** — Centralized in `gradle.properties`
+- **Dependency check** — `.github/workflows/dependency-check.yml` runs every Monday and on each push to `main` that changes the build. It sends the resolved dependency graph to GitHub (for Dependabot alerts) and keeps one issue, "Dependency report", up to date with known vulnerabilities (from osv.dev) and newer stable releases. A newer release kept on purpose goes in `.github/dependency-check/held-back.txt`, with the reason. Dependabot (`.github/dependabot.yml`) updates only the GitHub Actions: it can't read versions from `gradle.properties`
 
 The framework repo itself is Gradle-only — `build-logic/` convention plugins, the `ekbatan.publishing` plugin, and the `dev.monosoul.jooq-docker` integration assume Gradle. **Downstream consumers, however, can use either Gradle or Maven** — the 17 published JARs have plain Maven POMs with no Gradle-only metadata. The runnable proof is the Maven wallet matrix under `ekbatan-examples/`: 18 projects covering Spring Boot, Quarkus, and Micronaut across PostgreSQL/MariaDB/MySQL, with JVM and GraalVM native-image variants for each:
 

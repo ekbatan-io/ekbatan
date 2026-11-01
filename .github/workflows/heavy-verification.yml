@@ -38,7 +38,7 @@ jobs:
       reason: ${{ steps.activity.outputs.reason }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -86,17 +86,19 @@ jobs:
       modules: ${{ steps.list.outputs.modules }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Temurin is enough to configure the build and print the list; no image is compiled here.
       - name: Set Up JDK 25
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 25
 
       - name: Set Up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic # open source; the default cache is closed-source, under Gradle's terms of use
 
       - name: List modules
         id: list
@@ -128,16 +130,18 @@ jobs:
         module: ${{ fromJSON(needs.root-native-modules.outputs.modules) }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set Up GraalVM
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: graalvm
           java-version: 25
 
       - name: Set Up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic # open source; the default cache is closed-source, under Gradle's terms of use
 
       - name: Verify GraalVM
         shell: bash
@@ -156,7 +160,7 @@ jobs:
 
       - name: Upload Native Test Reports
         if: failure() || cancelled()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: root-native-test-reports-${{ matrix.module }}
           if-no-files-found: ignore
@@ -178,16 +182,18 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set Up JDK 25
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: 25
 
       - name: Set Up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic # open source; the default cache is closed-source, under Gradle's terms of use
 
       # An example on another version would quietly fetch that version from Maven Central and test
       # it instead of this commit.
@@ -214,7 +220,7 @@ jobs:
           cp -R ~/.m2/repository/io/github/ekbatan-io ekbatan-m2/io/github/
 
       - name: Upload Ekbatan
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ekbatan-m2
           path: ekbatan-m2
@@ -275,20 +281,22 @@ jobs:
             command: ./mvnw -B -ntp verify
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set Up GraalVM
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: graalvm
           java-version: 25
           cache: maven
 
       - name: Set Up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic # open source; the default cache is closed-source, under Gradle's terms of use
 
       - name: Download Ekbatan
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ekbatan-m2
           path: ekbatan-m2
@@ -306,7 +314,7 @@ jobs:
 
       - name: Upload Example JVM Test Reports
         if: failure() || cancelled()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: example-jvm-${{ matrix.project }}-reports
           if-no-files-found: ignore
@@ -388,17 +396,19 @@ jobs:
             allow_failure: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set Up GraalVM
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: graalvm
           java-version: 25
           cache: maven
 
       - name: Set Up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          cache-provider: basic # open source; the default cache is closed-source, under Gradle's terms of use
 
       - name: Verify GraalVM
         shell: bash
@@ -407,7 +417,7 @@ jobs:
           native-image --version
 
       - name: Download Ekbatan
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: ekbatan-m2
           path: ekbatan-m2
@@ -430,7 +440,7 @@ jobs:
 
       - name: Upload Example Native Test Reports
         if: failure() || cancelled()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: example-native-${{ matrix.project }}-reports
           if-no-files-found: ignore

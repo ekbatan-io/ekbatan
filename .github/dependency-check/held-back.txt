@@ -1,0 +1,17 @@
+# Newer releases this build does not take, on purpose. The weekly report lists them apart, with
+# the reason, and they alone don't keep the report issue open. Known vulnerabilities are reported
+# whatever this file says.
+#
+# One per line: the dependency (group:name), the newer version held back, the reason. Both the
+# name and the version may use * as a wildcard. A version pattern stops matching once a release
+# beyond it comes out, so that release shows up again for a fresh look.
+
+tools.jackson.core:jackson-databind           3.2.*   Jackson 3.2 needs jackson-annotations 2.22, and Quarkus 3.40's BOM pins 2.21: a Quarkus app fails with NoClassDefFoundError
+tools.jackson.dataformat:*                    3.2.*   moves with jackson-databind
+io.smallrye:jandex                            *       Jandex 3.2+ writes index format v12, which Quarkus 3.x rejects (build-logic/build.gradle.kts)
+org.jetbrains.kotlin:*                        *       build-logic's Kotlin comes with Gradle's kotlin-dsl, and moves with the Gradle version
+org.gradle.kotlin.kotlin-dsl:*                *       comes with Gradle, and moves with the Gradle version
+io.rest-assured:rest-assured                  *       version set by the Quarkus BOM
+org.ow2.asm:asm                               *       version set by the Quarkus BOM
+io.smallrye.config:smallrye-config            *       version set by the Quarkus BOM
+org.yaml:snakeyaml                            *       version set by the Micronaut platform

@@ -13,7 +13,7 @@ public class WalletClosedEvent extends ModelEvent<Wallet> {
     }
 
     @JsonCreator
-    private WalletClosedEvent(@JsonProperty("modelId") String modelId, @JsonProperty("modelName") String modelName) {
+    WalletClosedEvent(@JsonProperty("modelId") String modelId, @JsonProperty("modelName") String modelName) {
         super(modelId, Wallet.class);
     }
 }

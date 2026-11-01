@@ -33,9 +33,9 @@ repositories {
 dependencies {
     // GraalVM hosted API (Feature, RuntimeReflection) — provided by native-image at build
     // time, never on the JVM runtime classpath.
-    compileOnly("org.graalvm.nativeimage:svm:25.0.2")
+    compileOnly("org.graalvm.nativeimage:svm:25.0.5")
 
     // ClassGraph powers the build-time classpath scan inside Jackson3RecordsFeature.
     // It must reach the native-image build classpath, so it ships transitively.
-    api("io.github.classgraph:classgraph:4.8.181")
+    api("io.github.classgraph:classgraph:6.0.0")
 }

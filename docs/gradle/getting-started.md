@@ -116,7 +116,7 @@ plugins {
     java
     // The Micronaut Gradle plugin registers `micronaut-inject-java` as an annotation
     // processor and provides `./gradlew run`.
-    id("io.micronaut.application") version "4.6.1"
+    id("io.micronaut.application") version "5.0.2"
     id("dev.monosoul.jooq-docker") version "8.0.9"
 }
 
@@ -126,7 +126,7 @@ repositories {
 }
 
 micronaut {
-    version("4.10.7")
+    version("5.2.4")
     runtime("netty")
     testRuntime("junit5")
     processing {

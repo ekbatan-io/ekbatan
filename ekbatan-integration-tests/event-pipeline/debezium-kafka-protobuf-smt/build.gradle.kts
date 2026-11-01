@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("com.google.protobuf") version "0.9.4"
+    id("com.google.protobuf") version "0.10.0"
 }
 
 java {
@@ -86,7 +86,7 @@ tasks.withType<Test> {
         systemProperty(
             "smt.payload.descriptors",
             project.layout.buildDirectory
-                .file("generated/source/proto/test/descriptor_set.desc")
+                .file("generated/sources/proto/test/descriptor_set.desc")
                 .get()
                 .asFile.absolutePath,
         )
@@ -104,7 +104,7 @@ extensions.configure<org.graalvm.buildtools.gradle.dsl.GraalVMExtension> {
                 listOf(
                     "-Dsmt.plugin.jar=${smtPluginJar.singleFile.absolutePath}",
                     "-Dsmt.payload.descriptors=${project.layout.buildDirectory.file(
-                        "generated/source/proto/test/descriptor_set.desc",
+                        "generated/sources/proto/test/descriptor_set.desc",
                     ).get().asFile.absolutePath}",
                     "-Dsmt.action.event.descriptor=${actionEventDescriptorFile.singleFile.absolutePath}",
                 )

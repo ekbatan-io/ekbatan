@@ -1,0 +1,79 @@
+# Checks the build's dependencies every Monday, and on each push to main that changes the build.
+#
+# 1. Sends the resolved dependency graph of every module (transitive dependencies included) to
+#    GitHub, so Dependabot alerts cover the Gradle build: they show under Security > Dependabot,
+#    once "Dependabot alerts" is on in the repository settings. Dependabot can't read this build
+#    by itself: it sees only versions written literally in build files, and ours live in
+#    gradle.properties.
+# 2. Writes a report - known vulnerabilities (from osv.dev) and newer stable releases - to the
+#    run's summary and to one open issue titled "Dependency report", kept up to date: a comment
+#    flags each newly found vulnerability, and the issue is closed when nothing is left to report.
+#    The scripts are in .github/dependency-check/.
+name: Dependency check
+
+on:
+  schedule:
+    - cron: "0 6 * * 1" # Mondays, 06:00 UTC
+  push:
+    branches: [main]
+    paths:
+      - "gradle.properties"
+      - "**/*.gradle.kts"
+      - "gradle/wrapper/gradle-wrapper.properties"
+      - ".github/dependency-check/**"
+      - ".github/workflows/dependency-check.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: dependency-check
+  cancel-in-progress: true
+
+permissions:
+  contents: write # send the dependency graph
+  issues: write # keep the report issue up to date
+
+jobs:
+  check:
+    name: Check dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up JDK 25 (Temurin)
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Send the dependency graph to GitHub
+        uses: gradle/actions/dependency-submission@v6
+        with:
+          cache-provider: basic # open source; the default cache is closed-source, under Gradle's terms of use
+          dependency-graph: generate-and-submit
+        env:
+          # "runtime": shipped to users - on the runtime classpath of a published module or an
+          # SMT, so of any project but the integration tests. Everything else (tests, code
+          # generation, build plugins) is "development". GitHub labels each alert with it.
+          DEPENDENCY_GRAPH_RUNTIME_INCLUDE_CONFIGURATIONS: "^runtimeClasspath$"
+          DEPENDENCY_GRAPH_RUNTIME_EXCLUDE_PROJECTS: "^:ekbatan-integration-tests-.*"
+
+      - name: Find newer versions
+        # A module that fails here only goes missing from the report; the run goes on.
+        continue-on-error: true
+        run: >-
+          ./gradlew --init-script .github/dependency-check/versions.init.gradle.kts
+          dependencyUpdates :build-logic:dependencyUpdates --continue --no-configuration-cache
+
+      - name: Write the report
+        run: |
+          python3 .github/dependency-check/report.py --updates . --graph dependency-graph-reports \
+            --out "$RUNNER_TEMP/report.md" --state "$RUNNER_TEMP/state.json"
+          cat "$RUNNER_TEMP/report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Update the report issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/dependency-check/issue.py "$RUNNER_TEMP/report.md" "$RUNNER_TEMP/state.json"

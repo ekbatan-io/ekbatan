@@ -66,9 +66,9 @@ class EventStreamingIntegrationTest {
             .withNetworkAliases("kafka")
             .withListener("kafka:19092");
 
-    private static final DebeziumContainer DEBEZIUM = new DebeziumContainer("quay.io/debezium/connect:3.5.0.Final")
+    private static final DebeziumContainer DEBEZIUM = new DebeziumContainer("quay.io/debezium/connect:3.7.0.Final")
             .withNetwork(NETWORK)
-            .withKafka(NETWORK, "kafka:19092")
+            .withEnv("BOOTSTRAP_SERVERS", "kafka:19092")
             .dependsOn(KAFKA);
 
     private static ActionExecutor executor;

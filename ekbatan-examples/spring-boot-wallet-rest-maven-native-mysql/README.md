@@ -47,7 +47,7 @@ See [`docs/database/mysql.md`](../../docs/database/mysql.md) for the per-dialect
 
 ## Run locally
 
-You only need Docker installed. The wrapper script handles Maven itself — first run downloads Maven 3.9.11 into `~/.m2/wrapper/dists`.
+You only need Docker installed. The wrapper script handles Maven itself — first run downloads Maven 3.10.0 into `~/.m2/wrapper/dists`.
 
 ```bash
 ./mvnw spring-boot:run

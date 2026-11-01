@@ -53,22 +53,27 @@ public final class AvroSpecificRecordFeature implements Feature {
 
         int registered = 0;
         try (ScanResult scan = new ClassGraph()
-                .overrideClasspath((Object[]) classpath)
+                .enableClasspathEntries((Object[]) classpath)
                 .enableClassInfo()
+                // Asked about an interface outside the scanned packages, ClassGraph 4 also returned
+                // the outside classes it reached, such as Avro's SpecificRecordBase; 6 does so only
+                // when told to, and this keeps them registered as before.
+                .enableExternalClasses()
                 .ignoreClassVisibility()
                 .acceptPackages(scanRoots)
                 .scan()) {
 
             // ClassGraph already gives us the interface-implements relation cheaply via
-            // getClassesImplementing - no need for a per-class Class.forName lookup of the
+            // getAllClassesImplementing - no need for a per-class Class.forName lookup of the
             // SpecificRecord interface.
-            for (var ci : scan.getClassesImplementing(SPECIFIC_RECORD_INTERFACE)) {
+            for (var ci : scan.getAllClassesImplementing(SPECIFIC_RECORD_INTERFACE)) {
                 Class<?> cls;
                 try {
-                    cls = ci.loadClass();
+                    cls = access.findClassByName(ci.getName());
                 } catch (Throwable ignored) {
                     continue;
                 }
+                if (cls == null) continue;
                 if (registerForFullReflection(cls)) {
                     registered++;
                 }

@@ -1,21 +1,21 @@
-// Spotless 8.1.0 pulls in JGit 7.4.0; JReleaser 1.24.0 still calls
+// Spotless 8.10.4 pulls in JGit 7.8.0; JReleaser 1.26.0 still asks for JGit 5.13 and calls
 // `org.eclipse.jgit.lib.GpgObjectSigner` which JGit 7.x removed. Pin JGit to the latest 6.x
 // release (still has GpgObjectSigner; Spotless's git-diff usage is fine on 6.x) so both plugins
 // can coexist on the buildscript classpath.
 buildscript {
     configurations.classpath {
         resolutionStrategy {
-            force("org.eclipse.jgit:org.eclipse.jgit:6.10.0.202406032230-r")
+            force("org.eclipse.jgit:org.eclipse.jgit:6.10.1.202505221210-r")
         }
     }
 }
 
 plugins {
-    id("com.diffplug.spotless") version "8.1.0"
+    id("com.diffplug.spotless") version "8.10.4"
     id("ekbatan.module-conventions") apply false
     id("ekbatan.smt-conventions") apply false
     id("ekbatan.native-test-conventions") apply false
-    id("org.jreleaser") version "1.24.0"
+    id("org.jreleaser") version "1.26.0"
 }
 
 spotless {

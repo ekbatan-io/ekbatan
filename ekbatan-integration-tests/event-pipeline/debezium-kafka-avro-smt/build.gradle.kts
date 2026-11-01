@@ -66,6 +66,9 @@ dependencies {
 tasks.withType<Test> {
     useJUnitPlatform()
     dependsOn(smtPluginJar, actionEventSchemaFile)
+    // Like any consumer's, this test's own payload classes go on Avro's allow-list (Avro 1.12.2+);
+    // ActionEvent puts itself there.
+    systemProperty("org.apache.avro.SERIALIZABLE_PACKAGES", "com.example.finance.avro")
     doFirst {
         systemProperty("smt.plugin.jar", smtPluginJar.singleFile.absolutePath)
         systemProperty(
@@ -89,6 +92,7 @@ extensions.configure<org.graalvm.buildtools.gradle.dsl.GraalVMExtension> {
                     "-Dsmt.plugin.jar=${smtPluginJar.singleFile.absolutePath}",
                     "-Dsmt.payload.schemas.dir=${project.layout.projectDirectory.dir("src/test/avro").asFile.absolutePath}",
                     "-Dsmt.action.event.schema=${actionEventSchemaFile.singleFile.absolutePath}",
+                    "-Dorg.apache.avro.SERIALIZABLE_PACKAGES=com.example.finance.avro",
                 )
             },
         )

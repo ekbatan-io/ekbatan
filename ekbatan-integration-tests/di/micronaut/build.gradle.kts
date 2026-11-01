@@ -1,6 +1,6 @@
 plugins {
     id("java")
-    id("io.micronaut.library") version "4.6.1"
+    id("io.micronaut.library") version "4.6.2"
 }
 
 java {
@@ -13,7 +13,9 @@ repositories {
 }
 
 micronaut {
-    version(project.property("micronautVersion") as String)
+    // -Pmicronaut5: runs as a Micronaut 5 app (see gradle.properties). The plugin version follows
+    // in settings.gradle.kts; the Ekbatan jar under test is still the one built with Micronaut 4.
+    version(project.property(if (project.hasProperty("micronaut5")) "micronaut5Version" else "micronautVersion") as String)
 }
 
 dependencies {

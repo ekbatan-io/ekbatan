@@ -5,6 +5,8 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.security.AlgorithmParameters;
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -91,6 +93,10 @@ final class TestCertificates {
         pem(files.serverKey(), "PRIVATE KEY", server.getPrivate().getEncoded());
         pem(files.clientCertificate(), "CERTIFICATE", clientCertificate.getEncoded());
         Files.write(files.clientKey(), encrypted(client.getPrivate(), clientKeyPassword));
+        // Since 42.7.11 the driver refuses a key file anyone but its owner can read, as libpq does.
+        if (Files.getFileStore(files.clientKey()).supportsFileAttributeView(PosixFileAttributeView.class)) {
+            Files.setPosixFilePermissions(files.clientKey(), PosixFilePermissions.fromString("rw-------"));
+        }
         return files;
     }
 

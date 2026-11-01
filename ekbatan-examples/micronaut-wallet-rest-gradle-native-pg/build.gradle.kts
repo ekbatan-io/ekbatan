@@ -6,9 +6,9 @@ plugins {
     // Micronaut application plugin — produces a runnable shadow jar and a native binary. The
     // Micronaut 4.x plugin auto-applies `org.graalvm.buildtools.native` and wires it up; we
     // don't need to declare the GraalVM plugin separately.
-    id("io.micronaut.application") version "4.6.1"
-    id("dev.monosoul.jooq-docker") version "8.0.9"
-    id("com.diffplug.spotless") version "8.1.0"
+    id("io.micronaut.application") version "5.0.2"
+    id("dev.monosoul.jooq-docker") version "9.0.9"
+    id("com.diffplug.spotless") version "8.10.4"
 }
 
 group = "io.example"
@@ -26,8 +26,8 @@ repositories {
 }
 
 val ekbatanVersion: String by project
-val micronautVersion = "4.10.7"
-val flywayVersion = "12.0.0"
+val micronautVersion = "5.2.4"
+val flywayVersion = "13.10.3"
 
 micronaut {
     version(micronautVersion)
@@ -53,7 +53,7 @@ dependencies {
     // beans for any class annotated with `@Serdeable`. Required by `micronaut-serde-jackson`.
     annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
 
-    implementation("org.apache.commons:commons-lang3:3.20.0")
+    implementation("org.apache.commons:commons-lang3:3.21.0")
 
     // Native-image extras: ships GraalVM Features (Jackson 3 records, jOOQ array-type fix,
     // HikariCP metadata, etc.) that auto-apply when native-image runs. Only needed because
@@ -79,8 +79,8 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql")
 
     // ── PostgreSQL ──────────────────────────────────────────────────────────
-    runtimeOnly("org.postgresql:postgresql:42.7.10")
-    jooqCodegen("org.postgresql:postgresql:42.7.10")
+    runtimeOnly("org.postgresql:postgresql:42.7.14")
+    jooqCodegen("org.postgresql:postgresql:42.7.14")
 
     // ── Tests ───────────────────────────────────────────────────────────────
     testImplementation("io.micronaut:micronaut-http-client")
@@ -88,7 +88,7 @@ dependencies {
     testImplementation("org.testcontainers:testcontainers-postgresql:2.0.5")
     testImplementation("org.testcontainers:testcontainers-junit-jupiter:2.0.5")
     testImplementation("org.awaitility:awaitility:4.3.0")
-    testImplementation("org.assertj:assertj-core:3.27.6")
+    testImplementation("org.assertj:assertj-core:3.27.7")
 }
 
 spotless {
@@ -170,13 +170,6 @@ graalvmNative {
         //   UnsupportedFeatureError: Record components not available for record class
         //   io.example.wallet.action.WalletCreateAction$Params
         buildArgs.add("-Dio.ekbatan.graalvm.scan.packages=io.ekbatan,io.example")
-        // Init-at-build-time entries the bundled graalvm-reachability-metadata 0.3.35 does not
-        // tag for newer JUnit + Logback. Without these, native-image refuses to bake a Logger
-        // instance into the image heap because the type is marked for run-time init by default.
-        buildArgs.add("--initialize-at-build-time=org.junit.platform.commons.logging.LoggerFactory")
-        buildArgs.add("--initialize-at-build-time=org.junit.platform.commons.logging.LoggerFactory\$DelegatingLogger")
-        buildArgs.add("--initialize-at-build-time=ch.qos.logback")
-        buildArgs.add("--initialize-at-build-time=org.slf4j")
         buildArgs.add("--initialize-at-run-time=io.netty.handler.pcap.PcapWriteHandler\$WildcardAddressHolder")
     }
     binaries.named("test") {
@@ -185,20 +178,17 @@ graalvmNative {
     (this as ExtensionAware)
         .extensions
         .configure<GraalVMReachabilityMetadataRepositoryExtension>("metadataRepository") {
-            // Pin to 0.3.35 — the last 0.x release of graalvm-reachability-metadata. The
-            // 1.0+ versions dropped the top-level index.json that the auto-applied
-            // native-build-tools plugin (0.11.x via Micronaut 4.6.1) requires; using a 1.x
-            // repo against this plugin version fails with NoSuchFileException for index.json.
+            // The repository version is left to native-build-tools. Micronaut 5's plugin brings
+            // 1.1.x, which refuses the 0.3.x repositories Micronaut 4's 0.11.x needed.
             enabled.set(true)
-            version.set("0.3.35")
         }
 }
 
 // Force Flyway to the requested version even when the framework's BOM (Quarkus's
 // quarkus-bom, Spring Boot's spring-boot-dependencies, Micronaut's micronaut-bom) pins
 // an older one — they all do, to varying degrees:
-//   - Quarkus 3.34.6 pins flyway-core to 12.0.0
-//   - Spring Boot 4.x      pins flyway-core to 11.14.1
+//   - Quarkus 3.40.1.1 pins flyway-core to 12.0.0
+//   - Spring Boot 4.1.2    pins flyway-core to 12.4.0
 // Without this force, `org.flywaydb:flyway-core` gets resolved DOWN to the BOM's choice
 // and the runtime + jOOQ-codegen versions drift apart. Read from gradle.properties
 // directly so Spring Boot projects (which don't declare a local `flywayVersion` val,

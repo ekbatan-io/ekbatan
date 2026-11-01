@@ -40,7 +40,7 @@ public class TransferCompletedEvent extends ModelEvent<Wallet> {
     }
 
     @JsonCreator
-    private TransferCompletedEvent(
+    TransferCompletedEvent(
             @JsonProperty("modelId") String modelId,
             @JsonProperty("modelName") String modelName,
             @JsonProperty("transferId") UUID transferId,

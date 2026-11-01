@@ -71,9 +71,9 @@ class UnwrappedSmtIntegrationTest {
         var descriptors = Files.createTempDirectory("ekbatan-unwrapped-smt");
         var payloadDescriptor = DialectPipeline.writePayloadDescriptor(descriptors);
 
-        debezium = new DebeziumContainer("quay.io/debezium/connect:3.5.0.Final")
+        debezium = new DebeziumContainer("quay.io/debezium/connect:3.7.0.Final")
                 .withNetwork(NETWORK)
-                .withKafka(NETWORK, "kafka:19092")
+                .withEnv("BOOTSTRAP_SERVERS", "kafka:19092")
                 .withCopyFileToContainer(
                         MountableFile.forHostPath(SMT_JAR), CONTAINER_PLUGIN_DIR + "/" + SMT_JAR.getFileName())
                 .withCopyFileToContainer(
