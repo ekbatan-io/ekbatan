@@ -30,9 +30,9 @@ Pick the block for your stack. Everything below — the compiler flag, the codeg
         <maven.compiler.release>25</maven.compiler.release>
 
         <!-- (1) Spring Boot 4.0.x's BOM pins jOOQ to 3.19.x; Ekbatan needs 3.20.x. -->
-        <jooq.version>3.20.10</jooq.version>
+        <jooq.version>3.21.9</jooq.version>
 
-        <ekbatan.version>1.1.2</ekbatan.version>
+        <ekbatan.version>1.1.3</ekbatan.version>
     </properties>
 
     <dependencies>
@@ -124,9 +124,9 @@ Pick the block for your stack. Everything below — the compiler flag, the codeg
         <!-- (1) Pin jOOQ to match the codegen plugin version, even though Quarkus' BOM
              doesn't pin jOOQ — the failure mode if you skip this is the same
              NoSuchMethodError as on Spring Boot. -->
-        <jooq.version>3.20.10</jooq.version>
+        <jooq.version>3.21.9</jooq.version>
 
-        <ekbatan.version>1.1.2</ekbatan.version>
+        <ekbatan.version>1.1.3</ekbatan.version>
         <quarkus.platform.version>3.34.6</quarkus.platform.version>
     </properties>
 
@@ -250,8 +250,8 @@ The Micronaut parent POM pre-configures `maven-compiler-plugin` with `micronaut-
 
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
-        <jooq.version>3.20.10</jooq.version>
-        <ekbatan.version>1.1.2</ekbatan.version>
+        <jooq.version>3.21.9</jooq.version>
+        <ekbatan.version>1.1.3</ekbatan.version>
         <micronaut.version>5.2.4</micronaut.version>
         <micronaut.runtime>netty</micronaut.runtime>
         <exec.mainClass>com.example.Application</exec.mainClass>
@@ -356,7 +356,7 @@ The Micronaut parent POM pre-configures `maven-compiler-plugin` with `micronaut-
 
     <properties>
         <maven.compiler.release>25</maven.compiler.release>
-        <ekbatan.version>1.1.2</ekbatan.version>
+        <ekbatan.version>1.1.3</ekbatan.version>
     </properties>
 
     <dependencies>
@@ -399,12 +399,12 @@ The Micronaut parent POM pre-configures `maven-compiler-plugin` with `micronaut-
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>12.0.0</version>
+            <version>13.10.3</version>
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-            <version>12.0.0</version>
+            <version>13.10.3</version>
         </dependency>
     </dependencies>
 
@@ -441,7 +441,7 @@ Spring Boot 4.0.x's BOM pins `jooq.version=3.19.x`. Ekbatan compiles against jOO
 The fix is one line under `<properties>`:
 
 ```xml
-<jooq.version>3.20.10</jooq.version>
+<jooq.version>3.21.9</jooq.version>
 ```
 
 The property name must match exactly (`jooq.version`, lowercase, single dot) — that's Spring Boot's convention for BOM overrides, not an Ekbatan invention.
@@ -623,7 +623,7 @@ A few `<properties>` keys conflict with plugin behavior. None of them is Ekbatan
 
 ```xml
 <properties>
-    <flyway.maven.plugin.version>12.0.0</flyway.maven.plugin.version>
+    <flyway.maven.plugin.version>13.10.3</flyway.maven.plugin.version>
 </properties>
 ```
 
@@ -636,8 +636,8 @@ Unknown configuration property: flyway.maven.plugin.version
 Fix: use hyphenated names that don't start with `flyway.`:
 
 ```xml
-<flyway-version>12.0.0</flyway-version>
-<flyway-maven-plugin-version>12.0.0</flyway-maven-plugin-version>
+<flyway-version>13.10.3</flyway-version>
+<flyway-maven-plugin-version>13.10.3</flyway-maven-plugin-version>
 ```
 
 The same caution applies to `jooq.*` (the codegen plugin scans its own namespace), `quarkus.*`, and most plugin namespaces. Hyphenated property names are the safe default.

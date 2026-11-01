@@ -19,7 +19,7 @@ plugins {
 }
 
 // (1) Spring Boot 4.0.x's BOM pins jOOQ to 3.19.x; Ekbatan needs 3.20.x.
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 
 repositories {
     mavenLocal()
@@ -29,14 +29,14 @@ repositories {
 dependencies {
     // (2) The starter — pulls ekbatan-core, the local event handler,
     // and distributed jobs transitively.
-    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.3")
     // Programmatic shard-aware Flyway migration from ekbatan.sharding.*.
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
 
     // (3) @AutoBuilder is compile-time only: compileOnly exposes the annotation to javac,
     // annotationProcessor runs the processor that emits *Builder.java.
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     implementation("org.springframework.boot:spring-boot-starter-web")
 
@@ -69,7 +69,7 @@ plugins {
 // (1) The Quarkus platform BOM doesn't pin jOOQ, but the codegen plugin does — pin
 // explicitly so the runtime classpath matches what the generated classes were compiled
 // against.
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 
 repositories {
     mavenLocal()
@@ -81,13 +81,13 @@ dependencies {
 
     // (2) The Quarkus extension — pulls ekbatan-core + the local-event-handler +
     // distributed-jobs transitively.
-    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.3")
     // Programmatic shard-aware Flyway migration from ekbatan.sharding.*.
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
 
     // (3) @AutoBuilder is compile-time only: compileOnly + annotationProcessor.
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     implementation("io.quarkus:quarkus-rest")
     implementation("io.quarkus:quarkus-rest-jackson")
@@ -98,10 +98,11 @@ dependencies {
     implementation("org.flywaydb:flyway-mysql")     // MariaDB/MySQL dialect module
     implementation("io.quarkus:quarkus-jdbc-mariadb")
 
-    // Driver + jooqCodegen entry.
-    implementation("org.mariadb.jdbc:mariadb-java-client:3.5.7")
-    jooqCodegen("org.mariadb.jdbc:mariadb-java-client:3.5.7")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
+    // Driver + jooqCodegen entry. Driver 3.5, not 4: Quarkus 3.40 tests its MariaDB support
+    // with 3.5, and its platform keeps that version at runtime anyway.
+    implementation("org.mariadb.jdbc:mariadb-java-client:3.5.11")
+    jooqCodegen("org.mariadb.jdbc:mariadb-java-client:3.5.11")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -140,18 +141,18 @@ micronaut {
 
 dependencies {
     // (2) The integration jar — pulls ekbatan-core + handlers + jobs transitively.
-    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")
     // Programmatic shard-aware Flyway migration from ekbatan.sharding.*.
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
     // (5) REQUIRED on Micronaut: the EkbatanStereotypeVisitor lives in ekbatan-micronaut
     // and must be on the annotationProcessor classpath so it sees @EkbatanAction etc.
     // during *your* compile. Without this, no BeanDefinition is generated for your
     // annotated classes and Micronaut treats them as plain non-beans at runtime.
-    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")
 
     // (3) @AutoBuilder is compile-time only: compileOnly + annotationProcessor.
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     implementation("io.micronaut:micronaut-jackson-databind")
 
@@ -160,8 +161,8 @@ dependencies {
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("org.flywaydb:flyway-database-postgresql")
 
-    runtimeOnly("org.postgresql:postgresql:42.7.10")
-    jooqCodegen("org.postgresql:postgresql:42.7.10")
+    runtimeOnly("org.postgresql:postgresql:42.7.14")
+    jooqCodegen("org.postgresql:postgresql:42.7.14")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -184,26 +185,26 @@ repositories {
 
 dependencies {
     // ── Required ────────────────────────────────────────────────────────────
-    implementation("io.github.ekbatan-io:ekbatan-core:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2") // FlywayMigrator
+    implementation("io.github.ekbatan-io:ekbatan-core:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3") // FlywayMigrator
 
     // ── Optional capabilities — add only what you need ──────────────────────
 
     // @AutoBuilder code generation — generates *Builder classes for Models/Entities.
     // Skip if you'd rather write the builders by hand.
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     // In-process event handlers (fan-out + handling jobs over the eventlog).
-    implementation("io.github.ekbatan-io:ekbatan-local-event-handler:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-local-event-handler:1.1.3")
 
     // Distributed background jobs (db-scheduler facade; cluster-exclusive scheduling).
-    implementation("io.github.ekbatan-io:ekbatan-distributed-jobs:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-distributed-jobs:1.1.3")
 
-    implementation("org.flywaydb:flyway-core:12.0.0")
-    implementation("org.flywaydb:flyway-database-postgresql:12.0.0")
-    runtimeOnly("org.postgresql:postgresql:42.7.10")
-    jooqCodegen("org.postgresql:postgresql:42.7.10")
+    implementation("org.flywaydb:flyway-core:13.10.3")
+    implementation("org.flywaydb:flyway-database-postgresql:13.10.3")
+    runtimeOnly("org.postgresql:postgresql:42.7.14")
+    jooqCodegen("org.postgresql:postgresql:42.7.14")
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -220,7 +221,7 @@ Spring Boot 4.0.x's BOM pins `jooq.version=3.19.x`. Ekbatan compiles against jOO
 The fix is one line:
 
 ```kotlin
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 ```
 
 Quarkus' BOM doesn't pin jOOQ, but the codegen plugin's default version may not match what Ekbatan was built against — pin explicitly anyway, the cost is one line and the failure mode if you skip it is the same `NoSuchMethodError`. Micronaut's BOM also doesn't pin jOOQ; explicit pin is good hygiene there too. Plain-Java projects have no BOM and pull jOOQ transitively from `ekbatan-core` — no override needed.
@@ -242,10 +243,10 @@ The four `@Ekbatan*` annotations (`@EkbatanAction`, `@EkbatanRepository`, `@Ekba
 
 ```kotlin
 // compile classpath only — so javac sees @AutoBuilder without adding the jar at runtime
-compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
 // annotation processor classpath — so the processor actually runs and emits *Builder.java
-annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 ```
 
 This isn't redundant — `annotationProcessor` is isolated from the main compile classpath. Dropping one or the other breaks differently:
@@ -287,22 +288,22 @@ The DI integration dependencies pull the common runtime modules such as the loca
 
 ```kotlin
 // Programmatic Flyway migration from one DataSource or every primary shard in ShardingConfig.
-implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
+implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
 
 // Redis-backed distributed KeyedLockProvider (Redisson under the hood).
-implementation("io.github.ekbatan-io:ekbatan-keyed-lock-redis:1.1.2")
+implementation("io.github.ekbatan-io:ekbatan-keyed-lock-redis:1.1.3")
 
 // GraalVM native-image Features (auto-loaded; include only if you build native binaries).
-implementation("io.github.ekbatan-io:ekbatan-native:1.1.2")
+implementation("io.github.ekbatan-io:ekbatan-native:1.1.3")
 
 // ActionSpec, ActionAssert, VirtualClock, and classpath-resource Testcontainers helpers.
-testImplementation("io.github.ekbatan-io:ekbatan-test-support:1.1.2")
+testImplementation("io.github.ekbatan-io:ekbatan-test-support:1.1.3")
 
 // Wire-format DTOs for Kafka consumer apps reading from the eventlog. Pick the one
 // matching your Kafka serializer; NOT needed in the producer app itself.
-implementation("io.github.ekbatan-io:ekbatan-action-event-json:1.1.2")
-implementation("io.github.ekbatan-io:ekbatan-action-event-avro:1.1.2")
-implementation("io.github.ekbatan-io:ekbatan-action-event-protobuf:1.1.2")
+implementation("io.github.ekbatan-io:ekbatan-action-event-json:1.1.3")
+implementation("io.github.ekbatan-io:ekbatan-action-event-avro:1.1.3")
+implementation("io.github.ekbatan-io:ekbatan-action-event-protobuf:1.1.3")
 ```
 
 The wire-format jars are tagged "not needed in the producer app" because the framework writes events to the outbox using its own internal payload format — the wire-format DTOs are POJOs you deserialize *back into* on the consumer side (whatever app reads Kafka or polls the eventlog from outside the producing JVM).
@@ -324,7 +325,7 @@ The plugin starts a throwaway DB container at build time, runs your Flyway migra
 Most examples keep the Ekbatan version (and dialect-specific driver versions) in `gradle.properties` rather than hard-coding them in `build.gradle.kts`:
 
 ```properties
-ekbatanVersion=1.1.2
+ekbatanVersion=1.1.3
 ```
 
 Read in the build script via:

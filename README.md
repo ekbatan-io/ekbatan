@@ -28,7 +28,7 @@ Ekbatan is published on [Maven Central](https://central.sonatype.com/namespace/i
 
 ```kotlin
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.3")
 }
 ```
 
@@ -36,7 +36,7 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.3")
 }
 ```
 
@@ -44,8 +44,8 @@ dependencies {
 
 ```kotlin
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")
     annotationProcessor("io.micronaut:micronaut-inject-java")
 }
 ```
@@ -55,35 +55,35 @@ dependencies {
 ```kotlin
 dependencies {
     // ── Required ────────────────────────────────────────────────────────────
-    implementation("io.github.ekbatan-io:ekbatan-core:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-core:1.1.3")
 
     // ── Optional capabilities ───────────────────────────────────────────────
 
     // @AutoBuilder code generation — generates *Builder classes for Models/Entities
     // (skip if you'd rather write the builders by hand)
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     // In-process event handlers (fanout + handling jobs over the eventlog)
-    implementation("io.github.ekbatan-io:ekbatan-local-event-handler:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-local-event-handler:1.1.3")
 
     // Distributed background jobs (db-scheduler facade; cluster-exclusive scheduling)
-    implementation("io.github.ekbatan-io:ekbatan-distributed-jobs:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-distributed-jobs:1.1.3")
 
     // Redis-backed distributed KeyedLockProvider (Redisson under the hood)
-    implementation("io.github.ekbatan-io:ekbatan-keyed-lock-redis:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-keyed-lock-redis:1.1.3")
 
     // GraalVM native-image Features (auto-loaded; include only if you build native binaries)
-    implementation("io.github.ekbatan-io:ekbatan-native:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-native:1.1.3")
 
     // Testing helpers: ActionSpec, ActionAssert, VirtualClock, and Testcontainers utilities
-    testImplementation("io.github.ekbatan-io:ekbatan-test-support:1.1.2")
+    testImplementation("io.github.ekbatan-io:ekbatan-test-support:1.1.3")
 
     // ── Wire-format DTOs (only for Kafka consumer apps reading from the eventlog) ──
     // Pick the one matching your Kafka serializer; not needed in the producer app itself.
-    implementation("io.github.ekbatan-io:ekbatan-action-event-json:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-action-event-avro:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-action-event-protobuf:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-action-event-json:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-action-event-avro:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-action-event-protobuf:1.1.3")
 }
 ```
 
@@ -95,7 +95,7 @@ Substitute the artifactId for your stack — `ekbatan-spring-boot-starter`, `ekb
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-spring-boot-starter</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 ```
 

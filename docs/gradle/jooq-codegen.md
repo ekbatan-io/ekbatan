@@ -183,13 +183,14 @@ tasks {
 }
 
 dependencies {
-    implementation("org.mariadb.jdbc:mariadb-java-client:3.5.7")
-    jooqCodegen("org.mariadb.jdbc:mariadb-java-client:3.5.7")
+    // On Quarkus 3.40, driver 3.5.11: Quarkus tests its MariaDB support with 3.5.
+    implementation("org.mariadb.jdbc:mariadb-java-client:4.0.0")
+    jooqCodegen("org.mariadb.jdbc:mariadb-java-client:4.0.0")
     // The codegen task runs Flyway against the container, and `flyway-mysql` is what
     // Flyway uses to recognize MariaDB JDBC URLs (the artifact name is historical — it
     // covers MariaDB too).
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
-    implementation("org.flywaydb:flyway-mysql:12.0.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
+    implementation("org.flywaydb:flyway-mysql:13.10.3")
 }
 ```
 
@@ -271,10 +272,10 @@ tasks {
 }
 
 dependencies {
-    implementation("com.mysql:mysql-connector-j:9.4.0")
-    jooqCodegen("com.mysql:mysql-connector-j:9.4.0")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
-    implementation("org.flywaydb:flyway-mysql:12.0.0")
+    implementation("com.mysql:mysql-connector-j:26.10.0")
+    jooqCodegen("com.mysql:mysql-connector-j:26.10.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
+    implementation("org.flywaydb:flyway-mysql:13.10.3")
 }
 ```
 

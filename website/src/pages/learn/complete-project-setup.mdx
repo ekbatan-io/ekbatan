@@ -126,13 +126,13 @@ Add Ekbatan, `ekbatan-flyway`, your JDBC driver, and your stack's Flyway integra
 <div data-stack="spring" data-build="gradle" data-db="pg">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="yellow" code={`// At the top of build.gradle.kts, outside dependencies.
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.flywaydb:flyway-database-postgresql")
@@ -145,63 +145,63 @@ dependencies {
 <div data-stack="spring" data-build="gradle" data-db="mariadb">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="orange" code={`// At the top of build.gradle.kts, outside dependencies.
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.flywaydb:flyway-mysql")
     implementation("org.mariadb.jdbc:mariadb-java-client")
 
     jooqCodegen("org.mariadb.jdbc:mariadb-java-client")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
 }`} />
 
 </div>
 <div data-stack="spring" data-build="gradle" data-db="mysql">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="yellow" code={`// At the top of build.gradle.kts, outside dependencies.
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-spring-boot-starter:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation("org.flywaydb:flyway-mysql")
     implementation("com.mysql:mysql-connector-j")
 
     jooqCodegen("com.mysql:mysql-connector-j")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
 }`} />
 
 </div>
 <div data-stack="spring" data-build="maven" data-db="pg">
 
 <CodeBlock filename="pom.xml" language="xml" shadow="default" code={`<!-- Inside <properties>. -->
-<jooq.version>3.20.10</jooq.version>
+<jooq.version>3.21.9</jooq.version>
 
 <!-- inside <dependencies> -->
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-spring-boot-starter</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
@@ -222,23 +222,23 @@ dependencies {
 <div data-stack="spring" data-build="maven" data-db="mariadb">
 
 <CodeBlock filename="pom.xml" language="xml" shadow="default" code={`<!-- Inside <properties>. -->
-<jooq.version>3.20.10</jooq.version>
+<jooq.version>3.21.9</jooq.version>
 
 <!-- inside <dependencies> -->
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-spring-boot-starter</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
@@ -259,23 +259,23 @@ dependencies {
 <div data-stack="spring" data-build="maven" data-db="mysql">
 
 <CodeBlock filename="pom.xml" language="xml" shadow="default" code={`<!-- Inside <properties>. -->
-<jooq.version>3.20.10</jooq.version>
+<jooq.version>3.21.9</jooq.version>
 
 <!-- inside <dependencies> -->
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-spring-boot-starter</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
@@ -296,13 +296,13 @@ dependencies {
 <div data-stack="quarkus" data-build="gradle" data-db="pg">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="orange" code={`// At the top of build.gradle.kts, outside dependencies.
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     implementation("io.quarkus:quarkus-jdbc-postgresql")
     implementation("io.quarkus:quarkus-flyway")
@@ -315,63 +315,63 @@ dependencies {
 <div data-stack="quarkus" data-build="gradle" data-db="mariadb">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="yellow" code={`// At the top of build.gradle.kts, outside dependencies.
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     implementation("io.quarkus:quarkus-jdbc-mariadb")
     implementation("io.quarkus:quarkus-flyway")
     implementation("org.flywaydb:flyway-mysql")
 
     jooqCodegen("org.mariadb.jdbc:mariadb-java-client")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
 }`} />
 
 </div>
 <div data-stack="quarkus" data-build="gradle" data-db="mysql">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="orange" code={`// At the top of build.gradle.kts, outside dependencies.
-extra["jooq.version"] = "3.20.10"
+extra["jooq.version"] = "3.21.9"
 
 dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-quarkus:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
     implementation("io.quarkus:quarkus-jdbc-mysql")
     implementation("io.quarkus:quarkus-flyway")
     implementation("org.flywaydb:flyway-mysql")
 
     jooqCodegen("com.mysql:mysql-connector-j")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
 }`} />
 
 </div>
 <div data-stack="quarkus" data-build="maven" data-db="pg">
 
 <CodeBlock filename="pom.xml" language="xml" shadow="default" code={`<!-- Inside <properties>. -->
-<jooq.version>3.20.10</jooq.version>
+<jooq.version>3.21.9</jooq.version>
 
 <!-- inside <dependencies> -->
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-quarkus</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
@@ -392,23 +392,23 @@ dependencies {
 <div data-stack="quarkus" data-build="maven" data-db="mariadb">
 
 <CodeBlock filename="pom.xml" language="xml" shadow="default" code={`<!-- Inside <properties>. -->
-<jooq.version>3.20.10</jooq.version>
+<jooq.version>3.21.9</jooq.version>
 
 <!-- inside <dependencies> -->
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-quarkus</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
@@ -429,23 +429,23 @@ dependencies {
 <div data-stack="quarkus" data-build="maven" data-db="mysql">
 
 <CodeBlock filename="pom.xml" language="xml" shadow="default" code={`<!-- Inside <properties>. -->
-<jooq.version>3.20.10</jooq.version>
+<jooq.version>3.21.9</jooq.version>
 
 <!-- inside <dependencies> -->
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-quarkus</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
@@ -466,11 +466,11 @@ dependencies {
 <div data-stack="micronaut" data-build="gradle" data-db="pg">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="yellow" code={`dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")  // required for Micronaut DI
+    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")  // required for Micronaut DI
 
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("org.flywaydb:flyway-database-postgresql")
@@ -484,11 +484,11 @@ dependencies {
 <div data-stack="micronaut" data-build="gradle" data-db="mariadb">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="orange" code={`dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")  // required for Micronaut DI
+    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")  // required for Micronaut DI
 
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("org.flywaydb:flyway-mysql")
@@ -496,18 +496,18 @@ dependencies {
     runtimeOnly("org.mariadb.jdbc:mariadb-java-client")
 
     jooqCodegen("org.mariadb.jdbc:mariadb-java-client")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
 }`} />
 
 </div>
 <div data-stack="micronaut" data-build="gradle" data-db="mysql">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="yellow" code={`dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.2")  // required for Micronaut DI
+    implementation("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-micronaut:1.1.3")  // required for Micronaut DI
 
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("org.flywaydb:flyway-mysql")
@@ -515,7 +515,7 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
 
     jooqCodegen("com.mysql:mysql-connector-j")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
 }`} />
 
 </div>
@@ -525,17 +525,17 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-micronaut</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
@@ -564,17 +564,17 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-micronaut</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
@@ -603,17 +603,17 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-micronaut</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
@@ -639,50 +639,50 @@ dependencies {
 <div data-stack="plain" data-build="gradle" data-db="pg">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="orange" code={`dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-core:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-core:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
-    implementation("org.flywaydb:flyway-core:12.0.0")
-    implementation("org.flywaydb:flyway-database-postgresql:12.0.0")
-    implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.flywaydb:flyway-core:13.10.3")
+    implementation("org.flywaydb:flyway-database-postgresql:13.10.3")
+    implementation("org.postgresql:postgresql:42.7.14")
 
-    jooqCodegen("org.postgresql:postgresql:42.7.4")
+    jooqCodegen("org.postgresql:postgresql:42.7.14")
 }`} />
 
 </div>
 <div data-stack="plain" data-build="gradle" data-db="mariadb">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="yellow" code={`dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-core:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-core:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
-    implementation("org.flywaydb:flyway-core:12.0.0")
-    implementation("org.flywaydb:flyway-mysql:12.0.0")
+    implementation("org.flywaydb:flyway-core:13.10.3")
+    implementation("org.flywaydb:flyway-mysql:13.10.3")
     implementation("org.mariadb.jdbc:mariadb-java-client:3.4.1")
 
     jooqCodegen("org.mariadb.jdbc:mariadb-java-client:3.4.1")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
 }`} />
 
 </div>
 <div data-stack="plain" data-build="gradle" data-db="mysql">
 
 <CodeBlock filename="build.gradle.kts" language="kotlin" shadow="orange" code={`dependencies {
-    implementation("io.github.ekbatan-io:ekbatan-core:1.1.2")
-    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.2")
-    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
-    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.2")
+    implementation("io.github.ekbatan-io:ekbatan-core:1.1.3")
+    implementation("io.github.ekbatan-io:ekbatan-flyway:1.1.3")
+    compileOnly("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
+    annotationProcessor("io.github.ekbatan-io:ekbatan-annotation-processor:1.1.3")
 
-    implementation("org.flywaydb:flyway-core:12.0.0")
-    implementation("org.flywaydb:flyway-mysql:12.0.0")
+    implementation("org.flywaydb:flyway-core:13.10.3")
+    implementation("org.flywaydb:flyway-mysql:13.10.3")
     implementation("com.mysql:mysql-connector-j:9.1.0")
 
     jooqCodegen("com.mysql:mysql-connector-j:9.1.0")
-    jooqCodegen("org.flywaydb:flyway-mysql:12.0.0")
+    jooqCodegen("org.flywaydb:flyway-mysql:13.10.3")
 }`} />
 
 </div>
@@ -692,34 +692,34 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-core</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-core</artifactId>
-    <version>12.0.0</version>
+    <version>13.10.3</version>
 </dependency>
 
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-database-postgresql</artifactId>
-    <version>12.0.0</version>
+    <version>13.10.3</version>
 </dependency>
 <dependency>
     <groupId>org.postgresql</groupId>
     <artifactId>postgresql</artifactId>
-    <version>42.7.4</version>
+    <version>42.7.14</version>
 </dependency>`} />
 
 </div>
@@ -729,29 +729,29 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-core</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-core</artifactId>
-    <version>12.0.0</version>
+    <version>13.10.3</version>
 </dependency>
 
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-mysql</artifactId>
-    <version>12.0.0</version>
+    <version>13.10.3</version>
 </dependency>
 <dependency>
     <groupId>org.mariadb.jdbc</groupId>
@@ -766,29 +766,29 @@ dependencies {
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-core</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-flyway</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 <dependency>
     <groupId>io.github.ekbatan-io</groupId>
     <artifactId>ekbatan-annotation-processor</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
     <scope>provided</scope>
 </dependency>
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-core</artifactId>
-    <version>12.0.0</version>
+    <version>13.10.3</version>
 </dependency>
 
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-mysql</artifactId>
-    <version>12.0.0</version>
+    <version>13.10.3</version>
 </dependency>
 <dependency>
     <groupId>com.mysql</groupId>
@@ -1723,11 +1723,12 @@ Maven's codegen path uses three plugins (the Gradle plugin bundles all three int
 
 <CodeBlock filename="pom.xml" language="xml" shadow="default" code={`<!-- 1. Inside <properties>: plugin versions + codegen-container coordinates,
      used as a single source of truth by the three plugins below. -->
-<flyway-version>12.0.0</flyway-version>
-<postgresql.version>42.7.10</postgresql.version>
-<fabric8-docker-plugin-version>0.48.1</fabric8-docker-plugin-version>
-<flyway-maven-plugin-version>12.0.0</flyway-maven-plugin-version>
-<jooq-codegen-maven-plugin-version>3.20.10</jooq-codegen-maven-plugin-version>
+<!-- On Quarkus 3.40, both Flyway versions are 12.0.0: its BOM keeps Flyway on 12. -->
+<flyway-version>13.10.3</flyway-version>
+<postgresql.version>42.7.14</postgresql.version>
+<fabric8-docker-plugin-version>0.49.0</fabric8-docker-plugin-version>
+<flyway-maven-plugin-version>13.10.3</flyway-maven-plugin-version>
+<jooq-codegen-maven-plugin-version>3.21.9</jooq-codegen-maven-plugin-version>
 
 <codegen.db.port>15432</codegen.db.port>
 <codegen.db.name>wallet_codegen</codegen.db.name>
@@ -1896,11 +1897,13 @@ Maven's codegen path uses three plugins (the Gradle plugin bundles all three int
 Maven's codegen path uses three plugins in `<build><plugins>`. **docker-maven-plugin** starts a throwaway MariaDB in `initialize`, **flyway-maven-plugin** runs your migrations against it (also `initialize`), and **jooq-codegen-maven** introspects the schema in `generate-sources`. `prepare-package` tears the container down. The codegen container connects as `root` so `V0000__create_eventlog_database.sql` can `CREATE DATABASE`; the runtime / test containers use a less-privileged user.
 
 <CodeBlock filename="pom.xml" language="xml" shadow="default" code={`<!-- 1. Inside <properties>: plugin versions + codegen-container coordinates. -->
-<flyway-version>12.0.0</flyway-version>
-<mariadb-driver-version>3.5.7</mariadb-driver-version>
-<fabric8-docker-plugin-version>0.48.1</fabric8-docker-plugin-version>
-<flyway-maven-plugin-version>12.0.0</flyway-maven-plugin-version>
-<jooq-codegen-maven-plugin-version>3.20.10</jooq-codegen-maven-plugin-version>
+<!-- On Quarkus 3.40: Flyway 12.0.0 for both Flyway versions (its BOM keeps Flyway on 12), and
+     driver 3.5.11 (Quarkus tests its MariaDB support with 3.5). -->
+<flyway-version>13.10.3</flyway-version>
+<mariadb-driver-version>4.0.0</mariadb-driver-version>
+<fabric8-docker-plugin-version>0.49.0</fabric8-docker-plugin-version>
+<flyway-maven-plugin-version>13.10.3</flyway-maven-plugin-version>
+<jooq-codegen-maven-plugin-version>3.21.9</jooq-codegen-maven-plugin-version>
 
 <codegen.db.port>13306</codegen.db.port>
 <codegen.db.name>wallet</codegen.db.name>
@@ -2065,11 +2068,12 @@ Maven's codegen path uses three plugins in `<build><plugins>`. **docker-maven-pl
 Maven's codegen path uses three plugins in `<build><plugins>`. **docker-maven-plugin** starts a throwaway MySQL in `initialize`, **flyway-maven-plugin** runs your migrations against it (also `initialize`), and **jooq-codegen-maven** introspects the schema in `generate-sources`. `prepare-package` tears the container down. The codegen container connects as `root` so `V0000__create_eventlog_database.sql` can `CREATE DATABASE`; the runtime / test containers use a less-privileged user.
 
 <CodeBlock filename="pom.xml" language="xml" shadow="default" code={`<!-- 1. Inside <properties>: plugin versions + codegen-container coordinates. -->
-<flyway-version>12.0.0</flyway-version>
-<mysql-driver-version>9.4.0</mysql-driver-version>
-<fabric8-docker-plugin-version>0.48.1</fabric8-docker-plugin-version>
-<flyway-maven-plugin-version>12.0.0</flyway-maven-plugin-version>
-<jooq-codegen-maven-plugin-version>3.20.10</jooq-codegen-maven-plugin-version>
+<!-- On Quarkus 3.40, both Flyway versions are 12.0.0: its BOM keeps Flyway on 12. -->
+<flyway-version>13.10.3</flyway-version>
+<mysql-driver-version>26.10.0</mysql-driver-version>
+<fabric8-docker-plugin-version>0.49.0</fabric8-docker-plugin-version>
+<flyway-maven-plugin-version>13.10.3</flyway-maven-plugin-version>
+<jooq-codegen-maven-plugin-version>3.21.9</jooq-codegen-maven-plugin-version>
 
 <codegen.db.port>13307</codegen.db.port>
 <codegen.db.name>wallet</codegen.db.name>

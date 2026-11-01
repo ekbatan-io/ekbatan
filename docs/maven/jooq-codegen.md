@@ -75,11 +75,12 @@ The testcontainers community plugin bundles all three concerns the same way the 
 
 ```xml
 <properties>
-    <fabric8-docker-plugin-version>0.48.1</fabric8-docker-plugin-version>
-    <flyway-maven-plugin-version>12.0.0</flyway-maven-plugin-version>
-    <jooq-codegen-maven-plugin-version>3.20.10</jooq-codegen-maven-plugin-version>
-    <flyway-version>12.0.0</flyway-version>
-    <postgresql.version>42.7.10</postgresql.version>
+    <fabric8-docker-plugin-version>0.49.0</fabric8-docker-plugin-version>
+    <!-- On Quarkus 3.40, both Flyway versions are 12.0.0: its BOM keeps Flyway on 12. -->
+    <flyway-maven-plugin-version>13.10.3</flyway-maven-plugin-version>
+    <jooq-codegen-maven-plugin-version>3.21.9</jooq-codegen-maven-plugin-version>
+    <flyway-version>13.10.3</flyway-version>
+    <postgresql.version>42.7.14</postgresql.version>
 
     <!-- Single source of truth for the codegen container — used by docker (to start it),
          flyway (to migrate), and jooq (to introspect). -->
