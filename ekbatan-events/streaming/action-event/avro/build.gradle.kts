@@ -54,7 +54,8 @@ sourceSets.main {
 // Avro decodes only into classes on its allow-list (since 1.12.2), and ActionEvent is generated, so it
 // cannot add itself there. This puts a call to AvroAllowList.allow in its static setup, right after its
 // model is created and before anything can decode one. The build fails if Avro's generator stops
-// writing the line it goes after.
+// writing the line it goes after. Avro's generator leaves the file alone when it is newer than the
+// schema, so the call may already be there from an earlier run: then nothing is added.
 tasks.named("generateAvroJava") {
     doLast {
         val source =
@@ -63,9 +64,12 @@ tasks.named("generateAvroJava") {
                 .get()
                 .asFile
         val anchor = "  private static final SpecificData MODEL\$ = new SpecificData();\n"
+        val allow = "  static { AvroAllowList.allow(ActionEvent.class); }\n"
         val text = source.readText()
         check(text.contains(anchor)) { "ActionEvent.java no longer has the line the allow-list call goes after: $anchor" }
-        source.writeText(text.replace(anchor, anchor + "  static { AvroAllowList.allow(ActionEvent.class); }\n"))
+        if (!text.contains(anchor + allow)) {
+            source.writeText(text.replace(anchor, anchor + allow))
+        }
     }
 }
 
