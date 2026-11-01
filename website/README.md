@@ -17,6 +17,8 @@ The tutorial under `/learn/` uses a `<StackPicker />` component that swaps snipp
 
 ## Local development
 
+Needs Node 22.22 or later (Astro 7's minimum). The deploy workflow builds with Node 26.
+
 ```bash
 cd website
 npm install      # first time only

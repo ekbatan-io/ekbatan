@@ -2,7 +2,7 @@
 # every push to `main` that touches the website. The site ends up at
 #     https://ekbatan-io.github.io/ekbatan/
 # so `BASE=/ekbatan/` is passed to the build — see `website/astro.config.mjs`
-# and `website/src/lib/remark-base-path.mjs` for how that prefix flows through
+# and `website/src/plugins/remark-base-path.mjs` for how that prefix flows through
 # to every internal link in the rendered HTML.
 name: Deploy website to GitHub Pages
 
@@ -35,7 +35,8 @@ jobs:
       - uses: withastro/action@v6
         with:
           path: website
-          node-version: 22
+          # The current Node LTS. Astro 7 needs Node 22.22 or later.
+          node-version: 26
           package-manager: npm@latest
         env:
           # Astro reads this in `website/astro.config.mjs` and `remark-base-path`

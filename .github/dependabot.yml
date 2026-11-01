@@ -1,8 +1,12 @@
-# Dependabot opens pull requests for newer GitHub Actions in .github/workflows.
+# Dependabot opens pull requests for newer GitHub Actions in .github/workflows, and for newer npm
+# packages of the website (website/package.json and its lock file).
 #
 # It does not update the Gradle build: Dependabot reads only versions written literally in build
 # files, and this build keeps its versions in gradle.properties. Those are covered by
 # .github/workflows/dependency-check.yml, which reports newer versions and known vulnerabilities.
+#
+# `cooldown` makes Dependabot wait until a release is 14 days old before proposing it. Fixes for
+# known vulnerabilities don't wait: the cooldown applies only to ordinary version updates.
 version: 2
 updates:
   - package-ecosystem: github-actions
@@ -10,8 +14,23 @@ updates:
     schedule:
       interval: weekly
       day: monday
+    cooldown:
+      default-days: 14
     groups:
       # Patch and minor releases together in one pull request; each major release on its own.
       github-actions:
+        patterns: ["*"]
+        update-types: [minor, patch]
+
+  - package-ecosystem: npm
+    directory: /website
+    schedule:
+      interval: weekly
+      day: monday
+    cooldown:
+      default-days: 14
+    groups:
+      # Patch and minor releases together in one pull request; each major release on its own.
+      website:
         patterns: ["*"]
         update-types: [minor, patch]

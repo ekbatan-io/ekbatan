@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
+import { unified } from "@astrojs/markdown-remark";
 import remarkBasePath from "./src/plugins/remark-base-path.mjs";
 
 // Astro config for the Ekbatan website.
@@ -30,8 +31,17 @@ export default defineConfig({
         shikiConfig: {
             theme: "github-light",
         },
-        remarkPlugins: [[remarkBasePath, { base: BASE }]],
+        // Astro 7's default Markdown processor (Satteri) runs no remark plugins. `unified()` is
+        // the remark/rehype pipeline Astro used before, which runs `remarkBasePath`; MDX pages
+        // take the processor from here too.
+        processor: unified({
+            remarkPlugins: [[remarkBasePath, { base: BASE }]],
+        }),
     },
+    // Astro 7's default ('jsx') drops the line breaks between elements, and with them the
+    // visible space between inline elements written on separate lines. `true` is what Astro 6
+    // did: it removes only whitespace that doesn't show.
+    compressHTML: true,
     // The eventual deploy URL — used for canonical links and the sitemap when we
     // wire those up. Placeholder for now.
     site: "https://ekbatan.dev",
